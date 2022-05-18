@@ -1,0 +1,45 @@
+.header {
+    height: 100px;
+    margin: 0 0 70px;
+    padding: 0 50px 0 55px;
+    box-shadow: 0 2px 25px 0 rgba(0, 0, 0, 0.31);
+    background-image: linear-gradient(to bottom, #4368cd, #7455f6);
+}
+
+#ghost-logo {
+    width: 107px;
+}
+
+#header-logo {
+    width: 236px;
+    height: 50px;
+    position: absolute;
+    left: 82px;
+    margin-top: 30px;
+
+}
+
+.connect-btn{
+    float: right;
+    width: 200px;
+    height: 50px;
+    margin-top: 30px;
+    padding: 13px 20px 12px 19px;
+    border-radius: 38px;
+    background-color: #fcfcfc;
+    border: solid 1px #7e77dd;
+    box-shadow: 0 2px 25px 0 rgba(0, 0, 0, 0.5);
+
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.connect-btn span {
+    font-weight: 600;
+    color: #564dd0;
+}
+
+.connect-btn img {
+    width: 25px;
+}
