@@ -18,6 +18,20 @@
     margin-top: 30px;
 }
 
+.header-investor-data {
+    height: 100px;
+    display: inline-flex;
+    align-items: center;
+    gap: 75px;
+    position: absolute;
+    left: 50%;
+}
+
+.header-investor-data span {
+    display: block;
+    color: #fcfcfc;
+}
+
 .connect-btn{
     float: right;
     width: 200px;
