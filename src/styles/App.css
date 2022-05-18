@@ -3,3 +3,15 @@
   height: 100vh;
   background-image: linear-gradient(to bottom, #4368cd, #7455f6);
 }
+.title {
+  margin-left: 55px;
+  font-weight: 600;
+  color: #fcfcfc;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
+  margin: 35px 0px 0 55px;
+}

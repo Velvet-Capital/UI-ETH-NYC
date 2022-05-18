@@ -9,8 +9,8 @@ import WalletImg from '../assets/img/wallet.png';
 function Header() {
     return (
         <div className="header">
-            <img src={GhostLogo} alt="" id="ghost-logo"/>
-            <img src={Logo} alt="" id="header-logo" />
+            <img src={GhostLogo} alt="" id="ghost-logo" draggable="false" />
+            <img src={Logo} alt="" id="header-logo" draggable="false" />
 
             <button className="connect-btn" >
                 <img src={WalletImg} alt="" className="fn-sm"/>
