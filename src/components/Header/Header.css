@@ -57,3 +57,10 @@
 .connect-btn img {
     width: 25px;
 }
+
+.connect-btn .connect-btn-icon {
+    width: 17px;
+    height: 10px;
+    margin-left: 15px;
+    object-fit: contain;
+}

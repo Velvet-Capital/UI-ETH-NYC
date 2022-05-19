@@ -5,6 +5,8 @@ import '../../styles/utils.css'
 import GhostLogo from '../../assets/img/ghost-logo.png';
 import Logo from '../../assets/img/headerlogo.png';
 import WalletImg from '../../assets/img/wallet.png';
+import ArrowUPImg from '../../assets/img/chevron-down (1).svg';
+import ArrowDownImg from '../../assets/img/chevron-down.svg';
 
 function Header({toggleConnectWalletModal, isWalletConnected}) {
     return (
@@ -34,6 +36,7 @@ function Header({toggleConnectWalletModal, isWalletConnected}) {
                 <button className="connect-btn" >
                     <img src={WalletImg} alt="" />
                     <span className="fn-sm">0x19..709</span>
+                    <img src={ArrowDownImg} className="connect-btn-icon" alt="" />
                 </button> 
             )}
         </div>
