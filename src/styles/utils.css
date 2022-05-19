@@ -21,3 +21,17 @@
 .c-green {
     color: #55d27c !important;
 }
+
+.horizontally-centred {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.my-30 {
+    margin: 30px 0;
+}
+
+.text-center {
+    text-align: center;
+}
