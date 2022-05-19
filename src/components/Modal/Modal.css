@@ -1,0 +1,99 @@
+.overlay {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    opacity: 0.9;
+    background-image: linear-gradient(to bottom, #4368cd, #7455f6);
+    animation: overlay-show 0.4s ease-in-out forwards;
+
+}
+
+.modal {
+    width: 532px;
+    height: 646px;
+    position: absolute;
+    left: 50vw;
+    transform: translate(-50%);
+    margin-top: 68px;
+    padding: 55px 65px 37px 65px;
+    border-radius: 40px;
+    box-shadow: 1px 1px 4px 0 #b3b3b3;
+    background-color: #fff;
+    opacity: 0;
+    animation: modal-show 0.4s ease-in-out forwards;
+}
+
+@keyframes overlay-show {
+    to {
+        opacity: 0.9;
+    }
+}
+
+@keyframes modal-show {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.connect-modal-velvet-logo {
+    width: 62px;
+    height: 58px;
+    object-fit: contain;
+}
+
+.connect-modal-title {
+    font-size: 21px;
+    font-weight: 600;
+    text-align: center;
+    color: #564dd0;
+    margin: 30px 0;
+}
+
+#connect-modal-input {
+    width: 100%;
+    height: 70px;
+    border: none;
+    border-bottom: 2px solid #7e77dd;
+    padding: 28.5px 14px 11.5px 14px;
+    font-size: 22px;
+    color: #b3b3b3;
+}
+
+#connect-modal-input:focus, #connect-modal-input:active  {
+    outline: none;
+}
+
+.connect-modal-signup-btn {
+    margin: 20px 0;
+}
+
+.connect-modal-metamask-btn {
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    height: 70px;
+    margin: 30px 0 20px 0;
+    padding: 11px 49px 10px 50px;
+    border: solid 1px #7e77dd;
+    border-radius: 15px;
+    box-shadow: 0 2px 15px 0 rgba(126, 119, 221, 0.57);
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.connect-modal-metamask-btn span {
+    font-weight: 600;
+    color: #564dd0;
+    text-align: center;
+}
+
+.connect-modal-metamask-btn img {
+    width: 49px;
+    height: 49px;
+    margin: 0 0 0 25px;
+    object-fit: contain;
+}
