@@ -14,7 +14,7 @@ import PeopleImg from './assets/img/people.svg';
 
 function App() {
 
-    const [isWalletConnected, setIsWalletConnected] = useState(false);
+    const [isWalletConnected, setIsWalletConnected] = useState(true);
     const [showConnectWalletModal, setShowConnectWalletModal] = useState(false);
 
     function toggleConnectWalletModal() {
@@ -30,7 +30,7 @@ function App() {
 
         <Modal show={showConnectWalletModal} toggleConnectWalletModal={toggleConnectWalletModal} />
 
-        <Header toggleConnectWalletModal={toggleConnectWalletModal} />
+        <Header toggleConnectWalletModal={toggleConnectWalletModal} isWalletConnected={isWalletConnected} />
 
         <h2 className='title fn-lg'>Community portfolios</h2>
 
@@ -58,7 +58,7 @@ function App() {
                     <span>-</span>
                 </div>
 
-                <button className="btn fn-md">Create</button>
+                <button className="btn fn-md" >Create</button>
 
                 <div className="portfolio-data">
                     <div className="left">
