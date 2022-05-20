@@ -5,7 +5,12 @@
     opacity: 0.9;
     background-image: linear-gradient(to bottom, #4368cd, #7455f6);
     animation: overlay-show 0.4s ease-in-out forwards;
+}
 
+@keyframes overlay-show {
+    to {
+        opacity: 0.9;
+    }
 }
 
 .modal {
@@ -21,12 +26,6 @@
     background-color: #fff;
     opacity: 0;
     animation: modal-show 0.4s ease-in-out forwards;
-}
-
-@keyframes overlay-show {
-    to {
-        opacity: 0.9;
-    }
 }
 
 @keyframes modal-show {

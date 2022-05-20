@@ -1,5 +1,5 @@
 import React from "react";
-import './Modal.css';
+import './ConnectModal.css';
 
 import VelvetImg from '../../assets/img/velvet.svg';
 import MetamaskImg from '../../assets/img/metamask.webp';
@@ -9,9 +9,9 @@ function Modal(props) {
 
     return (
         <>
-            <div className="overlay" onClick={props.toggleConnectWalletModal} >
+            <div className="overlay" onClick={props.toggleModal} >
             </div>
-            <div className='modal show'>
+            <div className='modal'>
                 <img src={VelvetImg} alt="" className='connect-modal-velvet-logo horizontally-centred'/>
                 <h2 className="connect-modal-title">Create wallet</h2>
                 <input type="email" name="email" placeholder="E-mail" id="connect-modal-input" />

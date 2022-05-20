@@ -1,10 +1,13 @@
 .portfolio-box {
     width: 345px;
     height: 443px;
-    padding: 45px 30px 25px 30px;
     border-radius: 20px;
     box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.1);
     background-color: #fff;
+}
+
+.portfolio-box-front {
+    padding: 45px 30px 25px 30px;
 }
 
 .level1 {
@@ -35,6 +38,7 @@
     height: 75px;
     margin: 25px 0px 25px 0;
     object-fit: contain;
+    cursor: pointer;
 }
 
 .user-return span, .user-balance span{
@@ -92,4 +96,57 @@
     height: 20px;
     margin: 0 10px 0 0;
     object-fit: contain;
+}
+
+/* backside  */
+
+.portfolio-box-back {
+    padding: 30px 25px 30px 26px;
+}
+
+#portfolio-box-back-cross {
+    width: 14px;
+    float: right;
+    cursor: pointer;
+}
+
+.portfolio-box-back h2 {
+    font-size: 21px;
+    font-weight: 500;
+    color: #564dd0;
+    margin-top: 8px;
+    margin-bottom: 10px;
+}
+
+.portfolio-box-back h3 {
+    font-size: 18px;
+    font-weight: 400;
+    color: #666;
+}
+
+.portfolio-box-back-assets {
+    height: 285px;
+    margin-top: 30px;
+    overflow-y: auto;
+}
+.portfolio-box-back-asset {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.portfolio-box-back-asset-icon {
+    width: 35px;
+    margin-right: 10px;
+}
+
+.portfolio-box-back-asset span {
+    font-size: 16px;
+    color: #262626;
+}
+
+.portfolio-box-back-asset-allocation {
+    margin-right: 22px;
+    margin-left: auto;
+    font-weight: 500;
 }
