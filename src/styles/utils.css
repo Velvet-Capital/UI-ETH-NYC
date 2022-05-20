@@ -35,3 +35,15 @@
 .text-center {
     text-align: center;
 }
+
+.flex {
+    display: flex;
+}
+
+.block {
+    display: block;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
