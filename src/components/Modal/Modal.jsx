@@ -18,7 +18,7 @@ function Modal(props) {
                 <button className="btn fn-md connect-modal-signup-btn">Sign Up</button>
                 <p className="fn-sm" style={{textAlign: 'center', color: '#564dd0', cursor: 'pointer', fontWeight: 500}}>I already have an account</p>
                 <h2 className="connect-modal-title my-30">Connect wallet</h2>
-                <button className="connect-modal-metamask-btn fn-md">
+                <button className="connect-modal-metamask-btn fn-md" onClick={props.connectWallet}>
                     <span> Connect with Metamask</span>
                     <img src={MetamaskImg} alt="" />
                 </button>
