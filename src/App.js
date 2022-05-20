@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './styles/App.css';
 import './styles/portfoliobox.css';
 
@@ -14,7 +14,8 @@ import PeopleImg from './assets/img/people.svg';
 
 function App() {
 
-    const [isWalletConnected, setIsWalletConnected] = useState(true);
+    const [isWalletConnected, setIsWalletConnected] = useState(false);
+    const [currentAccount, setCurrentAccount] = useState('');
     const [showConnectWalletModal, setShowConnectWalletModal] = useState(false);
 
     function toggleConnectWalletModal() {
@@ -25,12 +26,54 @@ function App() {
             setShowConnectWalletModal(true);
         }
     }
+
+    async function connectWallet() {
+        try{
+            const {ethereum} = window;
+            if (!ethereum) {
+                alert("Get MetaMask -> https://metamask.io/")
+                return;
+            }
+
+            const accounts = await ethereum.request({method: "eth_requestAccounts"});
+            setCurrentAccount(accounts[0]);
+            setIsWalletConnected(true);
+            toggleConnectWalletModal();
+        }
+        catch(err) {
+            console.log(err);
+        }
+    }
+
+    async function checkIfWalletConnected() {
+        try{
+            const {ethereum} = window;
+            if(!ethereum) {
+                alert("Get MetaMask -> https://metamask.io/")
+                return
+            }
+            const accounts = await ethereum.request({method: "eth_accounts"});
+            if(accounts.length > 0) {
+                setCurrentAccount(accounts[0]);
+                setIsWalletConnected(true);
+            }
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
+    useEffect(() => {
+       checkIfWalletConnected();
+
+    }, [])
+
     return (
     <div className="App">
 
-        <Modal show={showConnectWalletModal} toggleConnectWalletModal={toggleConnectWalletModal} />
+        <Modal show={showConnectWalletModal} toggleConnectWalletModal={toggleConnectWalletModal} connectWallet={connectWallet} />
 
-        <Header toggleConnectWalletModal={toggleConnectWalletModal} isWalletConnected={isWalletConnected} />
+        <Header toggleConnectWalletModal={toggleConnectWalletModal} isWalletConnected={isWalletConnected} currentAccount={currentAccount} />
 
         <h2 className='title fn-lg'>Community portfolios</h2>
 

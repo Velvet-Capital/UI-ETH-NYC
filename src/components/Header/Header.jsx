@@ -9,7 +9,7 @@ import ArrowUPImg from '../../assets/img/chevron-down (1).svg';
 import ArrowDownImg from '../../assets/img/chevron-down.svg';
 import ExitImg from '../../assets/img/exit.svg';
 
-function Header({toggleConnectWalletModal, isWalletConnected}) {
+function Header({toggleConnectWalletModal, isWalletConnected, currentAccount}) {
 
     const [showDropdownMenu, setShowDropdownMenu] = useState(false);
 
@@ -46,7 +46,7 @@ function Header({toggleConnectWalletModal, isWalletConnected}) {
             ) : (
                 <button className="connect-btn" onClick={toggleDropdownMenu}>
                     <img src={WalletImg} alt="" />
-                    <span className="fn-sm">0x19..709</span>
+                    <span className="fn-sm"> {currentAccount.slice(0,4) + '...' + currentAccount.slice(-3)} </span>
                     <img src={showDropdownMenu ? ArrowUPImg : ArrowDownImg} className="connect-btn-icon" alt="" />
                 </button> 
             )}
