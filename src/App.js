@@ -109,12 +109,12 @@ function App() {
                     <img className="assets-img" src={AssetsImg} alt="" />
 
                     <div className="user-balance">
-                        <span>balance</span>
+                        <span>Balance</span>
                         <span>$0</span>
                     </div>
 
                     <div className="user-return">
-                        <span>return</span>
+                        <span>Return</span>
                         <span>-</span>
                     </div>
 
@@ -194,16 +194,16 @@ function App() {
                     <img className="assets-img" src={AssetsImg} alt="" />
 
                     <div className="user-balance">
-                        <span>balance</span>
+                        <span>Balance</span>
                         <span>$0</span>
                     </div>
 
                     <div className="user-return">
-                        <span>return</span>
+                        <span>Return</span>
                         <span>-</span>
                     </div>
 
-                    <button className="btn fn-md" onClick={toggleCreateModal}>Create</button>
+                    <button className="btn fn-md" onClick={isWalletConnected && toggleCreateModal}>Create</button>
 
                     <div className="portfolio-data">
                         <div className="left">

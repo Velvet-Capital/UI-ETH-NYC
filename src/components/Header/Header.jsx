@@ -50,6 +50,7 @@ function Header({toggleConnectWalletModal, isWalletConnected, currentAccount}) {
                     <img src={showDropdownMenu ? ArrowUPImg : ArrowDownImg} className="connect-btn-icon" alt="" />
                 </button> 
             )}
+
             {
                 showDropdownMenu && (
                 <div className="header-dropdown-menu">
@@ -57,7 +58,7 @@ function Header({toggleConnectWalletModal, isWalletConnected, currentAccount}) {
                         <p className="fn-vsm">Wallet balance</p>
                         <span>$10,000</span>
                     </div>
-                    <hr />
+                    <hr style={{opacity: 0.5}}/>
                     <div>
                         <span className="fn-sm">Disconnect</span>
                         <img src={ExitImg} alt="" />

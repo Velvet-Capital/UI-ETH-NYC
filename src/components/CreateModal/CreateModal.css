@@ -8,9 +8,10 @@
 }
 
 #create-modal-cancle {
-    display: block;
     width: 20px;
-    float: right;
+    position: absolute;
+    top: 5%;
+    right: 5%;
 }
 
 .create-modal-details {
@@ -22,9 +23,8 @@
     margin-bottom: 53px;
 }
 
-.create-modal-logo {
+#create-modal-logo {
     width: 80px;
-    object-fit: contain;
 }
 
 .create-modal-details span {
@@ -86,6 +86,11 @@
     font-size: 16px;
     font-weight: 500;
     color: #262626;
+
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background: url(../../assets/img/chevron-down.svg) no-repeat 170px center;
+    
 }
 
 .asset-dropdown select:focus, .create-modal-amount-input input:focus {

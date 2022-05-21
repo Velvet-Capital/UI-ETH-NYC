@@ -3,6 +3,11 @@
   box-sizing: border-box;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
 body {
   margin: 0;
   font-family: Montserrat, 'Segoe UI', 'Roboto', 'Oxygen',

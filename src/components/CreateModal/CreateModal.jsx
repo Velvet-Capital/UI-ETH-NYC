@@ -2,7 +2,7 @@ import React from "react";
 import './CreateModal.css';
 
 import CrossImg from '../../assets/img/cross.svg';
-import VelvetLogo from '../../assets/img/velvetcapitallogo.png';
+import VelvetLogo from '../../assets/img/velvetlogo3x.png';
 import BtcImg from '../../assets/img/btc.svg';
 import EthImg from '../../assets/img/eth.svg';
 import BnbImg from '../../assets/img/bnb.png';
@@ -16,7 +16,7 @@ function CreateModal(props) {
             <div className="overlay" onClick={props.toggleModal}></div>
             <div className="modal create-modal">
                 <img src={CrossImg} alt="" id="create-modal-cancle" className="cursor-pointer" onClick={props.toggleModal} />
-                
+
                 <div className="create-modal-details">
                     <img src={VelvetLogo} alt="" id="create-modal-logo" />
                     <span>Top-15</span>
