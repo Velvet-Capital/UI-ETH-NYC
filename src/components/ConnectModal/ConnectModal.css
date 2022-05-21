@@ -65,6 +65,7 @@
 
 #connect-modal-input:focus, #connect-modal-input:active  {
     outline: none;
+    background-color: #fff;
 }
 
 .connect-modal-signup-btn {

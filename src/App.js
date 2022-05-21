@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { Magic} from 'magic-sdk';
+import { providers } from 'ethers';
 import './styles/App.css';
 import './styles/portfoliobox.css';
 
@@ -22,10 +24,12 @@ import AvaxImg from './assets/img/avax.png';
 
 function App() {
 
-    const [isWalletConnected, setIsWalletConnected] = useState(false);
     const [currentAccount, setCurrentAccount] = useState('');
+    const [email, setEmail] = useState('');
+    const [isWalletConnected, setIsWalletConnected] = useState(false);
     const [showConnectWalletModal, setShowConnectWalletModal] = useState(false);
     const [showCreateModal, setShowCreateModal] = useState(false);
+    const [provider, setProvider] = useState(null);
 
     function toggleConnectWalletModal() {
         if(showConnectWalletModal)
@@ -59,6 +63,35 @@ function App() {
         }
     }
 
+    function handleEmailInputChange(e) {
+        e.preventDefault();
+
+        setEmail(e.target.value);
+    }
+
+    async function handleSignin(e) {
+        e.preventDefault();
+
+        try{
+            const magic = new Magic('pk_live_5A41A4690CAFE701');
+    
+            const didToken = await magic.auth.loginWithMagicLink({
+                email: email
+            })
+    
+            const provider = new providers.Web3Provider(magic.rpcProvider);
+            setProvider(provider);
+            const signer = provider.getSigner();
+            setCurrentAccount(await signer.getAddress());
+            setIsWalletConnected(true);
+            toggleConnectWalletModal();
+        }
+        catch(err) {
+            console.log(err);
+            console.log("some error while login with magic link")
+        }
+    }
+
     async function checkIfWalletConnected() {
         try{
             const {ethereum} = window;
@@ -79,13 +112,12 @@ function App() {
 
     useEffect(() => {
        checkIfWalletConnected();
-
     }, [])
 
     return (
     <div className="App">
 
-        <ConnectModal show={showConnectWalletModal} toggleModal={toggleConnectWalletModal} connectWallet={connectWallet} />
+        <ConnectModal show={showConnectWalletModal} toggleModal={toggleConnectWalletModal} connectWallet={connectWallet} handleEmailInputChange={handleEmailInputChange} email={email} handleSignin={handleSignin} />
 
         <CreateModal show={showCreateModal} toggleModal={toggleCreateModal} />
 
