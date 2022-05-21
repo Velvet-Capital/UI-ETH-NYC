@@ -30,6 +30,8 @@ function App() {
     const [showConnectWalletModal, setShowConnectWalletModal] = useState(false);
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [provider, setProvider] = useState(null);
+    const [portfolioBox1FlipHandler, setPortfolioBox1FlipHandler] = useState('front');
+    const [portfolioBox2FlipHandler, setPortfolioBox2FlipHandler] = useState("front");
 
     function toggleConnectWalletModal() {
         if(showConnectWalletModal)
@@ -128,7 +130,8 @@ function App() {
         <div className="container">
 
             <div className="portfolio-box">
-                {/* <div className='protfolio-box-front'>
+                { portfolioBox1FlipHandler === 'front' ?
+                <div className='portfolio-box-front'>
                     <div className="level1">
                         <img src={Logo} alt="" />
 
@@ -138,7 +141,7 @@ function App() {
                         </div>
                     </div>
 
-                    <img className="assets-img" src={AssetsImg} alt="" />
+                    <img className="assets-img cursor-pointer" src={AssetsImg} alt="" onClick={() => setPortfolioBox1FlipHandler('back')}/>
 
                     <div className="user-balance">
                         <span>Balance</span>
@@ -164,10 +167,10 @@ function App() {
                         </div>
                     </div>
 
-                </div> */}
-
+                </div>
+                  :  
                 <div className="portfolio-box-back">
-                    <img src={CrossImg} alt="" id="portfolio-box-back-cross" />
+                    <img src={CrossImg} alt="" id="portfolio-box-back-cross" onClick={() => setPortfolioBox1FlipHandler('front')} />
                     <h2>Allocation</h2>
                     <h3>Rebalancing Weekly</h3>
                     <div className="portfolio-box-back-assets">
@@ -207,13 +210,15 @@ function App() {
                             <span className="portfolio-box-back-asset-allocation">6.6 %</span>
                         </div>
                     </div>
-                </div>
+                </div>}
 
             </div>
 
 
             <div className="portfolio-box">
-                <div className="portfolio-box-front">
+                { portfolioBox2FlipHandler === 'front' ? 
+
+                <div className="portfolio-box-front" >
                     <div className="level1">
                         <img src={MetaverseLogo} alt="" />
 
@@ -223,7 +228,7 @@ function App() {
                         </div>
                     </div>
 
-                    <img className="assets-img" src={AssetsImg} alt="" />
+                    <img className="assets-img cursor-pointer" src={AssetsImg} alt="" onClick={() => setPortfolioBox2FlipHandler('back')}/>
 
                     <div className="user-balance">
                         <span>Balance</span>
@@ -249,10 +254,49 @@ function App() {
                         </div>
                     </div>
                 </div>
+                    :
+                <div className="portfolio-box-back">
+                    <img src={CrossImg} alt="" id="portfolio-box-back-cross" onClick={() => setPortfolioBox2FlipHandler('front')} />
+                    <h2>Allocation</h2>
+                    <h3>Rebalancing Weekly</h3>
+                    <div className="portfolio-box-back-assets">
+                        <div className="portfolio-box-back-asset">
+                            <img src={BtcImg} alt="" className='portfolio-box-back-asset-icon' />
+                            <span className="portfolio-box-back-asset-name">Bitcoin</span>
+                            <span className="portfolio-box-back-asset-allocation">6.6 %</span>
+                        </div>
 
-                <div className="protfolio-box-back">
+                        <div className="portfolio-box-back-asset">
+                            <img src={EthImg} alt="" className='portfolio-box-back-asset-icon' />
+                            <span className="portfolio-box-back-asset-name">Ethereum</span>
+                            <span className="portfolio-box-back-asset-allocation">6.6 %</span>
+                        </div>
 
-                </div>
+                        <div className="portfolio-box-back-asset">
+                            <img src={AvaxImg} alt="" className='portfolio-box-back-asset-icon' />
+                            <span className="portfolio-box-back-asset-name">Avalanche</span>
+                            <span className="portfolio-box-back-asset-allocation">6.6 %</span>
+                        </div>
+
+                        <div className="portfolio-box-back-asset">
+                            <img src={BnbImg} alt="" className='portfolio-box-back-asset-icon' />
+                            <span className="portfolio-box-back-asset-name">BNB</span>
+                            <span className="portfolio-box-back-asset-allocation">6.6 %</span>
+                        </div>
+
+                        <div className="portfolio-box-back-asset">
+                            <img src={SolImg} alt="" className='portfolio-box-back-asset-icon' />
+                            <span className="portfolio-box-back-asset-name">Solana</span>
+                            <span className="portfolio-box-back-asset-allocation">6.6 %</span>
+                        </div>
+
+                        <div className="portfolio-box-back-asset">
+                            <img src={XrpImg} alt="" className='portfolio-box-back-asset-icon' />
+                            <span className="portfolio-box-back-asset-name">Ripple</span>
+                            <span className="portfolio-box-back-asset-allocation">6.6 %</span>
+                        </div>
+                    </div>
+                </div> }
             </div>
 
         </div>
