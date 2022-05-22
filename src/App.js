@@ -32,6 +32,7 @@ function App() {
     const [provider, setProvider] = useState(null);
     const [portfolioBox1FlipHandler, setPortfolioBox1FlipHandler] = useState('front');
     const [portfolioBox2FlipHandler, setPortfolioBox2FlipHandler] = useState("front");
+    const [createModalTab, setCreateModalTab] = useState('create');
 
     function toggleConnectWalletModal() {
         if(showConnectWalletModal)
@@ -45,6 +46,14 @@ function App() {
             setShowCreateModal(false);
         else
             setShowCreateModal(true);
+    }
+
+    function toggleCreateModalTab() {
+        if(createModalTab == 'create') 
+            setCreateModalTab('reedem');
+
+        else
+            setCreateModalTab('create');
     }
 
     async function connectWallet() {
@@ -121,7 +130,7 @@ function App() {
 
         <ConnectModal show={showConnectWalletModal} toggleModal={toggleConnectWalletModal} connectWallet={connectWallet} handleEmailInputChange={handleEmailInputChange} email={email} handleSignin={handleSignin} />
 
-        <CreateModal show={showCreateModal} toggleModal={toggleCreateModal} />
+        <CreateModal show={showCreateModal} toggleModal={toggleCreateModal} createModalTab={createModalTab} toggleCreateModalTab={toggleCreateModalTab}  />
 
         <Header toggleConnectWalletModal={toggleConnectWalletModal} isWalletConnected={isWalletConnected} currentAccount={currentAccount} />
 

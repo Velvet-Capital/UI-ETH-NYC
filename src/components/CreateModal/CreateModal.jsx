@@ -22,13 +22,13 @@ function CreateModal(props) {
                     <span>Top-15</span>
                 </div>
                 <div className="create-modal-action-tab flex">
-                    <div className="cursor-pointer">
-                        <span>Create</span>
-                        <div className="line active"></div>
+                    <div className="cursor-pointer" onClick={props.toggleCreateModalTab}>
+                        <span className={props.createModalTab === 'reedem' && "unactive"} >Create</span>
+                        <div className={`line ${props.createModalTab === 'create' && "active"}`} ></div>
                     </div>
-                    <div className="cursor-pointer">
-                        <span className="unactive">Redeem</span>
-                        <div className="line"></div>
+                    <div className="cursor-pointer" onClick={props.toggleCreateModalTab}>
+                        <span className={props.createModalTab === 'create' && "unactive"}>Redeem</span>
+                        <div className={`line ${props.createModalTab === 'reedem' && "active"}`} ></div>
                     </div>
                 </div>
 
@@ -51,7 +51,7 @@ function CreateModal(props) {
                     </div>
                 </div>
 
-                <button className="create-modal-action-btn btn fn-md">Create</button>
+                <button className="create-modal-action-btn btn fn-md">{props.createModalTab === 'create' ? "Create" : "Reedem"}</button>
             </div>
         </>
     )
