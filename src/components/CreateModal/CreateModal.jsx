@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
+import { BigNumber, utils } from "ethers";
 import './CreateModal.css';
+
+import Loading from '../Loading/Loading.jsx';
 
 import CrossImg from '../../assets/img/cross.svg';
 import VelvetLogo from '../../assets/img/velvetlogo3x.png';
@@ -9,6 +12,9 @@ import BnbImg from '../../assets/img/bnb.png';
 import SolImg from '../../assets/img/sol.png';
 
 function CreateModal(props) {
+
+    const [amount, setAmount] = useState(BigNumber.from(0));
+
     if(!props.show) return null;
 
     return (
@@ -23,11 +29,11 @@ function CreateModal(props) {
                 </div>
                 <div className="create-modal-action-tab flex">
                     <div className="cursor-pointer" onClick={props.toggleCreateModalTab}>
-                        <span className={props.createModalTab === 'reedem' && "unactive"} >Create</span>
+                        <span className={props.createModalTab === 'reedem' && "unactive"}> Create </span>
                         <div className={`line ${props.createModalTab === 'create' && "active"}`} ></div>
                     </div>
                     <div className="cursor-pointer" onClick={props.toggleCreateModalTab}>
-                        <span className={props.createModalTab === 'create' && "unactive"}>Redeem</span>
+                        <span className={props.createModalTab === 'create' && "unactive"}> Redeem </span>
                         <div className={`line ${props.createModalTab === 'reedem' && "active"}`} ></div>
                     </div>
                 </div>
@@ -46,12 +52,16 @@ function CreateModal(props) {
                     </div>
                     <div className="create-modal-amount-input">
                         <span className="fn-sm">Amount</span>
-                        <span className="fn-sm create-modal-amount-input-balance">~ $15,000</span>
-                        <input type="number" className="block" />
+                        <span className="fn-sm create-modal-amount-input-balance">{props.createModalTab === 'create' ? props.bnbBalance + ' BNB' : props.idxBalance + ' IDX'}</span>
+                        <input type="number" className="block" value={amount} onChange={(e) => setAmount(e.target.value)} />
                     </div>
                 </div>
 
-                <button className="create-modal-action-btn btn fn-md">{props.createModalTab === 'create' ? "Create" : "Reedem"}</button>
+                <button 
+                    className="create-modal-action-btn btn fn-md" 
+                    onClick={props.createModalTab === 'create' ? () => props.invest(utils.parseEther(amount.toString())) : () => props.withdraw(utils.parseEther(amount.toString()))}>
+                       {props.isLoading ? <Loading/> : props.createModalTab === 'create' ? "Create" : "Reedem"}
+                </button>
             </div>
         </>
     )

@@ -13,7 +13,7 @@ body {
   font-family: Montserrat, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-    background-image: linear-gradient(to bottom, #4368cd, #7455f6);
+  background-image: linear-gradient(to bottom, #4368cd, #7455f6);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

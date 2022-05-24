@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Magic} from 'magic-sdk';
-import { providers } from 'ethers';
+import { providers, Contract, utils} from 'ethers';
 import './styles/App.css';
 import './styles/portfoliobox.css';
+import indexSwap  from './utils/abi/IndexSwap.json';
 
 import Header from './components/Header/Header.jsx';
 import ConnectModal from './components/ConnectModal/ConnectModal.jsx';
@@ -33,6 +34,12 @@ function App() {
     const [portfolioBox1FlipHandler, setPortfolioBox1FlipHandler] = useState('front');
     const [portfolioBox2FlipHandler, setPortfolioBox2FlipHandler] = useState("front");
     const [createModalTab, setCreateModalTab] = useState('create');
+    const [bnbBalance, setBnbBalance] = useState('0');
+    const [idxBalance, setIdxBalance] = useState('0');
+    const [isLoading, setIsLoading] = useState(false);
+    
+    const indexSwapContractAddress = '0x69E0D1c8268d825E24B76f5248A8D39cEF3735fB';
+    const indexSwapAbi = indexSwap.abi;
 
     function toggleConnectWalletModal() {
         if(showConnectWalletModal)
@@ -41,7 +48,7 @@ function App() {
             setShowConnectWalletModal(true);
     }
 
-    function toggleCreateModal() {
+    async function toggleCreateModal() {
         if(showCreateModal)
             setShowCreateModal(false);
         else
@@ -49,47 +56,27 @@ function App() {
     }
 
     function toggleCreateModalTab() {
-        if(createModalTab == 'create') 
+        if(createModalTab === 'create') 
             setCreateModalTab('reedem');
-
         else
             setCreateModalTab('create');
     }
 
-    async function connectWallet() {
-        try{
-            const {ethereum} = window;
-            if (!ethereum) {
-                alert("Get MetaMask -> https://metamask.io/")
-                return;
-            }
-
-            const accounts = await ethereum.request({method: "eth_requestAccounts"});
-            setCurrentAccount(accounts[0]);
-            setIsWalletConnected(true);
-            toggleConnectWalletModal();
-        }
-        catch(err) {
-            console.log(err);
-        }
-    }
-
     function handleEmailInputChange(e) {
         e.preventDefault();
-
+        
         setEmail(e.target.value);
     }
-
+    
     async function handleSignin(e) {
         e.preventDefault();
-
-        try{
+        
+        try {
             const magic = new Magic('pk_live_5A41A4690CAFE701');
-    
             const didToken = await magic.auth.loginWithMagicLink({
                 email: email
             })
-    
+            
             const provider = new providers.Web3Provider(magic.rpcProvider);
             setProvider(provider);
             const signer = provider.getSigner();
@@ -102,9 +89,28 @@ function App() {
             console.log("some error while login with magic link")
         }
     }
+    
+    async function connectWallet() {
+        try{
+            const {ethereum} = window;
+            if (!ethereum) {
+                alert("Get MetaMask -> https://metamask.io/")
+                return;
+            }
+
+            const accounts = await ethereum.request({method: "eth_requestAccounts"});
+            setCurrentAccount(accounts[0]);
+            setIsWalletConnected(true);
+            toggleConnectWalletModal();
+            await getBalances();
+        }
+        catch(err) {
+            console.log(err);
+        }
+    }
 
     async function checkIfWalletConnected() {
-        try{
+        try {
             const {ethereum} = window;
             if(!ethereum) {
                 alert("Get MetaMask -> https://metamask.io/")
@@ -114,27 +120,139 @@ function App() {
             if(accounts.length > 0) {
                 setCurrentAccount(accounts[0]);
                 setIsWalletConnected(true);
+                await getBalances(accounts[0]);
             }
         }
-        catch(err){
+        catch(err) {
             console.log(err);
         }
     }
 
+    function getProviderOrSigner(needSigner=false) {
+        try {
+            const {ethereum} = window;
+            if(ethereum) {
+                const provider = new providers.Web3Provider(ethereum);
+                if(needSigner) 
+                    return provider.getSigner();
+
+                return provider;
+            }
+        }
+        catch(err) {
+            console.log(err);
+        }
+    }
+
+    async function getBalances(accountAddress) {
+        try {
+            console.log('getBalances');
+            const provider = getProviderOrSigner();
+            setBnbBalance(utils.formatEther(await provider.getBalance(accountAddress)).slice(0,4));
+            const contract = new Contract(indexSwapContractAddress, indexSwapAbi, provider);
+            setIdxBalance(utils.formatEther(await contract.balanceOf(accountAddress)).slice(0,4));
+        }
+        catch(err) {
+            console.log(err);
+        }
+    }
+
+    async function invest(amountToInvest) {
+        setIsLoading(true);
+        try {
+            const signer= getProviderOrSigner(true);
+            const contract = new Contract(indexSwapContractAddress, indexSwapAbi, signer);
+
+            let tx = await contract.investInFund({value: amountToInvest});
+            const receipt = await tx.wait();
+            setIsLoading(false);
+            await getBalances(currentAccount);
+            if(receipt.status === 1) 
+                alert(`You have successfully invested ${utils.formatEther(amountToInvest)} BNB`);
+            else
+                alert("Transaction failed! Please try again");
+
+            //adding index token to metamask
+            await window.ethereum.request({
+                method: 'wallet_watchAsset',
+                params: {
+                    type: 'ERC20',
+                    options: {
+                    address: '0x69E0D1c8268d825E24B76f5248A8D39cEF3735fB',
+                    symbol: 'IDX',
+                    decimals: 18,
+                    },
+                },
+            });
+        }
+        catch(err) {
+            setIsLoading(false);
+            console.log(err);
+        }
+    }
+
+    async function withdraw(amountToWithdraw) {
+        setIsLoading(true);
+        console.log(amountToWithdraw);
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const signer = getProviderOrSigner(true);
+                const contract = new Contract(indexSwapContractAddress, indexSwapAbi, signer);
+                
+                let tx = await contract.withdrawFromFundNew(amountToWithdraw, {gasLimit: utils.parseUnits('0.01', 'gwei')});
+                const receipt = await tx.wait();
+                setIsLoading(false);
+                await getBalances(currentAccount);
+                console.log(receipt);
+                if(receipt.status === 1)
+                    alert(`You have successfully reedemed ${utils.formatEther(amountToWithdraw)} IDX`);
+                else
+                    alert("Transaction failed! Please try again");
+            }
+        }
+        catch(err) {
+            setIsLoading(false);
+            console.log(err);
+        }
+    }
+    
     useEffect(() => {
-       checkIfWalletConnected();
+        checkIfWalletConnected();      
     }, [])
 
     return (
     <div className="App">
 
-        <ConnectModal show={showConnectWalletModal} toggleModal={toggleConnectWalletModal} connectWallet={connectWallet} handleEmailInputChange={handleEmailInputChange} email={email} handleSignin={handleSignin} />
+        <ConnectModal 
+            show = {showConnectWalletModal} 
+            toggleModal = {toggleConnectWalletModal} 
+            connectWallet = {connectWallet} 
+            handleEmailInputChange = {handleEmailInputChange} 
+            email = {email} 
+            handleSignin = {handleSignin} 
+        />
 
-        <CreateModal show={showCreateModal} toggleModal={toggleCreateModal} createModalTab={createModalTab} toggleCreateModalTab={toggleCreateModalTab}  />
+        <CreateModal 
+            show = {showCreateModal} 
+            toggleModal = {toggleCreateModal} 
+            createModalTab = {createModalTab} 
+            toggleCreateModalTab = {toggleCreateModalTab}  
+            invest = {invest}
+            withdraw = {withdraw}
+            bnbBalance = {bnbBalance}
+            idxBalance = {idxBalance}
+            isLoading = {isLoading}
+        />
 
-        <Header toggleConnectWalletModal={toggleConnectWalletModal} isWalletConnected={isWalletConnected} currentAccount={currentAccount} />
+        <Header 
+            toggleConnectWalletModal = {toggleConnectWalletModal} 
+            isWalletConnected = {isWalletConnected} 
+            currentAccount = {currentAccount} 
+            bnbBalance = {bnbBalance}
+        />
 
-        <h2 className='title fn-lg'>Community portfolios</h2>
+        <h2 className = 'title fn-lg'>Community portfolios</h2>
 
         <div className="container">
 
@@ -162,7 +280,7 @@ function App() {
                         <span>-</span>
                     </div>
 
-                    <button className="btn fn-md" onClick={isWalletConnected && toggleCreateModal}>Create</button>
+                    <button className="btn fn-md" onClick={isWalletConnected && toggleCreateModal}>Create/ Redeem</button>
 
                     <div className="portfolio-data">
                         <div className="left">
@@ -249,7 +367,7 @@ function App() {
                         <span>-</span>
                     </div>
 
-                    <button className="btn fn-md" onClick={isWalletConnected && toggleCreateModal}>Create</button>
+                    <button className="btn fn-md" onClick={isWalletConnected && toggleCreateModal}>Create/ Redeem</button>
 
                     <div className="portfolio-data">
                         <div className="left">
