@@ -9,7 +9,7 @@ import ArrowUPImg from '../../assets/img/chevron-down (1).svg';
 import ArrowDownImg from '../../assets/img/chevron-down.svg';
 import ExitImg from '../../assets/img/exit.svg';
 
-function Header({toggleConnectWalletModal, isWalletConnected, currentAccount}) {
+function Header({toggleConnectWalletModal, isWalletConnected, currentAccount, bnbBalance}) {
 
     const [showDropdownMenu, setShowDropdownMenu] = useState(false);
 
@@ -29,7 +29,7 @@ function Header({toggleConnectWalletModal, isWalletConnected, currentAccount}) {
             <div className="header-investor-data">
                 <div>
                     <span className="header-investor-data-title fn-sm">Balance</span>
-                    <span className="balance fn-lg">$15,000</span>
+                    <span className="balance fn-lg">{bnbBalance} BNB</span>
                 </div>
 
                 <div>
