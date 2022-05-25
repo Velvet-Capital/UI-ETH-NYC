@@ -9,7 +9,7 @@ import ArrowUPImg from '../../assets/img/chevron-down (1).svg';
 import ArrowDownImg from '../../assets/img/chevron-down.svg';
 import ExitImg from '../../assets/img/exit.svg';
 
-function Header({toggleConnectWalletModal, isWalletConnected, currentAccount, idxBalance}) {
+function Header({toggleConnectWalletModal, isWalletConnected, currentAccount, bnbBalance, currentBnbPrice, isTestnet, switchToMainnet, switchToTestnet}) {
 
     const [showDropdownMenu, setShowDropdownMenu] = useState(false);
 
@@ -29,12 +29,12 @@ function Header({toggleConnectWalletModal, isWalletConnected, currentAccount, id
             <div className="header-investor-data hide-for-mobile">
                 <div>
                     <span className="header-investor-data-title fn-sm">Balance</span>
-                    <span className="header-investor-data-balance fn-lg">{idxBalance} IDX</span>
+                    <span className="header-investor-data-balance fn-lg">$ {parseFloat(bnbBalance * currentBnbPrice).toFixed(2).toLocaleString()}</span>
                 </div>
 
                 <div>
                     <span className="header-investor-data-title fn-sm">Return</span>
-                    <span className="header-investor-data-return fn-lg c-green">+ $5,000 (20%)</span>
+                    <span className="header-investor-data-return fn-lg c-green">-</span>
                 </div>
             </div> )}
 
@@ -56,7 +56,15 @@ function Header({toggleConnectWalletModal, isWalletConnected, currentAccount, id
                 <div className="header-dropdown-menu">
                     <div>
                         <p className="fn-vsm">Wallet balance</p>
-                        <span>{idxBalance + ' IDX'}</span>
+                        <span>{bnbBalance + ' BNB'}</span>
+                    </div>
+                    <hr style={{opacity: 0.5}}/>
+                    <div>
+                        <button 
+                            className="btn header-dropdown-menu-btn fn-sm" 
+                            onClick={isTestnet ? switchToMainnet : switchToTestnet}>
+                                Switch to {isTestnet ? 'Mainnet' : 'Testnet'}
+                        </button>
                     </div>
                     <hr style={{opacity: 0.5}}/>
                     <div>

@@ -36,10 +36,12 @@ function App() {
     const [createModalTab, setCreateModalTab] = useState('create');
     const [bnbBalance, setBnbBalance] = useState('0');
     const [idxBalance, setIdxBalance] = useState('0');
-    const [isMainet, setIsMainet] = useState(false);
+    const [currentBnbPrice, setCurrentBnbPrice] = useState(null);
+    const [isTestnet, setIsTestnet] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     
-    const indexSwapContractAddress = '0x69E0D1c8268d825E24B76f5248A8D39cEF3735fB';
+    const indexSwapContractAddressTestnet = '0x69E0D1c8268d825E24B76f5248A8D39cEF3735fB';
+    const indexSwapContractAddressMainnet = '0x610571b323A7Cbf03F957fd551c35BB79Cff1E10';
     const indexSwapAbi = indexSwap.abi;
 
     function toggleConnectWalletModal() {
@@ -88,6 +90,68 @@ function App() {
             console.log("some error while login with magic link")
         }
     }
+
+    async function switchToTestnet() {
+        try {
+            const {ethereum} = window;
+            if(!ethereum) {
+                alert("Get MetaMask -> https://metamask.io/")
+                return
+            }
+  
+            setIsTestnet(true);
+            //switch network to bsc-testnet
+            await ethereum.request({
+                method: "wallet_addEthereumChain",
+                params: [{
+                    chainId: "0x61",
+                    rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+                    chainName: "BSC Testnet",
+                    nativeCurrency: {
+                        name: "Binance",
+                        symbol: "BNB",
+                        decimals: 18
+                    },
+                    blockExplorerUrls: ["https://testnet.bscscan.com"]
+                }]
+            });
+            await getBalancesTestnet(currentAccount);
+        }
+        catch(err) {
+            console.log(err);
+        }
+    }
+
+    async function switchToMainnet() {
+        try {
+            const {ethereum} = window;
+            if(!ethereum) {
+                alert("Get MetaMask -> https://metamask.io/")
+                return
+            }
+  
+            setIsTestnet(false);
+            //switch network to bsc-mainnet
+            await ethereum.request({
+                method: "wallet_addEthereumChain",
+                params: [{
+                    chainId: "0x38",
+                    rpcUrls: ["https://bsc-dataseed.binance.org/"],
+                    chainName: "BSC Main",
+                    nativeCurrency: {
+                        name: "Binance",
+                        symbol: "BNB",
+                        decimals: 18
+                    },
+                    blockExplorerUrls: ["https://bscscan.com"]
+                }]
+            });
+            await getBalancesMainnet(currentAccount);
+        }
+        catch(err) {
+            console.log(err);
+        }
+    }
     
     async function connectWallet() {
         try{
@@ -101,7 +165,10 @@ function App() {
             setCurrentAccount(accounts[0]);
             setIsWalletConnected(true);
             toggleConnectWalletModal();
-            await getBalances(accounts[0]);
+            if(isTestnet)
+                await getBalancesTestnet(accounts[0]);
+            else
+                await getBalancesMainnet(accounts[0]);
         }
         catch(err) {
             console.log(err);
@@ -120,7 +187,10 @@ function App() {
                 setCurrentAccount(accounts[0]);
                 setIsWalletConnected(true);
                 await checkNetwork();
-                await getBalances(accounts[0]);
+                if(isTestnet)
+                    await getBalancesTestnet(accounts[0]);
+                else
+                    await getBalancesMainnet(accounts[0]);
             }
         }
         catch(err) {
@@ -153,22 +223,43 @@ function App() {
             }
             const provider = getProviderOrSigner();
             const {chainId} = await provider.getNetwork();
-            if(chainId !== 97) {
-                //switch network to bsctest
-                await ethereum.request({
-                    method: "wallet_addEthereumChain",
-                    params: [{
-                        chainId: "0x61",
-                        rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
-                        chainName: "BSC Testnet",
-                        nativeCurrency: {
-                            name: "Binance",
-                            symbol: "BNB",
-                            decimals: 18
-                        },
-                        blockExplorerUrls: ["https://testnet.bscscan.com"]
-                    }]
-                });
+            if(isTestnet){
+                if(chainId !== 97) {
+                    //switch network to bsctest
+                    await ethereum.request({
+                        method: "wallet_addEthereumChain",
+                        params: [{
+                            chainId: "0x61",
+                            rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+                            chainName: "BSC Testnet",
+                            nativeCurrency: {
+                                name: "Binance",
+                                symbol: "BNB",
+                                decimals: 18
+                            },
+                            blockExplorerUrls: ["https://testnet.bscscan.com"]
+                        }]
+                    });
+                } 
+            } 
+            else {
+                if(chainId !== 56) {
+                    //switch network to bscmain
+                    await ethereum.request({
+                        method: "wallet_addEthereumChain",
+                        params: [{
+                            chainId: "0x38",
+                            rpcUrls: ["https://bsc-dataseed.binance.org/"],
+                            chainName: "BSC Main",
+                            nativeCurrency: {
+                                name: "Binance",
+                                symbol: "BNB",
+                                decimals: 18
+                            },
+                            blockExplorerUrls: ["https://bscscan.com"]
+                        }]
+                    });
+                } 
             }
         }
         catch(err) {
@@ -176,12 +267,24 @@ function App() {
         }
     }
 
-    async function getBalances(accountAddress) {
+    async function getBalancesTestnet(accountAddress) {
         try { 
             const provider = getProviderOrSigner();
-            setBnbBalance(utils.formatEther(await provider.getBalance(accountAddress)).slice(0,4));
-            const contract = new Contract(indexSwapContractAddress, indexSwapAbi, provider);
-            setIdxBalance(utils.formatEther(await contract.balanceOf(accountAddress)).slice(0,4));
+            setBnbBalance(parseFloat(utils.formatEther(await provider.getBalance(accountAddress))).toFixed(2));
+            const contract = new Contract(indexSwapContractAddressTestnet, indexSwapAbi, provider);
+            setIdxBalance(parseFloat(utils.formatEther(await contract.balanceOf(accountAddress))).toFixed(2));
+        }
+        catch(err) {
+            console.log(err);
+        }
+    }
+
+    async function getBalancesMainnet(accountAddress) {
+        try { 
+            const provider = getProviderOrSigner();
+            setBnbBalance(parseFloat(utils.formatEther(await provider.getBalance(accountAddress))).toFixed(2));
+            const contract = new Contract(indexSwapContractAddressMainnet, indexSwapAbi, provider); 
+            setIdxBalance(parseFloat(utils.formatEther(await contract.balanceOf(accountAddress))).toFixed(2));
         }
         catch(err) {
             console.log(err);
@@ -193,29 +296,28 @@ function App() {
         try {
             await checkNetwork();
             const signer= getProviderOrSigner(true);
-            const contract = new Contract(indexSwapContractAddress, indexSwapAbi, signer);
-
+            let contract;
+            if(isTestnet){
+                contract = new Contract(indexSwapContractAddressTestnet, indexSwapAbi, signer);
+            }
+            else {
+                contract = new Contract(indexSwapContractAddressMainnet, indexSwapAbi, signer);
+            }
+            
             let tx = await contract.investInFund({value: amountToInvest});
             const receipt = await tx.wait();
             setIsLoading(false);
-            await getBalances(currentAccount);
+            if(isTestnet)
+                await getBalancesTestnet(currentAccount);
+            else
+                await getBalancesMainnet(currentAccount);
+
             if(receipt.status === 1) 
                 alert(`You have successfully invested ${utils.formatEther(amountToInvest)} BNB`);
             else
                 alert("Transaction failed! Please try again");
-
-            //adding index token to metamask
-            await window.ethereum.request({
-                method: 'wallet_watchAsset',
-                params: {
-                    type: 'ERC20',
-                    options: {
-                    address: '0x69E0D1c8268d825E24B76f5248A8D39cEF3735fB',
-                    symbol: 'IDX',
-                    decimals: 18,
-                    },
-                },
-            });
+            toggleCreateModal()
+            
         }
         catch(err) {
             setIsLoading(false);
@@ -228,16 +330,26 @@ function App() {
         try {
             await checkNetwork();
             const signer = getProviderOrSigner(true);
-            const contract = new Contract(indexSwapContractAddress, indexSwapAbi, signer);
+            let contract;
+            if(isTestnet){
+                contract = new Contract(indexSwapContractAddressTestnet, indexSwapAbi, signer);
+            }
+            else {
+                contract = new Contract(indexSwapContractAddressMainnet, indexSwapAbi, signer);
+            }
             
             let tx = await contract.withdrawFromFundNew(amountToWithdraw);
             const receipt = await tx.wait();
             setIsLoading(false);
-            await getBalances(currentAccount);
+            if(isTestnet)
+                await getBalancesTestnet(currentAccount);
+            else
+                await getBalancesMainnet(currentAccount);
             if(receipt.status === 1)
                 alert(`You have successfully reedemed ${utils.formatEther(amountToWithdraw)} IDX`);
             else
                 alert("Transaction failed! Please try again");
+            toggleCreateModal()
         }
         catch(err) {
             setIsLoading(false);
@@ -247,6 +359,15 @@ function App() {
     
     useEffect(() => { 
         checkIfWalletConnected(); 
+
+        //fetching bnb price from binance api
+        fetch('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT')
+        .then( res => res.json() )
+        .then( data => {
+            const price = parseFloat(data.price);
+            setCurrentBnbPrice(price)
+        })
+        .catch(err => console.log(err))
     }, [])
 
     return (
@@ -270,6 +391,7 @@ function App() {
             withdraw = {withdraw}
             bnbBalance = {bnbBalance}
             idxBalance = {idxBalance}
+            currentBnbPrice = {currentBnbPrice}
             isLoading = {isLoading}
         />
 
@@ -277,10 +399,14 @@ function App() {
             toggleConnectWalletModal = {toggleConnectWalletModal} 
             isWalletConnected = {isWalletConnected} 
             currentAccount = {currentAccount} 
-            idxBalance = {idxBalance}
+            bnbBalance = {bnbBalance}
+            currentBnbPrice = {currentBnbPrice}
+            isTestnet = {isTestnet}
+            switchToMainnet = {switchToMainnet}
+            switchToTestnet = {switchToTestnet}
         />
 
-        <h2 className = 'title fn-lg'>Community portfolios</h2>
+        <h2 className = 'title fn-lg'>Community Baskets</h2>
 
         <div className="container">
 
@@ -300,7 +426,7 @@ function App() {
 
                     <div className="user-balance">
                         <span>Balance</span>
-                        <span>$0</span>
+                        <span>{idxBalance} IDX</span>
                     </div>
 
                     <div className="user-return">
@@ -309,7 +435,7 @@ function App() {
                     </div>
 
                     <button className="btn fn-md" onClick={isWalletConnected ? toggleCreateModal : toggleConnectWalletModal}>
-                        Create/ Redeem
+                        {parseFloat(idxBalance) > 0 ? "Create/ Redeem" : "Create"}
                     </button>
 
                     <div className="portfolio-data">
@@ -389,7 +515,7 @@ function App() {
 
                     <div className="user-balance">
                         <span>Balance</span>
-                        <span>$0</span>
+                        <span>{idxBalance} IDX</span>
                     </div>
 
                     <div className="user-return">
@@ -398,7 +524,7 @@ function App() {
                     </div>
 
                     <button className="btn fn-md" onClick={isWalletConnected ? toggleCreateModal : toggleConnectWalletModal}>
-                        Create/ Redeem
+                        {parseFloat(idxBalance) > 0 ? "Create/ Redeem" : "Create"}
                     </button>
 
                     <div className="portfolio-data">

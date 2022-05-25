@@ -31,7 +31,7 @@ function Modal(props) {
                     <img src={MetamaskImg} alt="" />
                 </button>
 
-                <p className="text-center fn-vsm">By connecting you are agree to our <b>Terms of use and Privacy Policy</b></p>
+                <p className="text-center fn-vsm">By connecting you agree to our <b><a href="#">Terms of use and Privacy Policy</a></b> </p>
             </div>
         </>
     )
