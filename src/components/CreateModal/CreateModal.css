@@ -109,6 +109,11 @@
     color: #262626;
 }
 
+.create-modal-amount-input input::placeholder {
+    color: #262626;
+    opacity: 0.1;
+}
+
 .create-modal-amount-input-balance {
     float: right;
     color: #b3b3b3 !important;

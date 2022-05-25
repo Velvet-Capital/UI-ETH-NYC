@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { BigNumber, utils } from "ethers";
 import './CreateModal.css';
 
@@ -14,15 +14,6 @@ import SolImg from '../../assets/img/sol.png';
 function CreateModal(props) {
 
     const [amount, setAmount] = useState(BigNumber.from(0));
-    const [currentBnbPrice, setCurrentBnbPrice] = useState(null);
-
-    useEffect(() => {
-        //fetching bnb price from binance api
-        fetch('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT')
-        .then( res => res.json() )
-        .then( data => setCurrentBnbPrice(data.price))
-        .catch(err => console.log(err))
-    },[])
 
     if(!props.show) return null;
 
@@ -51,7 +42,7 @@ function CreateModal(props) {
                     <div className="create-modal-token-input">
                         <span className="fn-sm">Token</span>
                         <div className="asset-dropdown">
-                            <select>
+                            <select disabled={props.createModalTab === 'create'} >
                                 {
                                     props.createModalTab === 'create' ? (
                                         <option value="1"><img src={BnbImg} alt="" /> BNB</option>
@@ -68,7 +59,7 @@ function CreateModal(props) {
                     <div className="create-modal-amount-input">
                         <span className="fn-sm">Amount</span>
                         <span className="fn-sm create-modal-amount-input-balance">
-                            ~ ${props.createModalTab === 'create' ? (amount * currentBnbPrice).toLocaleString() : (amount * currentBnbPrice).toLocaleString()}
+                            ~ ${props.createModalTab === 'create' ? (amount * props.currentBnbPrice).toLocaleString() : (amount * props.currentBnbPrice).toLocaleString()}
                         </span>
                         <input 
                             type="number" 
