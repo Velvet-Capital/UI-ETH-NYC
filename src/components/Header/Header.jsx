@@ -9,7 +9,7 @@ import ArrowUPImg from '../../assets/img/chevron-down (1).svg';
 import ArrowDownImg from '../../assets/img/chevron-down.svg';
 import ExitImg from '../../assets/img/exit.svg';
 
-function Header({toggleConnectWalletModal, isWalletConnected, currentAccount, bnbBalance}) {
+function Header({toggleConnectWalletModal, isWalletConnected, currentAccount, idxBalance}) {
 
     const [showDropdownMenu, setShowDropdownMenu] = useState(false);
 
@@ -26,15 +26,15 @@ function Header({toggleConnectWalletModal, isWalletConnected, currentAccount, bn
             <img src={Logo} alt="" id="header-logo" draggable="false" />
 
             {isWalletConnected && (
-            <div className="header-investor-data">
+            <div className="header-investor-data hide-for-mobile">
                 <div>
                     <span className="header-investor-data-title fn-sm">Balance</span>
-                    <span className="balance fn-lg">{bnbBalance} BNB</span>
+                    <span className="header-investor-data-balance fn-lg">{idxBalance} IDX</span>
                 </div>
 
                 <div>
                     <span className="header-investor-data-title fn-sm">Return</span>
-                    <span className="return fn-lg c-green">+ $5,000 (20%)</span>
+                    <span className="header-investor-data-return fn-lg c-green">+ $5,000 (20%)</span>
                 </div>
             </div> )}
 
@@ -56,7 +56,7 @@ function Header({toggleConnectWalletModal, isWalletConnected, currentAccount, bn
                 <div className="header-dropdown-menu">
                     <div>
                         <p className="fn-vsm">Wallet balance</p>
-                        <span>$10,000</span>
+                        <span>{idxBalance + ' IDX'}</span>
                     </div>
                     <hr style={{opacity: 0.5}}/>
                     <div>

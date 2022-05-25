@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BigNumber, utils } from "ethers";
 import './CreateModal.css';
 
@@ -6,14 +6,23 @@ import Loading from '../Loading/Loading.jsx';
 
 import CrossImg from '../../assets/img/cross.svg';
 import VelvetLogo from '../../assets/img/velvetlogo3x.png';
+import BnbImg from '../../assets/img/bnb.png';
 import BtcImg from '../../assets/img/btc.svg';
 import EthImg from '../../assets/img/eth.svg';
-import BnbImg from '../../assets/img/bnb.png';
 import SolImg from '../../assets/img/sol.png';
 
 function CreateModal(props) {
 
     const [amount, setAmount] = useState(BigNumber.from(0));
+    const [currentBnbPrice, setCurrentBnbPrice] = useState(null);
+
+    useEffect(() => {
+        //fetching bnb price from binance api
+        fetch('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT')
+        .then( res => res.json() )
+        .then( data => setCurrentBnbPrice(data.price))
+        .catch(err => console.log(err))
+    },[])
 
     if(!props.show) return null;
 
@@ -43,17 +52,31 @@ function CreateModal(props) {
                         <span className="fn-sm">Token</span>
                         <div className="asset-dropdown">
                             <select>
-                                <option value="1"><img src={BnbImg} alt="" /> BNB</option>
-                                <option value="2"><img src={BtcImg} alt="" /> BTC</option>
-                                <option value="3"><img src={EthImg} alt="" /> ETH</option>
-                                <option value="4"><img src={SolImg} alt="" /> SOL</option>
+                                {
+                                    props.createModalTab === 'create' ? (
+                                        <option value="1"><img src={BnbImg} alt="" /> BNB</option>
+                                        /* <option value="2"><img src={BtcImg} alt="" /> BTC</option>
+                                        <option value="3"><img src={EthImg} alt="" /> ETH</option>
+                                        <option value="4"><img src={SolImg} alt="" /> SOL</option> */
+                                    ) : (
+                                        <option value="1"><img src={BnbImg} alt="" /> IDX</option>
+                                    )
+                                }
                             </select>
                         </div>
                     </div>
                     <div className="create-modal-amount-input">
                         <span className="fn-sm">Amount</span>
-                        <span className="fn-sm create-modal-amount-input-balance">{props.createModalTab === 'create' ? props.bnbBalance + ' BNB' : props.idxBalance + ' IDX'}</span>
-                        <input type="number" className="block" value={amount} onChange={(e) => setAmount(e.target.value)} />
+                        <span className="fn-sm create-modal-amount-input-balance">
+                            ~ ${props.createModalTab === 'create' ? (amount * currentBnbPrice).toLocaleString() : (amount * currentBnbPrice).toLocaleString()}
+                        </span>
+                        <input 
+                            type="number" 
+                            className="block" 
+                            placeholder={props.createModalTab === 'create' ? props.bnbBalance + ' BNB' : props.idxBalance + ' IDX'} 
+                            max= '100'
+                            value={amount == '0' ? null : amount} onChange={(e) => e.target.value <= 10000000000 && setAmount(e.target.value)} 
+                        />
                     </div>
                 </div>
 

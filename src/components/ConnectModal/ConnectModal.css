@@ -16,12 +16,12 @@
 
 .modal {
     width: 532px;
-    height: 646px;
+    height: 605px;
     position: absolute;
     left: 50vw;
     transform: translate(-50%);
     margin-top: 68px;
-    padding: 55px 65px 37px 65px;
+    padding: 55px 65px;
     border-radius: 40px;
     box-shadow: 1px 1px 4px 0 #b3b3b3;
     background-color: #fff;
@@ -69,7 +69,7 @@
 }
 
 .connect-modal-signup-btn {
-    margin: 20px 0;
+    margin: 20px 0 0 0;
 }
 
 .connect-modal-metamask-btn {
@@ -78,8 +78,8 @@
 
     width: 100%;
     height: 70px;
-    margin: 30px 0 20px 0;
-    padding: 11px 49px 10px 50px;
+    margin: 0 0 20px 0;
+    padding: 11px 48px 10px 50px;
     border: solid 1px #7e77dd;
     border-radius: 15px;
     box-shadow: 0 2px 15px 0 rgba(126, 119, 221, 0.57);

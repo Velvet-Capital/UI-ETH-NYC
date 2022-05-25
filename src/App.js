@@ -36,6 +36,7 @@ function App() {
     const [createModalTab, setCreateModalTab] = useState('create');
     const [bnbBalance, setBnbBalance] = useState('0');
     const [idxBalance, setIdxBalance] = useState('0');
+    const [isMainet, setIsMainet] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     
     const indexSwapContractAddress = '0x69E0D1c8268d825E24B76f5248A8D39cEF3735fB';
@@ -64,13 +65,11 @@ function App() {
 
     function handleEmailInputChange(e) {
         e.preventDefault();
-        
         setEmail(e.target.value);
     }
     
     async function handleSignin(e) {
         e.preventDefault();
-        
         try {
             const magic = new Magic('pk_live_5A41A4690CAFE701');
             const didToken = await magic.auth.loginWithMagicLink({
@@ -102,7 +101,7 @@ function App() {
             setCurrentAccount(accounts[0]);
             setIsWalletConnected(true);
             toggleConnectWalletModal();
-            await getBalances();
+            await getBalances(accounts[0]);
         }
         catch(err) {
             console.log(err);
@@ -120,6 +119,7 @@ function App() {
             if(accounts.length > 0) {
                 setCurrentAccount(accounts[0]);
                 setIsWalletConnected(true);
+                await checkNetwork();
                 await getBalances(accounts[0]);
             }
         }
@@ -144,9 +144,40 @@ function App() {
         }
     }
 
-    async function getBalances(accountAddress) {
+    async function checkNetwork() {
         try {
-            console.log('getBalances');
+            const {ethereum} = window;
+            if(!ethereum) {
+                alert("Get MetaMask -> https://metamask.io/")
+                return
+            }
+            const provider = getProviderOrSigner();
+            const {chainId} = await provider.getNetwork();
+            if(chainId !== 97) {
+                //switch network to bsctest
+                await ethereum.request({
+                    method: "wallet_addEthereumChain",
+                    params: [{
+                        chainId: "0x61",
+                        rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+                        chainName: "BSC Testnet",
+                        nativeCurrency: {
+                            name: "Binance",
+                            symbol: "BNB",
+                            decimals: 18
+                        },
+                        blockExplorerUrls: ["https://testnet.bscscan.com"]
+                    }]
+                });
+            }
+        }
+        catch(err) {
+            console.log(err);
+        }
+    }
+
+    async function getBalances(accountAddress) {
+        try { 
             const provider = getProviderOrSigner();
             setBnbBalance(utils.formatEther(await provider.getBalance(accountAddress)).slice(0,4));
             const contract = new Contract(indexSwapContractAddress, indexSwapAbi, provider);
@@ -160,6 +191,7 @@ function App() {
     async function invest(amountToInvest) {
         setIsLoading(true);
         try {
+            await checkNetwork();
             const signer= getProviderOrSigner(true);
             const contract = new Contract(indexSwapContractAddress, indexSwapAbi, signer);
 
@@ -193,23 +225,19 @@ function App() {
 
     async function withdraw(amountToWithdraw) {
         setIsLoading(true);
-        console.log(amountToWithdraw);
         try {
-            const { ethereum } = window;
-            if (ethereum) {
-                const signer = getProviderOrSigner(true);
-                const contract = new Contract(indexSwapContractAddress, indexSwapAbi, signer);
-                
-                let tx = await contract.withdrawFromFundNew(amountToWithdraw, {gasLimit: utils.parseUnits('0.01', 'gwei')});
-                const receipt = await tx.wait();
-                setIsLoading(false);
-                await getBalances(currentAccount);
-                console.log(receipt);
-                if(receipt.status === 1)
-                    alert(`You have successfully reedemed ${utils.formatEther(amountToWithdraw)} IDX`);
-                else
-                    alert("Transaction failed! Please try again");
-            }
+            await checkNetwork();
+            const signer = getProviderOrSigner(true);
+            const contract = new Contract(indexSwapContractAddress, indexSwapAbi, signer);
+            
+            let tx = await contract.withdrawFromFundNew(amountToWithdraw);
+            const receipt = await tx.wait();
+            setIsLoading(false);
+            await getBalances(currentAccount);
+            if(receipt.status === 1)
+                alert(`You have successfully reedemed ${utils.formatEther(amountToWithdraw)} IDX`);
+            else
+                alert("Transaction failed! Please try again");
         }
         catch(err) {
             setIsLoading(false);
@@ -217,8 +245,8 @@ function App() {
         }
     }
     
-    useEffect(() => {
-        checkIfWalletConnected();      
+    useEffect(() => { 
+        checkIfWalletConnected(); 
     }, [])
 
     return (
@@ -249,7 +277,7 @@ function App() {
             toggleConnectWalletModal = {toggleConnectWalletModal} 
             isWalletConnected = {isWalletConnected} 
             currentAccount = {currentAccount} 
-            bnbBalance = {bnbBalance}
+            idxBalance = {idxBalance}
         />
 
         <h2 className = 'title fn-lg'>Community portfolios</h2>
@@ -280,7 +308,9 @@ function App() {
                         <span>-</span>
                     </div>
 
-                    <button className="btn fn-md" onClick={isWalletConnected && toggleCreateModal}>Create/ Redeem</button>
+                    <button className="btn fn-md" onClick={isWalletConnected ? toggleCreateModal : toggleConnectWalletModal}>
+                        Create/ Redeem
+                    </button>
 
                     <div className="portfolio-data">
                         <div className="left">
@@ -367,7 +397,9 @@ function App() {
                         <span>-</span>
                     </div>
 
-                    <button className="btn fn-md" onClick={isWalletConnected && toggleCreateModal}>Create/ Redeem</button>
+                    <button className="btn fn-md" onClick={isWalletConnected ? toggleCreateModal : toggleConnectWalletModal}>
+                        Create/ Redeem
+                    </button>
 
                     <div className="portfolio-data">
                         <div className="left">

@@ -47,3 +47,15 @@
 .cursor-pointer {
     cursor: pointer;
 }
+
+@media (min-width: 699px) {
+    .hide-for-desktop {
+        display: none;
+    }
+}
+
+@media (max-width: 699px ) {
+    .hide-for-mobile {
+        display: none;
+    }
+}
