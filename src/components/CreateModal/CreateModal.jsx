@@ -6,6 +6,8 @@ import Loading from '../Loading/Loading.jsx';
 
 import CrossImg from '../../assets/img/cross.svg';
 import VelvetLogo from '../../assets/img/velvetlogo3x.png';
+import MetaverseLogo from '../../assets/img/metaverse.svg';
+
 import BnbImg from '../../assets/img/bnb.png';
 import BtcImg from '../../assets/img/btc.svg';
 import EthImg from '../../assets/img/eth.svg';
@@ -14,6 +16,15 @@ import SolImg from '../../assets/img/sol.png';
 function CreateModal(props) {
 
     const [amount, setAmount] = useState(BigNumber.from(0));
+
+    let indexTokenBalance = '';
+    if(props.portfolioName === 'META')
+        indexTokenBalance = props.metaBalance;
+    else if(props.portfolioName === 'BLUECHIP') 
+        indexTokenBalance = props.bluechipBalance;
+    else if(props.portfolioName === 'TOP7')
+        indexTokenBalance = props.top7Balance;
+
 
     if(!props.show) return null;
 
@@ -24,8 +35,8 @@ function CreateModal(props) {
                 <img src={CrossImg} alt="" id="create-modal-cancle" className="cursor-pointer" onClick={props.toggleModal} />
 
                 <div className="create-modal-details">
-                    <img src={VelvetLogo} alt="" id="create-modal-logo" />
-                    <span>Top-15</span>
+                    <img src={props.portfolioName === 'META' ? MetaverseLogo : VelvetLogo} alt="" id="create-modal-logo" />
+                    <span>{props.portfolioName}</span>
                 </div>
                 <div className="create-modal-action-tab flex">
                     <div className="cursor-pointer" onClick={props.toggleCreateModalTab}>
@@ -50,7 +61,7 @@ function CreateModal(props) {
                                         <option value="3"><img src={EthImg} alt="" /> ETH</option>
                                         <option value="4"><img src={SolImg} alt="" /> SOL</option> */
                                     ) : (
-                                        <option value="1"><img src={BnbImg} alt="" /> IDX</option>
+                                        <option value="1"><img src={BnbImg} alt="" /> {props.portfolioName}</option>
                                     )
                                 }
                             </select>
@@ -64,18 +75,19 @@ function CreateModal(props) {
                         <input 
                             type="number" 
                             className="block" 
-                            placeholder={props.createModalTab === 'create' ? 'max ' + props.bnbBalance + ' BNB' : 'max ' + props.idxBalance + ' IDX'} 
+                            placeholder={props.createModalTab === 'create' ? 'max ' + props.bnbBalance + ' BNB' : 'max ' + indexTokenBalance + ' ' + props.portfolioName} 
                             max= '100'
                             value={amount == '0' ? null : amount} onChange={(e) => e.target.value <= 1000000000 && setAmount(e.target.value)} 
                         />
                     </div>
                 </div>
     
-                {props.createModalTab === 'create' ? <p className="create-modal-inf font-normal fn-sm text-center c-purple">You will get ~ {amount.toString()} IDX tokens representing your basket</p> : <p className="create-modal-inf font-normal fn-sm text-center c-purple">You will get ~ {amount.toString()} BNB </p> }
+                {props.createModalTab === 'create' ? <p className="create-modal-inf font-normal fn-sm text-center c-purple">You will get ~ {amount.toString()} {props.portfolioName} tokens representing your basket</p> : <p className="create-modal-inf font-normal fn-sm text-center c-purple">You will get ~ {amount.toString()} BNB </p> }
 
                 <button 
                     className="create-modal-action-btn btn fn-md" 
-                    onClick={props.createModalTab === 'create' ? () => props.invest(utils.parseEther(amount.toString())) : () => props.withdraw(utils.parseEther(amount.toString()))}>
+                    data-portfolio-name= {props.portfolioName}
+                    onClick={props.createModalTab === 'create' ? () => props.invest(props.portfolioName, utils.parseEther(amount.toString())) : () => props.withdraw(props.portfolioName, utils.parseEther(amount.toString()))}>
                        {props.isLoading ? <Loading/> : props.createModalTab === 'create' ? "Create" : "Reedem"}
                 </button>
             </div>
