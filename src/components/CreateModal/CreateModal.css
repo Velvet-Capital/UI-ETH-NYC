@@ -1,7 +1,7 @@
 .create-modal {
     width: 641px;
     height: 560px;
-    padding: 80px 59px 92px 59px;
+    padding: 60px 59px 80px 59px;
     margin-top: 0;
     top: 50vh;
     transform: translate(-50%, -50%);
@@ -29,7 +29,7 @@
 .create-modal-details span {
     font-size: 30px;
     font-weight: 600;
-    color: #564dd0;
+    color: var(--purple);
 }
 
 .create-modal-action-tab {
@@ -46,7 +46,7 @@
     font-size: 21px;
     font-weight: 600;
     margin-bottom: 10px;
-    color: #564dd0;
+    color: var(--purple);
 }
 
 .create-modal-action-tab .unactive {
@@ -60,17 +60,17 @@
 }
 
 .create-modal-action-tab .active {
-    border: 2px solid #564dd0;
+    border: 2px solid var(--purple);
 }
 
 .create-modal-inputs {
     gap: 20px;
     flex-wrap: wrap;
-    margin-bottom: 40px;
+    margin-bottom: 31px;
 }
 
 .create-modal-inputs span {
-    color: #564dd0;
+    color: var(--purple);
 }
 
 .asset-dropdown select {
@@ -110,8 +110,8 @@
 }
 
 .create-modal-amount-input input::placeholder {
-    color: #262626;
-    opacity: 0.1;
+    color: #797272;
+    opacity: 0.3;
 }
 
 .create-modal-amount-input-balance {
@@ -120,6 +120,6 @@
 }
 
 .create-modal-action-btn {
-    margin: 0;
-    background-color: #7e77dd;
+    margin: 21px 0;
+    background-color: var(--green);
 }
