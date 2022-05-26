@@ -1,3 +1,8 @@
+:root {
+    --green: #55d27c;
+    --purple: #564dd0;
+}
+
 .fn-vsm {
     font-size: 11px !important;
 }
@@ -14,12 +19,24 @@
     font-size: 24px !important;
 }
 
+.font-normal {
+    font-weight: normal !important;
+}
+
+.font-semibold {
+    font-weight: 600 !important;
+}
+
 .c-red {
     color: red !important;
 }
 
 .c-green {
-    color: #55d27c !important;
+    color: var(--green) !important;
+}
+
+.c-purple {
+    color: var(--purple) !important;
 }
 
 .horizontally-centred {

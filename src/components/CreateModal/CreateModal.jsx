@@ -42,7 +42,7 @@ function CreateModal(props) {
                     <div className="create-modal-token-input">
                         <span className="fn-sm">Token</span>
                         <div className="asset-dropdown">
-                            <select disabled={props.createModalTab === 'create'} >
+                            <select disabled >
                                 {
                                     props.createModalTab === 'create' ? (
                                         <option value="1"><img src={BnbImg} alt="" /> BNB</option>
@@ -64,12 +64,14 @@ function CreateModal(props) {
                         <input 
                             type="number" 
                             className="block" 
-                            placeholder={props.createModalTab === 'create' ? props.bnbBalance + ' BNB' : props.idxBalance + ' IDX'} 
+                            placeholder={props.createModalTab === 'create' ? 'max ' + props.bnbBalance + ' BNB' : 'max ' + props.idxBalance + ' IDX'} 
                             max= '100'
-                            value={amount == '0' ? null : amount} onChange={(e) => e.target.value <= 10000000000 && setAmount(e.target.value)} 
+                            value={amount == '0' ? null : amount} onChange={(e) => e.target.value <= 1000000000 && setAmount(e.target.value)} 
                         />
                     </div>
                 </div>
+    
+                {props.createModalTab === 'create' ? <p className="create-modal-inf font-normal fn-sm text-center c-purple">You will get ~ {amount.toString()} IDX tokens representing your basket</p> : <p className="create-modal-inf font-normal fn-sm text-center c-purple">You will get ~ {amount.toString()} BNB </p> }
 
                 <button 
                     className="create-modal-action-btn btn fn-md" 
