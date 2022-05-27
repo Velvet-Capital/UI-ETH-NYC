@@ -9,16 +9,9 @@ import ArrowUPImg from '../../assets/img/chevron-down (1).svg';
 import ArrowDownImg from '../../assets/img/chevron-down.svg';
 import ExitImg from '../../assets/img/exit.svg';
 
-function Header({toggleConnectWalletModal, isWalletConnected, currentAccount, bnbBalance, currentBnbPrice, isTestnet, switchToMainnet, switchToTestnet}) {
+function Header({toggleConnectWalletModal, toggleHeaderDropdownMenu, showHeaderDropdownMenu, isWalletConnected, currentAccount, bnbBalance, currentBnbPrice, isTestnet, switchToMainnet, switchToTestnet}) {
 
-    const [showDropdownMenu, setShowDropdownMenu] = useState(false);
-
-    function toggleDropdownMenu() {
-        if (showDropdownMenu)
-            setShowDropdownMenu(false);
-        else
-            setShowDropdownMenu(true);
-    }
+    const bnbBalanceInDollar = parseFloat(bnbBalance * currentBnbPrice).toFixed(2).toLocaleString();
 
     return (
         <div className="header">
@@ -29,7 +22,7 @@ function Header({toggleConnectWalletModal, isWalletConnected, currentAccount, bn
             <div className="header-investor-data hide-for-mobile">
                 <div>
                     <span className="header-investor-data-title fn-sm">Balance</span>
-                    <span className="header-investor-data-balance fn-lg">$ {parseFloat(bnbBalance * currentBnbPrice).toFixed(2).toLocaleString()}</span>
+                    <span className="header-investor-data-balance fn-lg">$ {bnbBalanceInDollar === '0.00' ? '0' : bnbBalanceInDollar}</span>
                 </div>
 
                 <div>
@@ -44,15 +37,15 @@ function Header({toggleConnectWalletModal, isWalletConnected, currentAccount, bn
                     <span className="fn-sm">Connect a wallet</span>
                 </button>
             ) : (
-                <button className="connect-btn" onClick={toggleDropdownMenu}>
+                <button className="connect-btn" onClick={toggleHeaderDropdownMenu}>
                     <img src={WalletImg} alt="" />
                     <span className="fn-sm"> {currentAccount.slice(0,4) + '...' + currentAccount.slice(-3)} </span>
-                    <img src={showDropdownMenu ? ArrowUPImg : ArrowDownImg} className="connect-btn-icon" alt="" />
+                    <img src={showHeaderDropdownMenu ? ArrowUPImg : ArrowDownImg} className="connect-btn-icon" alt="" />
                 </button> 
             )}
 
             {
-                showDropdownMenu && (
+                showHeaderDropdownMenu && (
                 <div className="header-dropdown-menu">
                     <div>
                         <p className="fn-vsm">Wallet balance</p>

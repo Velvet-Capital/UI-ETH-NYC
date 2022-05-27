@@ -30,6 +30,7 @@ function App() {
     const [isWalletConnected, setIsWalletConnected] = useState(false);
     const [showConnectWalletModal, setShowConnectWalletModal] = useState(false);
     const [showCreateModal, setShowCreateModal] = useState(false);
+    const [showHeaderDropdownMenu, setShowHeaderDropdownMenu] = useState(false);
     const [provider, setProvider] = useState(null);
     const [portfolioBox1FlipHandler, setPortfolioBox1FlipHandler] = useState('front');
     const [portfolioBox2FlipHandler, setPortfolioBox2FlipHandler] = useState("front");
@@ -47,6 +48,17 @@ function App() {
     const metaIndexContractAddressMainnet = '0xB757F1D8c40D49313f716906d7c3107a877367AD';
     const top7IndexContractAddressTestnet = '0x5DA92941262768deA5018114e64EB73b937B5Cb0';
     const indexSwapAbi = indexSwap.abi;
+
+    let top7IndexVaultBalance;
+    let metaIndexVaultBalance;
+    let bluechipIndexVaultBalance;
+    const top7Tokens = [];
+    const metaTokens = [];
+    const bluechipTokens = [];
+    const top7IndexTokensWeight = {}
+    const metaIndexTokensWeight = {}
+    const bluechipIndexTokensWeight = {}
+
 
     function toggleConnectWalletModal() {
         if(showConnectWalletModal)
@@ -69,6 +81,13 @@ function App() {
             setCreateModalTab('reedem');
         else
             setCreateModalTab('create');
+    }
+
+    function toggleHeaderDropdownMenu() {
+        if (showHeaderDropdownMenu)
+            setShowHeaderDropdownMenu(false);
+        else
+            setShowHeaderDropdownMenu(true);
     }
 
     function handleEmailInputChange(e) {
@@ -105,9 +124,8 @@ function App() {
                 return
             }
   
-            setIsTestnet(true);
             //switch network to bsc-testnet
-            await ethereum.request({
+            ethereum.request({
                 method: "wallet_addEthereumChain",
                 params: [{
                     chainId: "0x61",
@@ -120,8 +138,17 @@ function App() {
                     },
                     blockExplorerUrls: ["https://testnet.bscscan.com"]
                 }]
-            });
-            await getBalancesTestnet(currentAccount);
+            }).then( async () => {
+                console.log('then')
+                setIsTestnet(true);
+                toggleHeaderDropdownMenu();
+                await getBalancesTestnet(currentAccount);
+            }).catch( (err) => {
+                if(err.code === 4001){
+                    setIsTestnet(false);
+                    console.log('catch')
+                }
+            })
         }
         catch(err) {
             console.log(err);
@@ -136,7 +163,6 @@ function App() {
                 return
             }
   
-            setIsTestnet(false);
             //switch network to bsc-mainnet
             await ethereum.request({
                 method: "wallet_addEthereumChain",
@@ -152,6 +178,8 @@ function App() {
                     blockExplorerUrls: ["https://bscscan.com"]
                 }]
             });
+            setIsTestnet(false);
+            toggleHeaderDropdownMenu()
             await getBalancesMainnet(currentAccount);
         }
         catch(err) {
@@ -193,11 +221,9 @@ function App() {
             if(accounts.length > 0) {
                 setCurrentAccount(accounts[0]);
                 setIsWalletConnected(true);
-                await checkNetwork();
-                if(isTestnet)
-                    await getBalancesTestnet(accounts[0]);
-                else
+                checkNetwork().then(async () => {
                     await getBalancesMainnet(accounts[0]);
+                });
             }
         }
         catch(err) {
@@ -276,10 +302,22 @@ function App() {
 
     async function getBalancesTestnet(accountAddress) {
         try { 
+            //Getting BNB Balance
             const provider = getProviderOrSigner();
-            setBnbBalance(parseFloat(utils.formatEther(await provider.getBalance(accountAddress))).toFixed(2));
+            setBnbBalance(parseFloat(utils.formatEther(await provider.getBalance(accountAddress))).toFixed(3));
+            //Getting Top7 Balance
             const contract = new Contract(top7IndexContractAddressTestnet, indexSwapAbi, provider);
-            setTop7IndexBalance(parseFloat(utils.formatEther(await contract.balanceOf(accountAddress))).toFixed(2));
+            const top7Balance = parseFloat(utils.formatEther(await contract.balanceOf(accountAddress))).toFixed(3);
+            top7Balance === '0.000' ? setTop7IndexBalance('0') : setTop7IndexBalance(top7Balance);
+            //Getting Top7 Vault Balance
+            top7IndexVaultBalance = utils.formatEther( (await contract.getTokenAndVaultBalance())[1] );
+            console.log('Top7 Vault Balance: ' + top7IndexVaultBalance);  
+            //Getting Top7 Tokens Weight
+            const tokensBalance = (await contract.getTokenAndVaultBalance())[0];
+            tokensBalance.forEach((tokenBalance, index) => {
+                top7IndexTokensWeight[index] = ((utils.formatEther(tokenBalance) / top7IndexVaultBalance) * 100).toFixed(1);
+            })
+            console.log('Top7 Tokens Weight' , top7IndexTokensWeight);
         }
         catch(err) {
             console.log(err);
@@ -288,15 +326,39 @@ function App() {
 
     async function getBalancesMainnet(accountAddress) {
         try { 
-            //BNB
+            //Getting BNB Balance
             const provider = getProviderOrSigner();
-            setBnbBalance(parseFloat(utils.formatEther(await provider.getBalance(accountAddress))).toFixed(2));
-            //META
-            const contract = new Contract(metaIndexContractAddressMainnet, indexSwapAbi, provider); 
-            setMetaBalance(parseFloat(utils.formatEther(await contract.balanceOf(accountAddress))).toFixed(2));
-            //BLUECHIP
-            const contract2 = new Contract(bluechipIndexContractAddressMainnet, indexSwapAbi, provider); 
-            setBluechipBalance(parseFloat(utils.formatEther(await contract2.balanceOf(accountAddress))).toFixed(2));
+            setBnbBalance(parseFloat(utils.formatEther(await provider.getBalance(accountAddress))).toFixed(3));
+
+            //Getting META Balance
+            const metaContract = new Contract(metaIndexContractAddressMainnet, indexSwapAbi, provider); 
+            const metaBalance = parseFloat(utils.formatEther(await metaContract.balanceOf(accountAddress))).toFixed(3);
+            metaBalance === '0.000' ? setMetaBalance('0') : setMetaBalance(metaBalance);
+            //Getting META Vault Balance
+            metaIndexVaultBalance = utils.formatEther( (await metaContract.getTokenAndVaultBalance())[1] );
+            console.log("META vault Balance" ,metaIndexVaultBalance);
+            //Getting META Tokens Weight
+            const metaTokensBalance = (await metaContract.getTokenAndVaultBalance())[0];
+            metaTokensBalance.forEach((tokenBalance, index) => {
+                metaIndexTokensWeight[index] = ((utils.formatEther(tokenBalance) / metaIndexVaultBalance) * 100).toFixed(1);
+            })
+            console.log('META Tokens Weight' , metaIndexTokensWeight);
+
+
+            //Getting BLUECHIP Balance
+            const bluechipContract = new Contract(bluechipIndexContractAddressMainnet, indexSwapAbi, provider); 
+            const bluechipBalance = parseFloat(utils.formatEther(await bluechipContract.balanceOf(accountAddress))).toFixed(3);
+            bluechipBalance === '0.000' ? setBluechipBalance('0') : setBluechipBalance(bluechipBalance);
+            //Getting BLUECHIP Vault Balance
+            bluechipIndexVaultBalance = utils.formatEther( (await bluechipContract.getTokenAndVaultBalance())[1] );
+            console.log("bluechip vault Balance" ,bluechipIndexVaultBalance);
+            //Getting META Tokens Weight
+            const bluechipTokensBalance = (await bluechipContract.getTokenAndVaultBalance())[0];
+            bluechipTokensBalance.forEach((tokenBalance, index) => {
+                bluechipIndexTokensWeight[index] = ((utils.formatEther(tokenBalance) / bluechipIndexVaultBalance) * 100).toFixed(1);
+            })
+            console.log('BLUECHIP Tokens Weight' , bluechipIndexTokensWeight);
+
         }
         catch(err) {
             console.log(err);
@@ -420,6 +482,8 @@ function App() {
 
         <Header 
             toggleConnectWalletModal = {toggleConnectWalletModal} 
+            toggleHeaderDropdownMenu = {toggleHeaderDropdownMenu}
+            showHeaderDropdownMenu = {showHeaderDropdownMenu}
             isWalletConnected = {isWalletConnected} 
             currentAccount = {currentAccount} 
             bnbBalance = {bnbBalance}
