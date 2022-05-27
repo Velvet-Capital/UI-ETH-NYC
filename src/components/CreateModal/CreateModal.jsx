@@ -70,7 +70,7 @@ function CreateModal(props) {
                     <div className="create-modal-amount-input">
                         <span className="fn-sm">Amount</span>
                         <span className="fn-sm create-modal-amount-input-balance">
-                            ~ ${props.createModalTab === 'create' ? (amount * props.currentBnbPrice).toLocaleString() : (amount * props.currentBnbPrice).toLocaleString()}
+                            ~ ${props.createModalTab === 'create' ? (amount * props.currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 2}) : (amount * props.currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 2})}
                         </span>
                         <input 
                             type="number" 

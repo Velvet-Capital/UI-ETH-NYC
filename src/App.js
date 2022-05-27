@@ -199,11 +199,12 @@ function App() {
             setCurrentAccount(accounts[0]);
             setIsWalletConnected(true);
             toggleConnectWalletModal();
-            checkNetwork();
-            if(isTestnet)
-                await getBalancesTestnet(accounts[0]);
-            else
-                await getBalancesMainnet(accounts[0]);
+            checkNetwork().then(async () => {
+                if(isTestnet)
+                    await getBalancesTestnet(accounts[0]);
+                else
+                    await getBalancesMainnet(accounts[0]);
+            });
         }
         catch(err) {
             console.log(err);
@@ -304,7 +305,8 @@ function App() {
         try { 
             //Getting BNB Balance
             const provider = getProviderOrSigner();
-            setBnbBalance(parseFloat(utils.formatEther(await provider.getBalance(accountAddress))).toFixed(3));
+            const bnbBalance = parseFloat(utils.formatEther(await provider.getBalance(accountAddress))).toFixed(3);
+            bnbBalance === '0.000' ? setBnbBalance('0') : setBnbBalance(bnbBalance);
             //Getting Top7 Balance
             const contract = new Contract(top7IndexContractAddressTestnet, indexSwapAbi, provider);
             const top7Balance = parseFloat(utils.formatEther(await contract.balanceOf(accountAddress))).toFixed(3);
@@ -328,7 +330,8 @@ function App() {
         try { 
             //Getting BNB Balance
             const provider = getProviderOrSigner();
-            setBnbBalance(parseFloat(utils.formatEther(await provider.getBalance(accountAddress))).toFixed(3));
+            const bnbBalance = parseFloat(utils.formatEther(await provider.getBalance(accountAddress))).toFixed(3);
+            bnbBalance === '0.000' ? setBnbBalance('0') : setBnbBalance(bnbBalance);
 
             //Getting META Balance
             const metaContract = new Contract(metaIndexContractAddressMainnet, indexSwapAbi, provider); 
@@ -352,7 +355,7 @@ function App() {
             //Getting BLUECHIP Vault Balance
             bluechipIndexVaultBalance = utils.formatEther( (await bluechipContract.getTokenAndVaultBalance())[1] );
             console.log("bluechip vault Balance" ,bluechipIndexVaultBalance);
-            //Getting META Tokens Weight
+            //Getting BLUECHIP Tokens Weight
             const bluechipTokensBalance = (await bluechipContract.getTokenAndVaultBalance())[0];
             bluechipTokensBalance.forEach((tokenBalance, index) => {
                 bluechipIndexTokensWeight[index] = ((utils.formatEther(tokenBalance) / bluechipIndexVaultBalance) * 100).toFixed(1);
