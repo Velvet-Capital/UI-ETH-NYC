@@ -22,6 +22,8 @@ import SolImg from './assets/img/sol.png';
 import XrpImg from './assets/img/xrp.png';
 import AvaxImg from './assets/img/avax.png';
 
+import AssestsLogo from './utils/assests_logo_helper.js';
+
 
 function App() {
 
@@ -43,6 +45,9 @@ function App() {
     const [isTestnet, setIsTestnet] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [createModalPortfolioName, setCreateModalPortfolioName] = useState(null);
+    const [top7IndexTokensWeight, setTop7IndexTokensWeight] = useState({})
+    const [metaIndexTokensWeight, setMetaIndexTokensWeight] = useState({})
+    const [bluechipIndexTokensWeight, setBluechipIndexTokensWeight] = useState({})
     
     const bluechipIndexContractAddressMainnet = '0x55204c31E725C7635393bdBdE738d73c1e10E178';
     const metaIndexContractAddressMainnet = '0xB757F1D8c40D49313f716906d7c3107a877367AD';
@@ -52,12 +57,9 @@ function App() {
     let top7IndexVaultBalance;
     let metaIndexVaultBalance;
     let bluechipIndexVaultBalance;
-    const top7Tokens = [];
-    const metaTokens = [];
-    const bluechipTokens = [];
-    const top7IndexTokensWeight = {}
-    const metaIndexTokensWeight = {}
-    const bluechipIndexTokensWeight = {}
+    const top7Tokens = ['BTC', 'ETH', 'XRP', 'ADA', 'AVAX', 'DOT', 'TRX'];
+    const metaTokens = ['MANA', 'SAND', 'AXS'];
+    const bluechipTokens = ['BTC', 'ETH', 'XRP', 'ADA'];
 
 
     function toggleConnectWalletModal() {
@@ -316,10 +318,12 @@ function App() {
             console.log('Top7 Vault Balance: ' + top7IndexVaultBalance);  
             //Getting Top7 Tokens Weight
             const tokensBalance = (await contract.getTokenAndVaultBalance())[0];
+            const tokensWeight = {};
             tokensBalance.forEach((tokenBalance, index) => {
-                top7IndexTokensWeight[index] = ((utils.formatEther(tokenBalance) / top7IndexVaultBalance) * 100).toFixed(1);
+                tokensWeight[top7Tokens[index]] = ((utils.formatEther(tokenBalance) / top7IndexVaultBalance) * 100).toFixed(1);
             })
-            console.log('Top7 Tokens Weight' , top7IndexTokensWeight);
+            console.log(tokensWeight);
+            setTop7IndexTokensWeight(tokensWeight);
         }
         catch(err) {
             console.log(err);
@@ -342,10 +346,12 @@ function App() {
             console.log("META vault Balance" ,metaIndexVaultBalance);
             //Getting META Tokens Weight
             const metaTokensBalance = (await metaContract.getTokenAndVaultBalance())[0];
+            const tokensWeight = {};
             metaTokensBalance.forEach((tokenBalance, index) => {
-                metaIndexTokensWeight[index] = ((utils.formatEther(tokenBalance) / metaIndexVaultBalance) * 100).toFixed(1);
+                tokensWeight[metaTokens[index]] = ((utils.formatEther(tokenBalance) / metaIndexVaultBalance) * 100).toFixed(1);
             })
-            console.log('META Tokens Weight' , metaIndexTokensWeight);
+            console.log(tokensWeight);
+            setMetaIndexTokensWeight(tokensWeight);
 
 
             //Getting BLUECHIP Balance
@@ -357,10 +363,12 @@ function App() {
             console.log("bluechip vault Balance" ,bluechipIndexVaultBalance);
             //Getting BLUECHIP Tokens Weight
             const bluechipTokensBalance = (await bluechipContract.getTokenAndVaultBalance())[0];
+            const bluechipTokensWeight = {};
             bluechipTokensBalance.forEach((tokenBalance, index) => {
-                bluechipIndexTokensWeight[index] = ((utils.formatEther(tokenBalance) / bluechipIndexVaultBalance) * 100).toFixed(1);
+                bluechipTokensWeight[bluechipTokens[index]] = ((utils.formatEther(tokenBalance) / bluechipIndexVaultBalance) * 100).toFixed(1);
             })
-            console.log('BLUECHIP Tokens Weight' , bluechipIndexTokensWeight);
+            console.log(bluechipTokensWeight);
+            setBluechipIndexTokensWeight(bluechipTokensWeight);
 
         }
         catch(err) {
@@ -548,10 +556,23 @@ function App() {
                         <h2>Allocation</h2>
                         <h3>Rebalancing Weekly</h3>
                         <div className="portfolio-box-back-assets">
-                            <div className="portfolio-box-back-asset">
-                                <img src={BtcImg} alt="" className='portfolio-box-back-asset-icon' />
-                                <span className="portfolio-box-back-asset-name">Bitcoin</span>
-                                <span className="portfolio-box-back-asset-allocation">6.6 %</span>
+
+                            {
+                                top7Tokens.map((token, index) => {
+                                    return (
+                                        <div className="portfolio-box-back-asset" key={index}>
+                                            <img src={AssestsLogo[token]} alt="" className='portfolio-box-back-asset-icon' />
+                                            <span className="portfolio-box-back-asset-name">{token}</span>
+                                            <span className="portfolio-box-back-asset-allocation">{top7IndexTokensWeight[token]} %</span>
+                                        </div>
+                                    )
+                                })
+                            }
+
+                            {/* <div className="portfolio-box-back-asset">
+                                        <img src={BtcImg} alt="" className='portfolio-box-back-asset-icon' />
+                                        <span className="portfolio-box-back-asset-name">Bitcoin</span>
+                                        <span className="portfolio-box-back-asset-allocation">50 %</span>
                             </div>
 
                             <div className="portfolio-box-back-asset">
@@ -582,7 +603,7 @@ function App() {
                                 <img src={XrpImg} alt="" className='portfolio-box-back-asset-icon' />
                                 <span className="portfolio-box-back-asset-name">Ripple</span>
                                 <span className="portfolio-box-back-asset-allocation">6.6 %</span>
-                            </div>
+                            </div> */}
                         </div>
                     </div>}
 

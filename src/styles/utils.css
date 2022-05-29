@@ -65,6 +65,10 @@
     cursor: pointer;
 }
 
+.border-red {
+    border-color: red !important;
+}
+
 @media (min-width: 699px) {
     .hide-for-desktop {
         display: none;

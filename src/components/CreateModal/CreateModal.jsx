@@ -74,9 +74,8 @@ function CreateModal(props) {
                         </span>
                         <input 
                             type="number" 
-                            className="block" 
+                            className={props.createModalTab === 'create' ? (amount > props.bnbBalance ? "block border-red" : "block") : (amount > indexTokenBalance ? "block border-red" : "block") } 
                             placeholder={props.createModalTab === 'create' ? 'max ' + props.bnbBalance + ' BNB' : 'max ' + indexTokenBalance + ' ' + props.portfolioName} 
-                            max= '100'
                             value={amount == '0' ? null : amount} onChange={(e) => e.target.value <= 1000000000 && setAmount(e.target.value)} 
                         />
                     </div>
