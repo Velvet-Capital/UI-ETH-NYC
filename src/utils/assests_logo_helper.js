@@ -7,6 +7,9 @@ import AvaxImg from '../assets/img/avax.png';
 import TrxImg from '../assets/img/trx.png';
 import DotImg from '../assets/img/polkadot.png';
 import AdaImg from '../assets/img/ada.png';
+import ManaImg from '../assets/img/mana.png';
+import SandImg from '../assets/img/sand.png';
+import AxsImg from '../assets/img/axs.png';
 
 export default {
     'BTC' : BtcImg,
@@ -18,4 +21,7 @@ export default {
     'ADA' : AdaImg,
     'DOT' : DotImg,
     'TRX' : TrxImg,
+    'MANA' : ManaImg,
+    'SAND' : SandImg,
+    'AXS' : AxsImg
 };

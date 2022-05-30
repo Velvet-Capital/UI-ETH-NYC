@@ -461,7 +461,6 @@ function App() {
     
     useEffect(() => { 
         checkIfWalletConnected(); 
-
         //fetching bnb price from binance api
         fetch('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT')
         .then( res => res.json() )
@@ -565,7 +564,6 @@ function App() {
                         <h2>Allocation</h2>
                         <h3>Rebalancing Weekly</h3>
                         <div className="portfolio-box-back-assets">
-
                             {
                                 top7Tokens.map((token, index) => {
                                     return (
@@ -577,42 +575,6 @@ function App() {
                                     )
                                 })
                             }
-
-                            {/* <div className="portfolio-box-back-asset">
-                                        <img src={BtcImg} alt="" className='portfolio-box-back-asset-icon' />
-                                        <span className="portfolio-box-back-asset-name">Bitcoin</span>
-                                        <span className="portfolio-box-back-asset-allocation">50 %</span>
-                            </div>
-
-                            <div className="portfolio-box-back-asset">
-                                <img src={EthImg} alt="" className='portfolio-box-back-asset-icon' />
-                                <span className="portfolio-box-back-asset-name">Ethereum</span>
-                                <span className="portfolio-box-back-asset-allocation">6.6 %</span>
-                            </div>
-
-                            <div className="portfolio-box-back-asset">
-                                <img src={AvaxImg} alt="" className='portfolio-box-back-asset-icon' />
-                                <span className="portfolio-box-back-asset-name">Avalanche</span>
-                                <span className="portfolio-box-back-asset-allocation">6.6 %</span>
-                            </div>
-
-                            <div className="portfolio-box-back-asset">
-                                <img src={BnbImg} alt="" className='portfolio-box-back-asset-icon' />
-                                <span className="portfolio-box-back-asset-name">BNB</span>
-                                <span className="portfolio-box-back-asset-allocation">6.6 %</span>
-                            </div>
-
-                            <div className="portfolio-box-back-asset">
-                                <img src={SolImg} alt="" className='portfolio-box-back-asset-icon' />
-                                <span className="portfolio-box-back-asset-name">Solana</span>
-                                <span className="portfolio-box-back-asset-allocation">6.6 %</span>
-                            </div>
-
-                            <div className="portfolio-box-back-asset">
-                                <img src={XrpImg} alt="" className='portfolio-box-back-asset-icon' />
-                                <span className="portfolio-box-back-asset-name">Ripple</span>
-                                <span className="portfolio-box-back-asset-allocation">6.6 %</span>
-                            </div> */}
                         </div>
                     </div>}
 
@@ -664,44 +626,23 @@ function App() {
                         :  
                         <div className="portfolio-box-back">
                             <img src={CrossImg} alt="" id="portfolio-box-back-cross" onClick={() => setPortfolioBox1FlipHandler('front')} />
+
                             <h2>Allocation</h2>
+
                             <h3>Rebalancing Weekly</h3>
+                            
                             <div className="portfolio-box-back-assets">
-                                <div className="portfolio-box-back-asset">
-                                    <img src={BtcImg} alt="" className='portfolio-box-back-asset-icon' />
-                                    <span className="portfolio-box-back-asset-name">Bitcoin</span>
-                                    <span className="portfolio-box-back-asset-allocation">6.6 %</span>
-                                </div>
-
-                                <div className="portfolio-box-back-asset">
-                                    <img src={EthImg} alt="" className='portfolio-box-back-asset-icon' />
-                                    <span className="portfolio-box-back-asset-name">Ethereum</span>
-                                    <span className="portfolio-box-back-asset-allocation">6.6 %</span>
-                                </div>
-
-                                <div className="portfolio-box-back-asset">
-                                    <img src={AvaxImg} alt="" className='portfolio-box-back-asset-icon' />
-                                    <span className="portfolio-box-back-asset-name">Avalanche</span>
-                                    <span className="portfolio-box-back-asset-allocation">6.6 %</span>
-                                </div>
-
-                                <div className="portfolio-box-back-asset">
-                                    <img src={BnbImg} alt="" className='portfolio-box-back-asset-icon' />
-                                    <span className="portfolio-box-back-asset-name">BNB</span>
-                                    <span className="portfolio-box-back-asset-allocation">6.6 %</span>
-                                </div>
-
-                                <div className="portfolio-box-back-asset">
-                                    <img src={SolImg} alt="" className='portfolio-box-back-asset-icon' />
-                                    <span className="portfolio-box-back-asset-name">Solana</span>
-                                    <span className="portfolio-box-back-asset-allocation">6.6 %</span>
-                                </div>
-
-                                <div className="portfolio-box-back-asset">
-                                    <img src={XrpImg} alt="" className='portfolio-box-back-asset-icon' />
-                                    <span className="portfolio-box-back-asset-name">Ripple</span>
-                                    <span className="portfolio-box-back-asset-allocation">6.6 %</span>
-                                </div>
+                                {
+                                    bluechipTokens.map((token, index) => {
+                                        return (
+                                            <div className="portfolio-box-back-asset" key={index}>
+                                                <img src={AssestsLogo[token]} alt="" className='portfolio-box-back-asset-icon' />
+                                                <span className="portfolio-box-back-asset-name">{token}</span>
+                                                <span className="portfolio-box-back-asset-allocation">{bluechipIndexTokensWeight[token]} %</span>
+                                            </div>
+                                        )
+                                    })
+                                }
                             </div>
                         </div>}
 
@@ -754,41 +695,17 @@ function App() {
                             <h2>Allocation</h2>
                             <h3>Rebalancing Weekly</h3>
                             <div className="portfolio-box-back-assets">
-                                <div className="portfolio-box-back-asset">
-                                    <img src={BtcImg} alt="" className='portfolio-box-back-asset-icon' />
-                                    <span className="portfolio-box-back-asset-name">Bitcoin</span>
-                                    <span className="portfolio-box-back-asset-allocation">6.6 %</span>
-                                </div>
-
-                                <div className="portfolio-box-back-asset">
-                                    <img src={EthImg} alt="" className='portfolio-box-back-asset-icon' />
-                                    <span className="portfolio-box-back-asset-name">Ethereum</span>
-                                    <span className="portfolio-box-back-asset-allocation">6.6 %</span>
-                                </div>
-
-                                <div className="portfolio-box-back-asset">
-                                    <img src={AvaxImg} alt="" className='portfolio-box-back-asset-icon' />
-                                    <span className="portfolio-box-back-asset-name">Avalanche</span>
-                                    <span className="portfolio-box-back-asset-allocation">6.6 %</span>
-                                </div>
-
-                                <div className="portfolio-box-back-asset">
-                                    <img src={BnbImg} alt="" className='portfolio-box-back-asset-icon' />
-                                    <span className="portfolio-box-back-asset-name">BNB</span>
-                                    <span className="portfolio-box-back-asset-allocation">6.6 %</span>
-                                </div>
-
-                                <div className="portfolio-box-back-asset">
-                                    <img src={SolImg} alt="" className='portfolio-box-back-asset-icon' />
-                                    <span className="portfolio-box-back-asset-name">Solana</span>
-                                    <span className="portfolio-box-back-asset-allocation">6.6 %</span>
-                                </div>
-
-                                <div className="portfolio-box-back-asset">
-                                    <img src={XrpImg} alt="" className='portfolio-box-back-asset-icon' />
-                                    <span className="portfolio-box-back-asset-name">Ripple</span>
-                                    <span className="portfolio-box-back-asset-allocation">6.6 %</span>
-                                </div>
+                                {
+                                    metaTokens.map((token, index) => {
+                                        return (
+                                            <div className="portfolio-box-back-asset" key={index}>
+                                                <img src={AssestsLogo[token]} alt="" className='portfolio-box-back-asset-icon' />
+                                                <span className="portfolio-box-back-asset-name">{token}</span>
+                                                <span className="portfolio-box-back-asset-allocation">{metaIndexTokensWeight[token]} %</span>
+                                            </div>
+                                        )
+                                    })
+                                }                            
                             </div>
                         </div> }
                     </div>
