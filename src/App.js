@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Magic} from 'magic-sdk';
 import { providers, Contract, utils} from 'ethers';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './styles/App.css';
 import './styles/portfoliobox.css';
 import indexSwap  from './utils/abi/IndexSwap.json';
@@ -23,7 +25,6 @@ import XrpImg from './assets/img/xrp.png';
 import AvaxImg from './assets/img/avax.png';
 
 import AssestsLogo from './utils/assests_logo_helper.js';
-
 
 function App() {
 
@@ -122,7 +123,15 @@ function App() {
         try {
             const {ethereum} = window;
             if(!ethereum) {
-                alert("Get MetaMask -> https://metamask.io/")
+                toast.error("Get MetaMask -> https://metamask.io/", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
                 return
             }
   
@@ -159,7 +168,15 @@ function App() {
         try {
             const {ethereum} = window;
             if(!ethereum) {
-                alert("Get MetaMask -> https://metamask.io/")
+                toast.error("Get MetaMask -> https://metamask.io/", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
                 return
             }
   
@@ -195,7 +212,15 @@ function App() {
         try{
             const {ethereum} = window;
             if (!ethereum) {
-                alert("Get MetaMask -> https://metamask.io/")
+                toast.error("Get MetaMask -> https://metamask.io/", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
                 return;
             }
 
@@ -219,7 +244,15 @@ function App() {
         try {
             const {ethereum} = window;
             if(!ethereum) {
-                alert("Get MetaMask -> https://metamask.io/")
+                toast.error("Get MetaMask -> https://metamask.io/", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
                 return
             }
             const accounts = await ethereum.request({method: "eth_accounts"});
@@ -256,7 +289,15 @@ function App() {
         try {
             const {ethereum} = window;
             if(!ethereum) {
-                alert("Get MetaMask -> https://metamask.io/")
+                toast.error("Get MetaMask -> https://metamask.io/", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
                 return
             }
             const provider = getProviderOrSigner();
@@ -403,19 +444,54 @@ function App() {
             else
                 await getBalancesMainnet(currentAccount);
 
-            if(receipt.status === 1) 
-                alert(`You have successfully invested ${utils.formatEther(amountToInvest)} BNB into ${portfolioName} Index`);
-            else
-                alert("Transaction failed! Please try again");
+            if(receipt.status === 1) {
+                toast.success(`You have successfully invested ${utils.formatEther(amountToInvest)} BNB into ${portfolioName} Index`, {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+            else {
+                toast.error("Transaction failed! Please try again", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
             toggleCreateModal();
         }
         catch(err) {
             setIsLoading(false);
             console.log(err);
-            if(err.code === -32603)
-                alert('Insufficient BNB Balance');
-            else 
-                alert('Some Error Occured');
+            if(err.code === -32603) {
+                toast.error('Insufficient BNB Balance', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+            else {
+                toast.error('Some Error Occured', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    progress: undefined,
+                });
+            }
         }
     }
 
@@ -443,19 +519,53 @@ function App() {
                 await getBalancesTestnet(currentAccount);
             else
                 await getBalancesMainnet(currentAccount);
-            if(receipt.status === 1)
-                alert(`You have successfully reedemed ${utils.formatEther(amountToWithdraw)} ${portfolioName}`);
-            else
-                alert("Transaction failed! Please try again");
+            if(receipt.status === 1) {
+                toast.success(`You have successfully reedemed ${utils.formatEther(amountToWithdraw)} ${portfolioName}`, {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+            else {
+                toast.error("Transaction failed! Please try again", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
             toggleCreateModal()
         }
         catch(err) {
             setIsLoading(false);
             console.log(err);
-            if(err.code === -32603)
-                alert(`Insufficient ${portfolioName} Balance`);
-            else
-                alert('Some Error Occured!')
+            if(err.error.code === -32603) {
+                toast.error(`Insufficient ${portfolioName} Balance`, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    progress: undefined,
+                });
+            }
+            else {
+                toast.error('Some Error Occured', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    progress: undefined,
+                });
+            }
         }
     }
     
@@ -712,6 +822,8 @@ function App() {
                 </>
             )}
         </div>
+
+        <ToastContainer />
 
     </div>
     );
