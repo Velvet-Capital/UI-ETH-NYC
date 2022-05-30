@@ -394,7 +394,7 @@ function App() {
             else if(portfolioName === 'TOP7') {
                 contract = new Contract(top7IndexContractAddressTestnet, indexSwapAbi, signer);
             }
-            
+
             let tx = await contract.investInFund({value: amountToInvest});
             const receipt = await tx.wait();
             setIsLoading(false);
@@ -407,12 +407,15 @@ function App() {
                 alert(`You have successfully invested ${utils.formatEther(amountToInvest)} BNB into ${portfolioName} Index`);
             else
                 alert("Transaction failed! Please try again");
-            toggleCreateModal()
-            
+            toggleCreateModal();
         }
         catch(err) {
             setIsLoading(false);
             console.log(err);
+            if(err.code === -32603)
+                alert('Insufficient BNB Balance');
+            else 
+                alert('Some Error Occured');
         }
     }
 
@@ -449,6 +452,10 @@ function App() {
         catch(err) {
             setIsLoading(false);
             console.log(err);
+            if(err.code === -32603)
+                alert(`Insufficient ${portfolioName} Balance`);
+            else
+                alert('Some Error Occured!')
         }
     }
     
