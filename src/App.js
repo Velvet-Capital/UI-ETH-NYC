@@ -127,7 +127,7 @@ function App() {
             }
   
             //switch network to bsc-testnet
-            ethereum.request({
+            await ethereum.request({
                 method: "wallet_addEthereumChain",
                 params: [{
                     chainId: "0x61",
@@ -140,17 +140,15 @@ function App() {
                     },
                     blockExplorerUrls: ["https://testnet.bscscan.com"]
                 }]
-            }).then( async () => {
-                console.log('then')
-                setIsTestnet(true);
-                toggleHeaderDropdownMenu();
-                await getBalancesTestnet(currentAccount);
-            }).catch( (err) => {
-                if(err.code === 4001){
-                    setIsTestnet(false);
-                    console.log('catch')
-                }
             })
+            
+            toggleHeaderDropdownMenu();
+            const provider = getProviderOrSigner();
+            const {chainId} = await provider.getNetwork();
+            if(chainId === 97) {
+                setIsTestnet(true);
+                await getBalancesTestnet(currentAccount);
+            }
         }
         catch(err) {
             console.log(err);
@@ -180,9 +178,13 @@ function App() {
                     blockExplorerUrls: ["https://bscscan.com"]
                 }]
             });
-            setIsTestnet(false);
-            toggleHeaderDropdownMenu()
-            await getBalancesMainnet(currentAccount);
+            toggleHeaderDropdownMenu();
+            const provider = getProviderOrSigner();
+            const {chainId} = await provider.getNetwork();
+            if(chainId === 56) {
+                setIsTestnet(false);
+                await getBalancesMainnet(currentAccount);
+            }
         }
         catch(err) {
             console.log(err);
