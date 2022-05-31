@@ -17,6 +17,7 @@ import AssetsImg from './assets/img/assetsimg1.png';
 import DollarImg from './assets/img/dollar.svg';
 import PeopleImg from './assets/img/people.svg';
 import CrossImg from './assets/img/cross.svg';
+import GreenTickImg from './assets/img/green-tick.png';
 import BtcImg from './assets/img/btc.svg';
 import EthImg from './assets/img/eth.svg';
 import BnbImg from './assets/img/bnb.png';
@@ -437,36 +438,29 @@ function App() {
             }
 
             let tx = await contract.investInFund({value: amountToInvest});
-            const receipt = await tx.wait();
-            setIsLoading(false);
-            if(isTestnet)
-                await getBalancesTestnet(currentAccount);
-            else
-                await getBalancesMainnet(currentAccount);
+            const receipt = tx.wait();
 
-            if(receipt.status === 1) {
-                toast.success(`You have successfully invested ${utils.formatEther(amountToInvest)} BNB into ${portfolioName} Index`, {
-                    position: "top-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            }
-            else {
-                toast.error("Transaction failed! Please try again", {
-                    position: "top-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            }
-            toggleCreateModal();
+            toast.promise(receipt, {
+                pending: `Investing ${utils.formatEther(amountToInvest)} BNB into ${portfolioName} Index`,
+                success: { render: `Successfully invested ${utils.formatEther(amountToInvest)} BNB into ${portfolioName} Index`, icon: {GreenTickImg} },
+                error: 'Transaction failed! Please try again'
+            }, {
+                position: 'top-center'
+            })
+
+            receipt.then(async () => {
+                setIsLoading(false);
+                if(isTestnet)
+                    await getBalancesTestnet(currentAccount);
+                else
+                    await getBalancesMainnet(currentAccount);
+                toggleCreateModal();
+            }).catch((err) => {
+                setIsLoading(false);
+                console.log(err)
+                toggleCreateModal();
+
+            })
         }
         catch(err) {
             setIsLoading(false);
@@ -513,35 +507,28 @@ function App() {
             }
             
             let tx = await contract.withdrawFromFundNew(amountToWithdraw);
-            const receipt = await tx.wait();
-            setIsLoading(false);
-            if(isTestnet)
-                await getBalancesTestnet(currentAccount);
-            else
-                await getBalancesMainnet(currentAccount);
-            if(receipt.status === 1) {
-                toast.success(`You have successfully reedemed ${utils.formatEther(amountToWithdraw)} ${portfolioName}`, {
-                    position: "top-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            }
-            else {
-                toast.error("Transaction failed! Please try again", {
-                    position: "top-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-            }
-            toggleCreateModal()
+            const receipt = tx.wait();
+
+            toast.promise(receipt, {
+                pending: `Redeeming ${utils.formatEther(amountToWithdraw)} ${portfolioName} Index`,
+                success: { render: `Successfully redeemed ${utils.formatEther(amountToWithdraw)} ${portfolioName}`, icon: {GreenTickImg} },
+                error: 'Transaction failed! Please try again'
+            }, {
+                position: 'top-center'
+            })
+
+            receipt.then(async () => {
+                setIsLoading(false);
+                if(isTestnet)
+                    await getBalancesTestnet(currentAccount);
+                else
+                    await getBalancesMainnet(currentAccount);
+                toggleCreateModal();
+            }).catch((err) => {
+                setIsLoading(false);
+                toggleCreateModal();
+                console.log(err);
+            })
         }
         catch(err) {
             setIsLoading(false);
