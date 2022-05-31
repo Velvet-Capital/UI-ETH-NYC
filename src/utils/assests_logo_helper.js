@@ -10,6 +10,7 @@ import AdaImg from '../assets/img/ada.png';
 import ManaImg from '../assets/img/mana.png';
 import SandImg from '../assets/img/sand.png';
 import AxsImg from '../assets/img/axs.png';
+import DogeImg from '../assets/img/doge.png';
 
 export default {
     'BTC' : BtcImg,
@@ -23,5 +24,7 @@ export default {
     'TRX' : TrxImg,
     'MANA' : ManaImg,
     'SAND' : SandImg,
-    'AXS' : AxsImg
+    'AXS' : AxsImg,
+    'DOGE' : DogeImg,
+    'WBNB' : BnbImg
 };

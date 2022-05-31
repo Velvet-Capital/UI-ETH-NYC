@@ -7,7 +7,6 @@ import Loading from '../Loading/Loading.jsx';
 import CrossImg from '../../assets/img/cross.svg';
 import VelvetLogo from '../../assets/img/velvetlogo3x.png';
 import MetaverseLogo from '../../assets/img/metaverse.svg';
-
 import BnbImg from '../../assets/img/bnb.png';
 import BtcImg from '../../assets/img/btc.svg';
 import EthImg from '../../assets/img/eth.svg';
@@ -22,6 +21,8 @@ function CreateModal(props) {
         indexTokenBalance = props.metaBalance;
     else if(props.portfolioName === 'BLUECHIP') 
         indexTokenBalance = props.bluechipBalance;
+    else if(props.portfolioName === 'TOP10')
+        indexTokenBalance = props.top10Balance;
     else if(props.portfolioName === 'TOP7')
         indexTokenBalance = props.top7Balance;
 

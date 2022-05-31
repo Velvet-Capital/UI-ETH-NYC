@@ -18,6 +18,7 @@ import DollarImg from './assets/img/dollar.svg';
 import PeopleImg from './assets/img/people.svg';
 import CrossImg from './assets/img/cross.svg';
 import GreenTickImg from './assets/img/green-tick.png';
+import ErrorImg from './assets/img/error.png';
 import BtcImg from './assets/img/btc.svg';
 import EthImg from './assets/img/eth.svg';
 import BnbImg from './assets/img/bnb.png';
@@ -37,31 +38,37 @@ function App() {
     const [showHeaderDropdownMenu, setShowHeaderDropdownMenu] = useState(false);
     const [provider, setProvider] = useState(null);
     const [portfolioBox1FlipHandler, setPortfolioBox1FlipHandler] = useState('front');
-    const [portfolioBox2FlipHandler, setPortfolioBox2FlipHandler] = useState("front");
+    const [portfolioBox2FlipHandler, setPortfolioBox2FlipHandler] = useState('front');
+    const [portfolioBox3FlipHandler, setPortfolioBox3FlipHandler] = useState('front');
     const [createModalTab, setCreateModalTab] = useState('create');
     const [bnbBalance, setBnbBalance] = useState('0');
     const [metaBalance, setMetaBalance] = useState('0');
     const [bluechipBalance, setBluechipBalance] = useState('0')
+    const [top10Balance, setTop10Balance] = useState('0');
     const [top7IndexBalalce, setTop7IndexBalance] = useState('0')
     const [currentBnbPrice, setCurrentBnbPrice] = useState(null);
     const [isTestnet, setIsTestnet] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [createModalPortfolioName, setCreateModalPortfolioName] = useState(null);
-    const [top7IndexTokensWeight, setTop7IndexTokensWeight] = useState({})
     const [metaIndexTokensWeight, setMetaIndexTokensWeight] = useState({})
     const [bluechipIndexTokensWeight, setBluechipIndexTokensWeight] = useState({})
+    const [top10IndexTokensWeight, setTop10IndexTokensWeight] = useState({})
+    const [top7IndexTokensWeight, setTop7IndexTokensWeight] = useState({})
     
     const bluechipIndexContractAddressMainnet = '0x55204c31E725C7635393bdBdE738d73c1e10E178';
     const metaIndexContractAddressMainnet = '0xB757F1D8c40D49313f716906d7c3107a877367AD';
+    const top10IndexContractAddressMainnet = '0x210b31776fA73c72CCaD41A65AcAF1Ab3317440E';
     const top7IndexContractAddressTestnet = '0x5DA92941262768deA5018114e64EB73b937B5Cb0';
     const indexSwapAbi = indexSwap.abi;
 
-    let top7IndexVaultBalance;
     let metaIndexVaultBalance;
     let bluechipIndexVaultBalance;
-    const top7Tokens = ['BTC', 'ETH', 'XRP', 'ADA', 'AVAX', 'DOT', 'TRX'];
+    let top10IndexVaultBalance;
+    let top7IndexVaultBalance;
     const metaTokens = ['MANA', 'SAND', 'AXS'];
     const bluechipTokens = ['BTC', 'ETH', 'XRP', 'ADA'];
+    const top10Tokens = ['BTC', 'ETH', 'XRP', 'ADA', 'AVAX', 'DOT', 'TRX', 'DOGE', 'SOL', 'WBNB'];
+    const top7Tokens = ['BTC', 'ETH', 'XRP', 'ADA', 'AVAX', 'DOT', 'TRX'];
 
 
     function toggleConnectWalletModal() {
@@ -414,6 +421,22 @@ function App() {
             console.log(bluechipTokensWeight);
             setBluechipIndexTokensWeight(bluechipTokensWeight);
 
+            //Getting TOP10 Balance
+            const top10Contract = new Contract(top10IndexContractAddressMainnet, indexSwapAbi, provider); 
+            const top10Balance = parseFloat(utils.formatEther(await top10Contract.balanceOf(accountAddress))).toFixed(3);
+            top10Balance === '0.000' ? setTop10Balance('0') : setTop10Balance(top10Balance);
+            //Getting TOP10 Vault Balance
+            top10IndexVaultBalance = utils.formatEther( (await top10Contract.getTokenAndVaultBalance())[1] );
+            console.log("Top10 vault Balance" , top10IndexVaultBalance);
+            //Getting TOP10 Tokens Weight
+            const top10TokensBalance = (await top10Contract.getTokenAndVaultBalance())[0];
+            const top10TokensWeight = {};
+            top10TokensBalance.forEach((tokenBalance, index) => {
+                top10TokensWeight[top10Tokens[index]] = ((utils.formatEther(tokenBalance) / top10IndexVaultBalance) * 100).toFixed(1);
+            })
+            console.log(top10TokensWeight);
+            setTop10IndexTokensWeight(top10TokensWeight);
+
         }
         catch(err) {
             console.log(err);
@@ -433,17 +456,20 @@ function App() {
             else if(portfolioName === 'BLUECHIP') {
                 contract = new Contract(bluechipIndexContractAddressMainnet, indexSwapAbi, signer);
             }
+            else if(portfolioName === 'TOP10') {
+                contract = new Contract(top10IndexContractAddressMainnet, indexSwapAbi, signer);
+            }
             else if(portfolioName === 'TOP7') {
                 contract = new Contract(top7IndexContractAddressTestnet, indexSwapAbi, signer);
             }
 
-            let tx = await contract.investInFund({value: amountToInvest});
+            let tx = await contract.investInFund({value: amountToInvest, gasLimit: 2220806 });
             const receipt = tx.wait();
 
             toast.promise(receipt, {
                 pending: `Investing ${utils.formatEther(amountToInvest)} BNB into ${portfolioName} Index`,
                 success: { render: `Successfully invested ${utils.formatEther(amountToInvest)} BNB into ${portfolioName} Index`, icon: {GreenTickImg} },
-                error: 'Transaction failed! Please try again'
+                error: {render: 'Transaction failed! Please try again', icon: {ErrorImg}}
             }, {
                 position: 'top-center'
             })
@@ -502,6 +528,9 @@ function App() {
             else if(portfolioName === 'BLUECHIP') {
                 contract = new Contract(bluechipIndexContractAddressMainnet, indexSwapAbi, signer);
             }
+            else if(portfolioName === 'TOP10') {
+                contract = new Contract(top10IndexContractAddressMainnet, indexSwapAbi, signer);
+            }
             else if(portfolioName === 'TOP7') {
                 contract = new Contract(top7IndexContractAddressTestnet, indexSwapAbi, signer);
             }
@@ -512,7 +541,7 @@ function App() {
             toast.promise(receipt, {
                 pending: `Redeeming ${utils.formatEther(amountToWithdraw)} ${portfolioName} Index`,
                 success: { render: `Successfully redeemed ${utils.formatEther(amountToWithdraw)} ${portfolioName}`, icon: {GreenTickImg} },
-                error: 'Transaction failed! Please try again'
+                error: {render: 'Transaction failed! Please try again', icon: {ErrorImg}}
             }, {
                 position: 'top-center'
             })
@@ -590,6 +619,7 @@ function App() {
             bnbBalance = {bnbBalance}
             metaBalance = {metaBalance}
             bluechipBalance = {bluechipBalance}
+            top10Balance = {top10Balance}
             top7Balance = {top7IndexBalalce}
             currentBnbPrice = {currentBnbPrice}
             portfolioName = {createModalPortfolioName}
@@ -676,7 +706,6 @@ function App() {
                     </div>}
 
                 </div>
-
             ) : (
                 <>
                     <div className="portfolio-box">
@@ -735,7 +764,7 @@ function App() {
                                             <div className="portfolio-box-back-asset" key={index}>
                                                 <img src={AssestsLogo[token]} alt="" className='portfolio-box-back-asset-icon' />
                                                 <span className="portfolio-box-back-asset-name">{token}</span>
-                                                <span className="portfolio-box-back-asset-allocation">{bluechipIndexTokensWeight[token]} %</span>
+                                                <span className="portfolio-box-back-asset-allocation">{bluechipIndexTokensWeight[token] ? bluechipIndexTokensWeight[token] : '0'} %</span>
                                             </div>
                                         )
                                     })
@@ -798,7 +827,69 @@ function App() {
                                             <div className="portfolio-box-back-asset" key={index}>
                                                 <img src={AssestsLogo[token]} alt="" className='portfolio-box-back-asset-icon' />
                                                 <span className="portfolio-box-back-asset-name">{token}</span>
-                                                <span className="portfolio-box-back-asset-allocation">{metaIndexTokensWeight[token]} %</span>
+                                                <span className="portfolio-box-back-asset-allocation">{metaIndexTokensWeight[token] ? metaIndexTokensWeight[token] : '0'} %</span>
+                                            </div>
+                                        )
+                                    })
+                                }                            
+                            </div>
+                        </div> }
+                    </div>
+
+                    <div className="portfolio-box">
+                        { portfolioBox3FlipHandler === 'front' ? 
+
+                        <div className="portfolio-box-front" >
+                            <div className="level1">
+                                <img src={Logo} alt="" />
+
+                                <div className="portfolio-details">
+                                    <h1 className="portfolio-title fn-lg">Top10</h1>
+                                    <p className="creator fn-vsm">by rambo23</p>
+                                </div>
+                            </div>
+
+                            <img className="assets-img cursor-pointer" src={AssetsImg} alt="" onClick={() => setPortfolioBox3FlipHandler('back')}/>
+
+                            <div className="user-balance">
+                                <span>Balance</span>
+                                <span>{top10Balance} TOP10</span>
+                            </div>
+
+                            <div className="user-return">
+                                <span>Return</span>
+                                <span>-</span>
+                            </div>
+
+                            <button className="btn fn-md" data-portfolio-name="TOP10" onClick={isWalletConnected ? toggleCreateModal : toggleConnectWalletModal}>
+                                {parseFloat(top10Balance) > 0 ? "Create/ Redeem" : "Create"}
+                            </button>
+
+                            <div className="portfolio-data">
+                                <div className="left">
+                                    <img src={PeopleImg} alt="" />
+                                    <span className="num-of-investors fn-sm">5,012</span>
+                                </div>
+
+                                <div className="right">
+                                    <img src={DollarImg} alt="" />
+                                    <span className="marketcap fn-sm">1,900,842</span>
+                                </div>
+                            </div>
+                        </div>
+                            :
+                        <div className="portfolio-box-back">
+                            <img src={CrossImg} alt="" id="portfolio-box-back-cross" onClick={() => setPortfolioBox3FlipHandler('front')} />
+                            <h2>Allocation</h2>
+                            <h3>Rebalancing Weekly</h3>
+                            <div className="portfolio-box-back-assets">
+                                {
+                                    top10Tokens.map((token, index) => {
+                                        return (
+                                            <div className="portfolio-box-back-asset" key={index}>
+                                                <img src={AssestsLogo[token]} alt="" className='portfolio-box-back-asset-icon' />
+                                                <span className="portfolio-box-back-asset-name">{token}</span>
+                                                <span className="portfolio-box-back-asset-allocation">{top10IndexTokensWeight[token] ? top10IndexTokensWeight[token] : '0'} %</span>
                                             </div>
                                         )
                                     })
@@ -812,8 +903,7 @@ function App() {
 
         <ToastContainer />
 
-    </div>
-    );
+    </div> );
 }
 
 export default App;
