@@ -8,8 +8,11 @@ import WalletImg from '../../assets/img/wallet.png';
 import ArrowUPImg from '../../assets/img/chevron-down (1).svg';
 import ArrowDownImg from '../../assets/img/chevron-down.svg';
 import ExitImg from '../../assets/img/exit.svg';
+import WrongNetworkImg from '../../assets/img/wrong-network.svg';
 
-function Header({toggleConnectWalletModal, toggleHeaderDropdownMenu, showHeaderDropdownMenu, isWalletConnected, currentAccount, bnbBalance, currentBnbPrice, isTestnet, switchToMainnet, switchToTestnet, disconnectWallet}) {
+import formatDecimal from "../../utils/formatDecimal";
+
+function Header({toggleConnectWalletModal, toggleHeaderDropdownMenu, showHeaderDropdownMenu, isWalletConnected, currentAccount, bnbBalance, currentBnbPrice, isTestnet, isWrongNetwork, switchToMainnet, switchToTestnet, disconnectWallet}) {
 
     const bnbBalanceInDollar = parseFloat(bnbBalance * currentBnbPrice).toFixed(2).toLocaleString();
 
@@ -31,13 +34,30 @@ function Header({toggleConnectWalletModal, toggleHeaderDropdownMenu, showHeaderD
                 </div>
             </div> )}
 
+            {
+                isWrongNetwork && (
+                    <>
+                        <div className="header-wrong-network-rounded-box flex">
+                            <img src={WrongNetworkImg} alt="" style={{width: '19px'}}/>
+                            <p>Wrong Network</p>
+                        </div>
+                        
+                        <div className="header-wrong-network-modal">
+                            <h2 className="font-semibold" style={{fontSize:'12px', color: '#fe6971', margin: '15px 0'}}>Wrong Network</h2>
+                            <p style={{fontSize:'10px', fontWeight: 500}}>Please Connect BSC Network</p>
+                            <button className="btn header-wrong-network-modal-btn" onClick={switchToMainnet}> Switch to BSC Network </button>
+                        </div>
+                    </>
+                )
+            }
+
             {!isWalletConnected ? (
                 <button className="connect-btn" onClick={toggleConnectWalletModal}>
                     <img src={WalletImg} alt="" />
                     <span className="fn-sm">Connect a wallet</span>
                 </button>
             ) : (
-                <button className="connect-btn" onClick={toggleHeaderDropdownMenu}>
+                <button className={isWrongNetwork ? "border-red connect-btn" : "connect-btn"} onClick={toggleHeaderDropdownMenu}>
                     <img src={WalletImg} alt="" />
                     <span className="fn-sm"> {currentAccount.slice(0,4) + '...' + currentAccount.slice(-3)} </span>
                     <img src={showHeaderDropdownMenu ? ArrowUPImg : ArrowDownImg} className="connect-btn-icon" alt="" />
@@ -49,7 +69,7 @@ function Header({toggleConnectWalletModal, toggleHeaderDropdownMenu, showHeaderD
                 <div className="header-dropdown-menu">
                     <div>
                         <p className="fn-vsm">Wallet balance</p>
-                        <span>{bnbBalance + ' BNB'}</span>
+                        <span>{formatDecimal(bnbBalance) + ' BNB'}</span>
                     </div>
                     <hr style={{opacity: 0.5}}/>
                     <div>

@@ -6,27 +6,27 @@ import CrossImg from '../../assets/img/cross.svg';
 import VelvetLogo from '../../assets/img/velvetlogo3x.png';
 import MetaverseLogo from '../../assets/img/metaverse.svg';
 import BnbImg from '../../assets/img/bnb.png';
-import BtcImg from '../../assets/img/btc.svg';
-import EthImg from '../../assets/img/eth.svg';
-import SolImg from '../../assets/img/sol.png';
+
+import formatDecimal from "../../utils/formatDecimal";
 
 function CreateModal(props) {
 
     const [amount, setAmount] = useState(BigNumber.from(0));
     const [hasEnoughFunds, setHasEnoughFunds] = useState(true);
 
-    let indexTokenBalance = '';
+    let indexTokenBalance;
     if(props.portfolioName === 'META')
-        indexTokenBalance = props.metaBalance;
+        indexTokenBalance = parseFloat(props.metaBalance);
 
     else if(props.portfolioName === 'BLUECHIP') 
-        indexTokenBalance = props.bluechipBalance;
+        indexTokenBalance = parseFloat(props.bluechipBalance);
 
     else if(props.portfolioName === 'TOP10')
-        indexTokenBalance = props.top10Balance;
+        indexTokenBalance = parseFloat(props.top10Balance);
 
     else if(props.portfolioName === 'TOP7')
-        indexTokenBalance = props.top7Balance;
+        indexTokenBalance = parseFloat(props.top7Balance);
+
 
     if(!props.show) return null;
 
@@ -83,15 +83,16 @@ function CreateModal(props) {
                         <input 
                             type="number" 
                             className={ hasEnoughFunds ? "block" : "block border-red" } 
-                            placeholder={props.createModalTab === 'create' ? 'max ' + props.bnbBalance + ' BNB' : 'max ' + indexTokenBalance + ' ' + props.portfolioName} 
-                            value={amount == '0' ? null : amount} 
+                            placeholder={props.createModalTab === 'create' ? 'max ' + formatDecimal(props.bnbBalance) + ' BNB' : 'max ' + formatDecimal(indexTokenBalance.toString()) + ' ' + props.portfolioName} 
+                            value={amount == '0' ? null : amount}
                             onChange={(e) => {
                                 e.target.value <= 1000000000 && setAmount(e.target.value);
-                                if(props.createModalTab === 'create')
-                                    e.target.value > props.bnbBalance ? setHasEnoughFunds(false) : setHasEnoughFunds(true);
+                                if(props.createModalTab === 'create'){
+                                    parseFloat(e.target.value) > parseFloat(props.bnbBalance) ? setHasEnoughFunds(false) : setHasEnoughFunds(true);
+                                }
 
                                 else
-                                    e.target.value > indexTokenBalance ? setHasEnoughFunds(false) : setHasEnoughFunds(true);
+                                    parseFloat(e.target.value) > indexTokenBalance ? setHasEnoughFunds(false) : setHasEnoughFunds(true);
                             }} 
                         />
                     </div>

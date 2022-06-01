@@ -23,6 +23,7 @@ import GreenTickImg from './assets/img/green-tick.png';
 import ErrorImg from './assets/img/error.png';
 
 import AssestsLogo from './utils/assests_logo_helper.js';
+import formatDecimal from './utils/formatDecimal';
 
 function App() {
 
@@ -44,6 +45,7 @@ function App() {
     const [top7IndexBalalce, setTop7IndexBalance] = useState('0')
     const [currentBnbPrice, setCurrentBnbPrice] = useState(null);
     const [isTestnet, setIsTestnet] = useState(false);
+    const [isWrongNetwork, setIsWrongNetwork] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [createModalPortfolioName, setCreateModalPortfolioName] = useState(null);
     const [successOrErrorModalInf, setSuccessOrErrorModalInf] = useState({
@@ -214,11 +216,13 @@ function App() {
                     blockExplorerUrls: ["https://bscscan.com"]
                 }]
             });
-            toggleHeaderDropdownMenu();
+            if(showHeaderDropdownMenu)
+                toggleHeaderDropdownMenu();
             const provider = getProviderOrSigner();
             const {chainId} = await provider.getNetwork();
             if(chainId === 56) {
                 setIsTestnet(false);
+                setIsWrongNetwork(false);
                 await getBalancesMainnet(currentAccount);
             }
         }
@@ -283,7 +287,13 @@ function App() {
             if(accounts.length > 0) {
                 setCurrentAccount(accounts[0]);
                 setIsWalletConnected(true);
-                getBalancesMainnet(accounts[0]);
+                const provider = getProviderOrSigner();
+                provider.getNetwork().then(({chainId}) => {
+                    if(chainId === 56)
+                        getBalancesMainnet(accounts[0]);
+                    else if (chainId === 97)
+                        getBalancesTestnet(accounts[0]);
+                })
             }
         }
         catch(err) {
@@ -372,12 +382,12 @@ function App() {
         try { 
             //Getting BNB Balance
             const provider = getProviderOrSigner();
-            const bnbBalance = parseFloat(utils.formatEther(await provider.getBalance(accountAddress))).toFixed(3);
+            const bnbBalance = (utils.formatEther(await provider.getBalance(accountAddress)).toLocaleString('en-US'));
             bnbBalance === '0.000' ? setBnbBalance('0') : setBnbBalance(bnbBalance);
 
             //Getting Top7 Balance
             const contract = new Contract(top7IndexContractAddressTestnet, indexSwapAbi, provider);
-            const top7Balance = parseFloat(utils.formatEther(await contract.balanceOf(accountAddress))).toFixed(3);
+            const top7Balance = (utils.formatEther(await contract.balanceOf(accountAddress))).toLocaleString('en-US');
             top7Balance === '0.000' ? setTop7IndexBalance('0') : setTop7IndexBalance(top7Balance);
             //Getting Top7 Vault Balance
             top7IndexVaultBalance = utils.formatEther( (await contract.getTokenAndVaultBalance())[1] );
@@ -400,12 +410,12 @@ function App() {
         try { 
             //Getting BNB Balance
             const provider = getProviderOrSigner();
-            const bnbBalance = parseFloat(utils.formatEther(await provider.getBalance(accountAddress))).toFixed(3);
+            const bnbBalance = ( +(utils.formatEther(await provider.getBalance(accountAddress))) ).toFixed(3);
             bnbBalance === '0.000' ? setBnbBalance('0') : setBnbBalance(bnbBalance);
 
             //Getting META Balance
             const metaContract = new Contract(metaIndexContractAddressMainnet, indexSwapAbi, provider); 
-            const metaBalance = parseFloat(utils.formatEther(await metaContract.balanceOf(accountAddress))).toFixed(3);
+            const metaBalance = (utils.formatEther(await metaContract.balanceOf(accountAddress)));
             metaBalance === '0.000' ? setMetaBalance('0') : setMetaBalance(metaBalance);
             //Getting META Vault Balance
             metaIndexVaultBalance = utils.formatEther( (await metaContract.getTokenAndVaultBalance())[1] );
@@ -422,7 +432,7 @@ function App() {
 
             //Getting BLUECHIP Balance
             const bluechipContract = new Contract(bluechipIndexContractAddressMainnet, indexSwapAbi, provider); 
-            const bluechipBalance = parseFloat(utils.formatEther(await bluechipContract.balanceOf(accountAddress))).toFixed(3);
+            const bluechipBalance = (utils.formatEther(await bluechipContract.balanceOf(accountAddress)));
             bluechipBalance === '0.000' ? setBluechipBalance('0') : setBluechipBalance(bluechipBalance);
             //Getting BLUECHIP Vault Balance
             bluechipIndexVaultBalance = utils.formatEther( (await bluechipContract.getTokenAndVaultBalance())[1] );
@@ -438,7 +448,7 @@ function App() {
 
             //Getting TOP10 Balance
             const top10Contract = new Contract(top10IndexContractAddressMainnet, indexSwapAbi, provider); 
-            const top10Balance = parseFloat(utils.formatEther(await top10Contract.balanceOf(accountAddress))).toFixed(3);
+            const top10Balance = (utils.formatEther(await top10Contract.balanceOf(accountAddress)));
             top10Balance === '0.000' ? setTop10Balance('0') : setTop10Balance(top10Balance);
             //Getting TOP10 Vault Balance
             top10IndexVaultBalance = utils.formatEther( (await top10Contract.getTokenAndVaultBalance())[1] );
@@ -640,6 +650,18 @@ function App() {
             setCurrentBnbPrice(price)
         })
         .catch(err => console.log(err))
+        //checking isWrongNetwork or not
+        const provider = getProviderOrSigner();
+        provider.getNetwork().then(({chainId}) => {
+            console.log(chainId)
+            if(chainId === 56) 
+                setIsWrongNetwork(false);
+            else if (chainId === 97)
+                setIsTestnet(true);
+            else
+                setIsWrongNetwork(true);
+        });
+
     }, [])
 
     return (
@@ -680,6 +702,7 @@ function App() {
             bnbBalance = {bnbBalance}
             currentBnbPrice = {currentBnbPrice}
             isTestnet = {isTestnet}
+            isWrongNetwork = {isWrongNetwork}
             switchToMainnet = {switchToMainnet}
             switchToTestnet = {switchToTestnet}
             disconnectWallet = {disconnectWallet}
@@ -706,7 +729,7 @@ function App() {
 
                         <div className="user-balance">
                             <span>Balance</span>
-                            <span>{top7IndexBalalce} TOP7</span>
+                            <span>{formatDecimal(top7IndexBalalce)} TOP7</span>
                         </div>
 
                         <div className="user-return">
@@ -777,7 +800,7 @@ function App() {
 
                             <div className="user-balance">
                                 <span>Balance</span>
-                                <span>{bluechipBalance} BLUECHIP</span>
+                                <span>{parseFloat(formatDecimal(bluechipBalance)) == 0 ? '0' : formatDecimal(bluechipBalance)} BLUECHIP</span>
                             </div>
 
                             <div className="user-return">
@@ -851,7 +874,7 @@ function App() {
 
                             <div className="user-balance">
                                 <span>Balance</span>
-                                <span>{metaBalance} META</span>
+                                <span>{parseFloat(formatDecimal(metaBalance)) == 0 ? '0' : formatDecimal(metaBalance)} META</span>
                             </div>
 
                             <div className="user-return">
@@ -920,7 +943,7 @@ function App() {
 
                             <div className="user-balance">
                                 <span>Balance</span>
-                                <span>{top10Balance} TOP10</span>
+                                <span>{parseFloat(formatDecimal(top10Balance)) == 0 ? '0' : formatDecimal(top10Balance)} TOP10</span>
                             </div>
 
                             <div className="user-return">
