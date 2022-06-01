@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { BigNumber, utils } from "ethers";
 import './CreateModal.css';
 
-import Loading from '../Loading/Loading.jsx';
-
 import CrossImg from '../../assets/img/cross.svg';
 import VelvetLogo from '../../assets/img/velvetlogo3x.png';
 import MetaverseLogo from '../../assets/img/metaverse.svg';
@@ -44,12 +42,12 @@ function CreateModal(props) {
                 </div>
                 <div className="create-modal-action-tab flex">
                     <div className="cursor-pointer" onClick={props.toggleCreateModalTab}>
-                        <span className={props.createModalTab === 'reedem' && "unactive"}> Create </span>
+                        <span className={props.createModalTab === 'redeem' && "unactive"}> Create </span>
                         <div className={`line ${props.createModalTab === 'create' && "active"}`} ></div>
                     </div>
                     <div className="cursor-pointer" onClick={props.toggleCreateModalTab}>
                         <span className={props.createModalTab === 'create' && "unactive"}> Redeem </span>
-                        <div className={`line ${props.createModalTab === 'reedem' && "active"}`} ></div>
+                        <div className={`line ${props.createModalTab === 'redeem' && "active"}`} ></div>
                     </div>
                 </div>
 
@@ -104,10 +102,10 @@ function CreateModal(props) {
                 <button 
                     className="create-modal-action-btn btn fn-md" 
                     data-portfolio-name= {props.portfolioName}
-                    disabled = {!hasEnoughFunds}
+                    disabled = {!hasEnoughFunds || props.isLoading}
                     style = {hasEnoughFunds ? {opacity: 1} : {opacity: 0.5}}
                     onClick={props.createModalTab === 'create' ? () => props.invest(props.portfolioName, utils.parseEther(amount.toString())) : () => props.withdraw(props.portfolioName, utils.parseEther(amount.toString()))}>
-                       {props.isLoading ? <Loading/> : props.createModalTab === 'create' ? "Create" : "Reedem"}
+                       {props.isLoading && props.createModalTab === 'create' ? 'Investing...' : props.isLoading && props.createModalTab === 'redeem' ? 'Redeeming...' : props.createModalTab === 'create' ? "Create" : "Redeem"}
                 </button>
             </div>
         </>

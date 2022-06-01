@@ -84,7 +84,7 @@ function App() {
 
     function toggleCreateModalTab() {
         if(createModalTab === 'create') 
-            setCreateModalTab('reedem');
+            setCreateModalTab('redeem');
         else
             setCreateModalTab('create');
     }
