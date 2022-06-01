@@ -19,12 +19,6 @@ import PeopleImg from './assets/img/people.svg';
 import CrossImg from './assets/img/cross.svg';
 import GreenTickImg from './assets/img/green-tick.png';
 import ErrorImg from './assets/img/error.png';
-import BtcImg from './assets/img/btc.svg';
-import EthImg from './assets/img/eth.svg';
-import BnbImg from './assets/img/bnb.png';
-import SolImg from './assets/img/sol.png';
-import XrpImg from './assets/img/xrp.png';
-import AvaxImg from './assets/img/avax.png';
 
 import AssestsLogo from './utils/assests_logo_helper.js';
 
@@ -65,11 +59,14 @@ function App() {
     let bluechipIndexVaultBalance;
     let top10IndexVaultBalance;
     let top7IndexVaultBalance;
+    // const metaTokens = [['Decentraland', 'MANA'], ['The Sandbox', 'SAND'] ['Axie Infinity', 'AXS']];
     const metaTokens = ['MANA', 'SAND', 'AXS'];
+    // const bluechipTokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA']];
     const bluechipTokens = ['BTC', 'ETH', 'XRP', 'ADA'];
+    // const top10Tokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA'], ['Avalanche', 'AVAX'], ['Polkadot', 'DOT'], ['TRON', 'TRX'], ['Dogecoin', 'DOGE'], ['Solana', 'SOL'], ['WBNB', 'WBNB']]
     const top10Tokens = ['BTC', 'ETH', 'XRP', 'ADA', 'AVAX', 'DOT', 'TRX', 'DOGE', 'SOL', 'WBNB'];
+    // const top7Tokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA'], ['Avalanche', 'AVAX'], ['Polkadot', 'DOT'], ['TRON', 'TRX']];
     const top7Tokens = ['BTC', 'ETH', 'XRP', 'ADA', 'AVAX', 'DOT', 'TRX'];
-
 
     function toggleConnectWalletModal() {
         if(showConnectWalletModal)
@@ -246,6 +243,11 @@ function App() {
         catch(err) {
             console.log(err);
         }
+    }
+
+    function disconnectWallet() {
+        setIsWalletConnected(false);
+        toggleHeaderDropdownMenu();
     }
 
     async function checkIfWalletConnected() {
@@ -637,6 +639,7 @@ function App() {
             isTestnet = {isTestnet}
             switchToMainnet = {switchToMainnet}
             switchToTestnet = {switchToTestnet}
+            disconnectWallet = {disconnectWallet}
         />
 
         <h2 className = 'title fn-lg'>Community Baskets</h2>

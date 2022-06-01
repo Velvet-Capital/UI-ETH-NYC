@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import './Header.css';
 import '../../styles/utils.css'
 
@@ -9,7 +9,7 @@ import ArrowUPImg from '../../assets/img/chevron-down (1).svg';
 import ArrowDownImg from '../../assets/img/chevron-down.svg';
 import ExitImg from '../../assets/img/exit.svg';
 
-function Header({toggleConnectWalletModal, toggleHeaderDropdownMenu, showHeaderDropdownMenu, isWalletConnected, currentAccount, bnbBalance, currentBnbPrice, isTestnet, switchToMainnet, switchToTestnet}) {
+function Header({toggleConnectWalletModal, toggleHeaderDropdownMenu, showHeaderDropdownMenu, isWalletConnected, currentAccount, bnbBalance, currentBnbPrice, isTestnet, switchToMainnet, switchToTestnet, disconnectWallet}) {
 
     const bnbBalanceInDollar = parseFloat(bnbBalance * currentBnbPrice).toFixed(2).toLocaleString();
 
@@ -60,7 +60,7 @@ function Header({toggleConnectWalletModal, toggleHeaderDropdownMenu, showHeaderD
                         </button>
                     </div>
                     <hr style={{opacity: 0.5}}/>
-                    <div>
+                    <div className="cursor-pointer" onClick={disconnectWallet}>
                         <span className="fn-sm">Disconnect</span>
                         <img src={ExitImg} alt="" />
                     </div>
