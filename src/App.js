@@ -61,13 +61,9 @@ function App() {
     let top10IndexVaultBalance;
     let top7IndexVaultBalance;
     const metaTokens = [['Decentraland', 'MANA'], ['The Sandbox', 'SAND'], ['Axie Infinity', 'AXS']];
-    // const metaTokens = ['MANA', 'SAND', 'AXS'];
     const bluechipTokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA']];
-    // const bluechipTokens = ['BTC', 'ETH', 'XRP', 'ADA'];
     const top10Tokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA'], ['Avalanche', 'AVAX'], ['Polkadot', 'DOT'], ['TRON', 'TRX'], ['Dogecoin', 'DOGE'], ['Solana', 'SOL'], ['WBNB', 'WBNB']]
-    // const top10Tokens = ['BTC', 'ETH', 'XRP', 'ADA', 'AVAX', 'DOT', 'TRX', 'DOGE', 'SOL', 'WBNB'];
     const top7Tokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA'], ['Avalanche', 'AVAX'], ['Polkadot', 'DOT'], ['TRON', 'TRX']];
-    // const top7Tokens = ['BTC', 'ETH', 'XRP', 'ADA', 'AVAX', 'DOT', 'TRX'];
 
     function toggleConnectWalletModal() {
         if(showConnectWalletModal)
@@ -77,6 +73,7 @@ function App() {
     }
 
     async function toggleCreateModal(e) {
+        await checkNetwork();
         if(showCreateModal)
             setShowCreateModal(false);
         else

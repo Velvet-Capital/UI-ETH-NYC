@@ -15,17 +15,20 @@ import SolImg from '../../assets/img/sol.png';
 function CreateModal(props) {
 
     const [amount, setAmount] = useState(BigNumber.from(0));
+    const [hasEnoughFunds, setHasEnoughFunds] = useState(true);
 
     let indexTokenBalance = '';
     if(props.portfolioName === 'META')
         indexTokenBalance = props.metaBalance;
+
     else if(props.portfolioName === 'BLUECHIP') 
         indexTokenBalance = props.bluechipBalance;
+
     else if(props.portfolioName === 'TOP10')
         indexTokenBalance = props.top10Balance;
+
     else if(props.portfolioName === 'TOP7')
         indexTokenBalance = props.top7Balance;
-
 
     if(!props.show) return null;
 
@@ -69,15 +72,29 @@ function CreateModal(props) {
                         </div>
                     </div>
                     <div className="create-modal-amount-input">
-                        <span className="fn-sm">Amount</span>
+                        {
+                            hasEnoughFunds ? (
+                                <span className="fn-sm">Amount</span>
+                            ) : (
+                                <span className="c-red fn-sm">Not enough funds</span>
+                            )
+                        }
                         <span className="fn-sm create-modal-amount-input-balance">
                             ~ ${props.createModalTab === 'create' ? (amount * props.currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 2}) : (amount * props.currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 2})}
                         </span>
                         <input 
                             type="number" 
-                            className={props.createModalTab === 'create' ? (amount > props.bnbBalance ? "block border-red" : "block") : (amount > indexTokenBalance ? "block border-red" : "block") } 
+                            className={ hasEnoughFunds ? "block" : "block border-red" } 
                             placeholder={props.createModalTab === 'create' ? 'max ' + props.bnbBalance + ' BNB' : 'max ' + indexTokenBalance + ' ' + props.portfolioName} 
-                            value={amount == '0' ? null : amount} onChange={(e) => e.target.value <= 1000000000 && setAmount(e.target.value)} 
+                            value={amount == '0' ? null : amount} 
+                            onChange={(e) => {
+                                e.target.value <= 1000000000 && setAmount(e.target.value);
+                                if(props.createModalTab === 'create')
+                                    e.target.value > props.bnbBalance ? setHasEnoughFunds(false) : setHasEnoughFunds(true);
+
+                                else
+                                    e.target.value > indexTokenBalance ? setHasEnoughFunds(false) : setHasEnoughFunds(true);
+                            }} 
                         />
                     </div>
                 </div>
@@ -87,6 +104,8 @@ function CreateModal(props) {
                 <button 
                     className="create-modal-action-btn btn fn-md" 
                     data-portfolio-name= {props.portfolioName}
+                    disabled = {!hasEnoughFunds}
+                    style = {hasEnoughFunds ? {opacity: 1} : {opacity: 0.5}}
                     onClick={props.createModalTab === 'create' ? () => props.invest(props.portfolioName, utils.parseEther(amount.toString())) : () => props.withdraw(props.portfolioName, utils.parseEther(amount.toString()))}>
                        {props.isLoading ? <Loading/> : props.createModalTab === 'create' ? "Create" : "Reedem"}
                 </button>
