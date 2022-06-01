@@ -145,6 +145,11 @@
     color: #262626;
 }
 
+.portfolio-box-back-asset-symbol {
+    margin-left: 10px;
+    color: #b3b3b3 !important;
+}
+
 .portfolio-box-back-asset-allocation {
     margin-right: 22px;
     margin-left: auto;
