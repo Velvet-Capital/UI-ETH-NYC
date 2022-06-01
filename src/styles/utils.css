@@ -27,6 +27,10 @@
     font-weight: 600 !important;
 }
 
+.font-bold {
+    font-weight: bold !important;
+}
+
 .c-red {
     color: red !important;
 }

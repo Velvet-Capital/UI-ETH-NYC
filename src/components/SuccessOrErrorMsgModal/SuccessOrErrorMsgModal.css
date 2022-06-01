@@ -1,0 +1,36 @@
+.overlay {
+    top: 0;
+}
+
+.success-or-error-msg-modal {
+    width: 640px;
+    height: 490px;
+    padding: 0 60px;
+    margin-top: 0;
+    top: 50vh;
+    transform: translate(-50%, -50%);
+}
+
+#success-or-error-msg-modal-cancle {
+    width: 20px;
+    position: absolute;
+    top: 5%;
+    right: 5%;
+}
+
+.success-or-error-msg-modal-img {
+    width: 64px;
+    margin-top: 90px;
+    margin-bottom: 20px;
+}
+
+.success-or-error-msg-modal-message {
+    font-weight: 500;
+    margin: 55px 0;
+}
+
+.success-or-error-msg-modal-btn {
+    color: #fff;
+    background-color: #7e77dd;
+    margin: 0;
+}

@@ -10,6 +10,7 @@ import indexSwap  from './utils/abi/IndexSwap.json';
 import Header from './components/Header/Header.jsx';
 import ConnectModal from './components/ConnectModal/ConnectModal.jsx';
 import CreateModal from './components/CreateModal/CreateModal.jsx';
+import SuccessOrErrorMsgModal from './components/SuccessOrErrorMsgModal/SuccessOrErrorMsgModal.jsx';
 
 import Logo from './assets/img/velvetcapitallogo.png';
 import MetaverseLogo from './assets/img/metaverse.svg';
@@ -45,6 +46,13 @@ function App() {
     const [isTestnet, setIsTestnet] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [createModalPortfolioName, setCreateModalPortfolioName] = useState(null);
+    const [successOrErrorModalInf, setSuccessOrErrorModalInf] = useState({
+        show: false,
+        portfolioName: '',
+        transactionType: '',
+        amount: '',
+        status: 0
+    })
     const [metaIndexTokensWeight, setMetaIndexTokensWeight] = useState({})
     const [bluechipIndexTokensWeight, setBluechipIndexTokensWeight] = useState({})
     const [top10IndexTokensWeight, setTop10IndexTokensWeight] = useState({})
@@ -94,6 +102,14 @@ function App() {
             setShowHeaderDropdownMenu(false);
         else
             setShowHeaderDropdownMenu(true);
+    }
+
+    function toggleSuccessOrErrorMsgModal() {
+        if(successOrErrorModalInf.show)
+            setSuccessOrErrorModalInf( (prevState) => ({...prevState, show: false}));
+
+        else 
+            setSuccessOrErrorModalInf( (prevState) => ({...prevState, show: true}));
     }
 
     function handleEmailInputChange(e) {
@@ -470,18 +486,33 @@ function App() {
                 success: { render: `Successfully invested ${utils.formatEther(amountToInvest)} BNB into ${portfolioName} Index`, icon: {GreenTickImg} },
                 error: {render: 'Transaction failed! Please try again', icon: {ErrorImg}}
             }, {
-                position: 'top-center'
+                position: 'top-center',
+                draggable: true
             })
 
             receipt.then(async () => {
                 setIsLoading(false);
+                toggleCreateModal();
+                setSuccessOrErrorModalInf({
+                    show: true,
+                    portfolioName: portfolioName,
+                    transactionType: 'invest',
+                    amount: utils.formatEther(amountToInvest),
+                    status: 1
+                })
                 if(isTestnet)
                     await getBalancesTestnet(currentAccount);
                 else
                     await getBalancesMainnet(currentAccount);
-                toggleCreateModal();
             }).catch((err) => {
                 setIsLoading(false);
+                setSuccessOrErrorModalInf({
+                    show: true,
+                    portfolioName: portfolioName,
+                    transactionType: 'invest',
+                    amount: utils.formatEther(amountToInvest),
+                    status: 0
+                })
                 console.log(err)
                 toggleCreateModal();
 
@@ -542,18 +573,33 @@ function App() {
                 success: { render: `Successfully redeemed ${utils.formatEther(amountToWithdraw)} ${portfolioName}`, icon: {GreenTickImg} },
                 error: {render: 'Transaction failed! Please try again', icon: {ErrorImg}}
             }, {
-                position: 'top-center'
+                position: 'top-center',
+                draggable: true
             })
 
             receipt.then(async () => {
                 setIsLoading(false);
+                toggleCreateModal();
+                setSuccessOrErrorModalInf({
+                    show: true,
+                    portfolioName: portfolioName,
+                    transactionType: 'redeem',
+                    amount: utils.formatEther(amountToWithdraw),
+                    status: 1
+                })
                 if(isTestnet)
                     await getBalancesTestnet(currentAccount);
                 else
                     await getBalancesMainnet(currentAccount);
-                toggleCreateModal();
             }).catch((err) => {
                 setIsLoading(false);
+                setSuccessOrErrorModalInf({
+                    show: true,
+                    portfolioName: portfolioName,
+                    transactionType: 'redeem',
+                    amount: utils.formatEther(amountToWithdraw),
+                    status: 0
+                })
                 toggleCreateModal();
                 console.log(err);
             })
@@ -928,6 +974,8 @@ function App() {
                 </>
             )}
         </div>
+
+        <SuccessOrErrorMsgModal show={successOrErrorModalInf.show} portfolioName={successOrErrorModalInf.portfolioName} transactionType={successOrErrorModalInf.transactionType} amount={successOrErrorModalInf.amount} status={successOrErrorModalInf.status}  toggleSuccessOrErrorMsgModal={toggleSuccessOrErrorMsgModal} />
 
         <ToastContainer />
 
