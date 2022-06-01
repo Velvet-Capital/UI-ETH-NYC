@@ -13,7 +13,8 @@ import CreateModal from './components/CreateModal/CreateModal.jsx';
 
 import Logo from './assets/img/velvetcapitallogo.png';
 import MetaverseLogo from './assets/img/metaverse.svg';
-import AssetsImg from './assets/img/assetsimg1.png';
+import AssetsImg1 from './assets/img/assetsimg1.png';
+import AssetsImg2 from './assets/img/assetsimg2.png';
 import DollarImg from './assets/img/dollar.svg';
 import PeopleImg from './assets/img/people.svg';
 import CrossImg from './assets/img/cross.svg';
@@ -658,7 +659,7 @@ function App() {
                             </div>
                         </div>
 
-                        <img className="assets-img cursor-pointer" src={AssetsImg} alt="" onClick={() => setPortfolioBox1FlipHandler('back')}/>
+                        <img className="assets-img cursor-pointer" src={AssetsImg2} alt="" onClick={() => setPortfolioBox1FlipHandler('back')}/>
 
                         <div className="user-balance">
                             <span>Balance</span>
@@ -729,7 +730,7 @@ function App() {
                                 </div>
                             </div>
 
-                            <img className="assets-img cursor-pointer" src={AssetsImg} alt="" onClick={() => setPortfolioBox1FlipHandler('back')}/>
+                            <img className="assets-img cursor-pointer" src={AssetsImg2} alt="" onClick={() => setPortfolioBox1FlipHandler('back')}/>
 
                             <div className="user-balance">
                                 <span>Balance</span>
@@ -803,7 +804,7 @@ function App() {
                                 </div>
                             </div>
 
-                            <img className="assets-img cursor-pointer" src={AssetsImg} alt="" onClick={() => setPortfolioBox2FlipHandler('back')}/>
+                            <img className="assets-img cursor-pointer" src={AssetsImg1} alt="" onClick={() => setPortfolioBox2FlipHandler('back')}/>
 
                             <div className="user-balance">
                                 <span>Balance</span>
@@ -872,7 +873,7 @@ function App() {
                                 </div>
                             </div>
 
-                            <img className="assets-img cursor-pointer" src={AssetsImg} alt="" onClick={() => setPortfolioBox3FlipHandler('back')}/>
+                            <img className="assets-img cursor-pointer" src={AssetsImg2} alt="" onClick={() => setPortfolioBox3FlipHandler('back')}/>
 
                             <div className="user-balance">
                                 <span>Balance</span>
