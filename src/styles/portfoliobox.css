@@ -33,12 +33,16 @@
     color: #7e77dd;
 }
 
-.assets-img {
+.portfolio-box-assets-img {
     width: 285px;
     height: 75px;
     margin: 25px 0px 25px 0;
-    object-fit: contain;
+    transition: transform 0.3s ease-in-out;
     cursor: pointer;
+}
+
+.portfolio-box-assets-img:hover {
+    transform: scale(1.1);
 }
 
 .portfolio-box-user-return span, .portfolio-box-user-balance span{

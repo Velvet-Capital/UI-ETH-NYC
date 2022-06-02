@@ -728,7 +728,7 @@ function App() {
                             </div>
                         </div>
 
-                        <img className="assets-img cursor-pointer" src={AssetsImg2} alt="" onClick={() => setPortfolioBox1FlipHandler('back')}/>
+                        <img className="portfolio-box-assets-img cursor-pointer" src={AssetsImg2} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox1FlipHandler('back')}/>
 
                         <div className="portfolio-box-user-balance">
                             <span>Balance</span>
@@ -799,7 +799,7 @@ function App() {
                                 </div>
                             </div>
 
-                            <img className="assets-img cursor-pointer" src={AssetsImg2} alt="" onClick={() => setPortfolioBox1FlipHandler('back')}/>
+                            <img className="portfolio-box-assets-img cursor-pointer" src={AssetsImg2} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox1FlipHandler('back')}/>
 
                             <div className="portfolio-box-user-balance">
                                 <span>Balance</span>
@@ -873,7 +873,7 @@ function App() {
                                 </div>
                             </div>
 
-                            <img className="assets-img cursor-pointer" src={AssetsImg1} alt="" onClick={() => setPortfolioBox2FlipHandler('back')}/>
+                            <img className="portfolio-box-assets-img cursor-pointer" src={AssetsImg1} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox2FlipHandler('back')}/>
 
                             <div className="portfolio-box-user-balance">
                                 <span>Balance</span>
@@ -942,7 +942,7 @@ function App() {
                                 </div>
                             </div>
 
-                            <img className="assets-img cursor-pointer" src={AssetsImg2} alt="" onClick={() => setPortfolioBox3FlipHandler('back')}/>
+                            <img className="portfolio-box-assets-img cursor-pointer" src={AssetsImg2} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox3FlipHandler('back')}/>
 
                             <div className="portfolio-box-user-balance">
                                 <span>Balance</span>
@@ -1005,7 +1005,8 @@ function App() {
 
         <ToastContainer />
 
-    </div> );
+    </div> 
+    );
 }
 
 export default App;
