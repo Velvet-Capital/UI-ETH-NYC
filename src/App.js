@@ -731,7 +731,7 @@ function App() {
                         <img className="portfolio-box-assets-img cursor-pointer" src={AssetsImg2} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox1FlipHandler('back')}/>
 
                         <div className="portfolio-box-user-balance">
-                            <span>Balance</span>
+                            <span>Value</span>
                             <span style={formatDecimal(top7IndexBalance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}} >$ { (top7IndexBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1}) }</span>
                         </div>
 
@@ -802,7 +802,7 @@ function App() {
                             <img className="portfolio-box-assets-img cursor-pointer" src={AssetsImg2} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox1FlipHandler('back')}/>
 
                             <div className="portfolio-box-user-balance">
-                                <span>Balance</span>
+                                <span>Value</span>
                                 <span style={formatDecimal(bluechipBalance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}}>$ { (bluechipBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1}) }</span>
                             </div>
 
@@ -876,7 +876,7 @@ function App() {
                             <img className="portfolio-box-assets-img cursor-pointer" src={AssetsImg1} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox2FlipHandler('back')}/>
 
                             <div className="portfolio-box-user-balance">
-                                <span>Balance</span>
+                                <span>Value</span>
                                 <span style={formatDecimal(metaBalance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}} >$ { (metaBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1}) }</span>
                             </div>
 
@@ -945,7 +945,7 @@ function App() {
                             <img className="portfolio-box-assets-img cursor-pointer" src={AssetsImg2} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox3FlipHandler('back')}/>
 
                             <div className="portfolio-box-user-balance">
-                                <span>Balance</span>
+                                <span>Value</span>
                                 <span style={formatDecimal(top10Balance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}} >$ { (top10Balance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1}) }</span>
                             </div>
 
