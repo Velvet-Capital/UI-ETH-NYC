@@ -253,11 +253,16 @@ function App() {
             setIsWalletConnected(true);
             toggleConnectWalletModal();
             checkNetwork().then(async () => {
-                if(isTestnet)
-                    await getBalancesTestnet(accounts[0]);
-                else
-                    await getBalancesMainnet(accounts[0]);
+                const provider = getProviderOrSigner();
+                if(provider) {
+                    const {chainId} = await provider.getNetwork();
+                    if(chainId === 56) {
+                        await getBalancesMainnet(accounts[0]);
+                        setIsWrongNetwork(false);
+                    }
+                }
             });
+
         }
         catch(err) {
             console.log(err);
@@ -655,7 +660,6 @@ function App() {
         const provider = getProviderOrSigner();
         if(provider) {
             provider.getNetwork().then(({chainId}) => {
-                console.log(chainId)
                 if(chainId === 56) 
                     setIsWrongNetwork(false);
                 else if (chainId === 97)
