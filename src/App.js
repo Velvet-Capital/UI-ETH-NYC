@@ -716,7 +716,7 @@ function App() {
             disconnectWallet = {disconnectWallet}
         />
 
-        <h2 className = 'title fn-lg'>Community Baskets</h2>
+        <h2 className = 'title fn-lg'>Community Portfolios</h2>
 
         <div className="container">
 
