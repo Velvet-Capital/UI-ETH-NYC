@@ -287,7 +287,8 @@ function App() {
                     draggable: true,
                     progress: undefined,
                 });
-                return
+                window.open('https://metamask.io/download/', '_blank');
+                return;
             }
             const accounts = await ethereum.request({method: "eth_accounts"});
             if(accounts.length > 0) {
