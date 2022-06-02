@@ -7,6 +7,33 @@ import ErrorImg from '../../assets/img/error-mark.svg';
 
 function SuccessOrErrorMsgModal(props) {
 
+    const tokensAddress = {
+        'BLUECHIP': '0x55204c31E725C7635393bdBdE738d73c1e10E178',
+        'META': '0xB757F1D8c40D49313f716906d7c3107a877367AD',
+        'TOP10': '0x210b31776fA73c72CCaD41A65AcAF1Ab3317440E',
+        'TOP7': '0x5DA92941262768deA5018114e64EB73b937B5Cb0'
+    }
+
+    async function addTokenToWallet(tokenAddress, tokenSymbol) {
+        try {
+            //adding token to metamask wallet
+            await window.ethereum.request({
+                method: 'wallet_watchAsset',
+                params: {
+                  type: 'ERC20', 
+                  options: {
+                    address: tokenAddress,
+                    symbol: tokenSymbol, 
+                    decimals: 18
+                  },
+                },
+              });
+        }
+        catch(err) {
+            console.log(err);
+        }
+    }
+
     if(!props.show) return null;
 
     return (
@@ -14,7 +41,6 @@ function SuccessOrErrorMsgModal(props) {
             <div className="overlay" onClick={props.toggleSuccessOrErrorMsgModal}></div>
             <div className="modal success-or-error-msg-modal">
                 <img src={CrossImg} alt="" id="success-or-error-msg-modal-cancle" className="cursor-pointer" onClick={props.toggleSuccessOrErrorMsgModal} />
-
                 {
                     props.status == 1 ? (
                         <>
@@ -22,7 +48,10 @@ function SuccessOrErrorMsgModal(props) {
                             <h2 className="success-or-error-msg-modal-title c-purple text-center" style={{fontSize: '30px'}}>Success!</h2>
                             {
                                 props.transactionType === 'invest' ? (
-                                    <p className="success-or-error-msg-modal-message c-purple text-center fn-md">You have successfully  invested {props.amount} BNB in {props.portfolioName} basket </p>
+                                    <>
+                                        <p className="success-or-error-msg-modal-message c-purple text-center fn-md">You have successfully  invested {props.amount} BNB in {props.portfolioName} basket </p>
+                                        <p className="success-or-error-msg-modal-message c-purple text-center fn-md cursor-pointer" onClick={() => addTokenToWallet(tokensAddress[props.portfolioName], props.portfolioName)} style={{margin: '20px 0'}}>Add {props.portfolioName} Token to your wallet: <u style={{color: 'blue'}}>{tokensAddress[props.portfolioName]}</u> </p>
+                                    </>
                                 ) : (
                                     <p className="success-or-error-msg-modal-message c-purple text-center fn-md">You have successfully redeemed {props.amount} {props.portfolioName} from basket </p>
                                 )
@@ -38,8 +67,6 @@ function SuccessOrErrorMsgModal(props) {
                         </>
                     )
                 }
-
-                
             </div>
         </>
     );
