@@ -54,19 +54,17 @@ function CreateModal(props) {
                 <div className="create-modal-inputs flex">
                     <div className="create-modal-token-input">
                         <span className="fn-sm">Token</span>
-                        <div className="asset-dropdown">
-                            <select disabled >
-                                {
-                                    props.createModalTab === 'create' ? (
-                                        <option value="1"><img src={BnbImg} alt="" /> BNB</option>
-                                        /* <option value="2"><img src={BtcImg} alt="" /> BTC</option>
-                                        <option value="3"><img src={EthImg} alt="" /> ETH</option>
-                                        <option value="4"><img src={SolImg} alt="" /> SOL</option> */
-                                    ) : (
-                                        <option value="1"><img src={BnbImg} alt="" /> {props.portfolioName}</option>
-                                    )
-                                }
-                            </select>
+                        <div className="create-modal-asset-dropdown flex">
+                            {
+                                props.createModalTab === 'create' ? (
+                                    <>
+                                        <img src={BnbImg} alt="" />
+                                        <span style={{fontSize: '16px', fontWeight: 500, color: '#262626'}}> BNB </span>
+                                    </>
+                                ) : (
+                                    <span style={{fontSize: '16px', fontWeight: 500, color: '#262626'}}> {props.portfolioName} </span>
+                                )
+                            }
                         </div>
                     </div>
                     <div className="create-modal-amount-input">
