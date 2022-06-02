@@ -12,7 +12,8 @@ import ConnectModal from './components/ConnectModal/ConnectModal.jsx';
 import CreateModal from './components/CreateModal/CreateModal.jsx';
 import SuccessOrErrorMsgModal from './components/SuccessOrErrorMsgModal/SuccessOrErrorMsgModal.jsx';
 
-import Logo from './assets/img/velvetcapitallogo.png';
+import VelvetCapitalLogo from './assets/img/newvelvetcapitallogo.svg';
+import VelvetCapitalLogo2 from './assets/img/velvetcapitallogo2.svg';
 import MetaverseLogo from './assets/img/metaverse.svg';
 import AssetsImg1 from './assets/img/assetsimg1.png';
 import AssetsImg2 from './assets/img/assetsimg2.png';
@@ -42,7 +43,7 @@ function App() {
     const [metaBalance, setMetaBalance] = useState('0');
     const [bluechipBalance, setBluechipBalance] = useState('0')
     const [top10Balance, setTop10Balance] = useState('0');
-    const [top7IndexBalalce, setTop7IndexBalance] = useState('0')
+    const [top7IndexBalance, setTop7IndexBalance] = useState('0')
     const [currentBnbPrice, setCurrentBnbPrice] = useState(null);
     const [isTestnet, setIsTestnet] = useState(false);
     const [isWrongNetwork, setIsWrongNetwork] = useState(false);
@@ -652,15 +653,17 @@ function App() {
         .catch(err => console.log(err))
         //checking isWrongNetwork or not
         const provider = getProviderOrSigner();
-        provider.getNetwork().then(({chainId}) => {
-            console.log(chainId)
-            if(chainId === 56) 
-                setIsWrongNetwork(false);
-            else if (chainId === 97)
-                setIsTestnet(true);
-            else
-                setIsWrongNetwork(true);
-        });
+        if(provider) {
+            provider.getNetwork().then(({chainId}) => {
+                console.log(chainId)
+                if(chainId === 56) 
+                    setIsWrongNetwork(false);
+                else if (chainId === 97)
+                    setIsTestnet(true);
+                else
+                    setIsWrongNetwork(true);
+            });
+        }
 
     }, [])
 
@@ -687,7 +690,7 @@ function App() {
             metaBalance = {metaBalance}
             bluechipBalance = {bluechipBalance}
             top10Balance = {top10Balance}
-            top7Balance = {top7IndexBalalce}
+            top7Balance = {top7IndexBalance}
             currentBnbPrice = {currentBnbPrice}
             portfolioName = {createModalPortfolioName}
             isLoading = {isLoading}
@@ -717,7 +720,7 @@ function App() {
                     { portfolioBox1FlipHandler === 'front' ?
                     <div className='portfolio-box-front'>
                         <div className="level1">
-                            <img src={Logo} alt="" />
+                            <img src={VelvetCapitalLogo} alt="" />
 
                             <div className="portfolio-details">
                                 <h1 className="portfolio-title fn-lg">Top 7</h1>
@@ -727,18 +730,18 @@ function App() {
 
                         <img className="assets-img cursor-pointer" src={AssetsImg2} alt="" onClick={() => setPortfolioBox1FlipHandler('back')}/>
 
-                        <div className="user-balance">
+                        <div className="portfolio-box-user-balance">
                             <span>Balance</span>
-                            <span>{formatDecimal(top7IndexBalalce)} TOP7</span>
+                            <span style={formatDecimal(top7IndexBalance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}} >$ { (top7IndexBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1}) }</span>
                         </div>
 
-                        <div className="user-return">
+                        <div className="portfolio-box-user-return">
                             <span>Return</span>
                             <span>-</span>
                         </div>
 
                         <button className="btn fn-md" data-portfolio-name="TOP7" onClick={isWalletConnected ? toggleCreateModal : toggleConnectWalletModal}>
-                            {parseFloat(top7IndexBalalce) > 0 ? "Create/ Redeem" : "Create"}
+                            {formatDecimal(top7IndexBalance) > 0 ? "Create/ Redeem" : "Create"}
                         </button>
 
                         <div className="portfolio-data">
@@ -788,7 +791,7 @@ function App() {
                         { portfolioBox1FlipHandler === 'front' ?
                         <div className='portfolio-box-front'>
                             <div className="level1">
-                                <img src={Logo} alt="" />
+                                <img src={VelvetCapitalLogo} alt="" />
 
                                 <div className="portfolio-details">
                                     <h1 className="portfolio-title fn-lg">Blue Chip</h1>
@@ -798,18 +801,18 @@ function App() {
 
                             <img className="assets-img cursor-pointer" src={AssetsImg2} alt="" onClick={() => setPortfolioBox1FlipHandler('back')}/>
 
-                            <div className="user-balance">
+                            <div className="portfolio-box-user-balance">
                                 <span>Balance</span>
-                                <span>{parseFloat(formatDecimal(bluechipBalance)) == 0 ? '0' : formatDecimal(bluechipBalance)} BLUECHIP</span>
+                                <span style={formatDecimal(bluechipBalance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}}>$ { (bluechipBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1}) }</span>
                             </div>
 
-                            <div className="user-return">
+                            <div className="portfolio-box-user-return">
                                 <span>Return</span>
                                 <span>-</span>
                             </div>
 
                             <button className="btn fn-md" data-portfolio-name="BLUECHIP" onClick={isWalletConnected ? toggleCreateModal : toggleConnectWalletModal}>
-                                {parseFloat(bluechipBalance) > 0 ? "Create/ Redeem" : "Create"}
+                                {formatDecimal(bluechipBalance) > 0 ? "Create/ Redeem" : "Create"}
                             </button>
 
                             <div className="portfolio-data">
@@ -872,18 +875,18 @@ function App() {
 
                             <img className="assets-img cursor-pointer" src={AssetsImg1} alt="" onClick={() => setPortfolioBox2FlipHandler('back')}/>
 
-                            <div className="user-balance">
+                            <div className="portfolio-box-user-balance">
                                 <span>Balance</span>
-                                <span>{parseFloat(formatDecimal(metaBalance)) == 0 ? '0' : formatDecimal(metaBalance)} META</span>
+                                <span style={formatDecimal(metaBalance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}} >$ { (metaBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1}) }</span>
                             </div>
 
-                            <div className="user-return">
+                            <div className="portfolio-box-user-return">
                                 <span>Return</span>
                                 <span>-</span>
                             </div>
 
                             <button className="btn fn-md" data-portfolio-name="META" onClick={isWalletConnected ? toggleCreateModal : toggleConnectWalletModal}>
-                                {parseFloat(metaBalance) > 0 ? "Create/ Redeem" : "Create"}
+                                {formatDecimal(metaBalance) > 0 ? "Create/ Redeem" : "Create"}
                             </button>
 
                             <div className="portfolio-data">
@@ -931,7 +934,7 @@ function App() {
 
                         <div className="portfolio-box-front" >
                             <div className="level1">
-                                <img src={Logo} alt="" />
+                                <img src={VelvetCapitalLogo2} alt="" />
 
                                 <div className="portfolio-details">
                                     <h1 className="portfolio-title fn-lg">Top10</h1>
@@ -941,18 +944,18 @@ function App() {
 
                             <img className="assets-img cursor-pointer" src={AssetsImg2} alt="" onClick={() => setPortfolioBox3FlipHandler('back')}/>
 
-                            <div className="user-balance">
+                            <div className="portfolio-box-user-balance">
                                 <span>Balance</span>
-                                <span>{parseFloat(formatDecimal(top10Balance)) == 0 ? '0' : formatDecimal(top10Balance)} TOP10</span>
+                                <span style={formatDecimal(top10Balance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}} >$ { (top10Balance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1}) }</span>
                             </div>
 
-                            <div className="user-return">
+                            <div className="portfolio-box-user-return">
                                 <span>Return</span>
                                 <span>-</span>
                             </div>
 
                             <button className="btn fn-md" data-portfolio-name="TOP10" onClick={isWalletConnected ? toggleCreateModal : toggleConnectWalletModal}>
-                                {parseFloat(top10Balance) > 0 ? "Create/ Redeem" : "Create"}
+                                {formatDecimal(top10Balance) > 0 ? "Create/ Redeem" : "Create"}
                             </button>
 
                             <div className="portfolio-data">

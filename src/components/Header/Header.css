@@ -68,12 +68,12 @@
 
 .header-wrong-network-rounded-box {
     width: 125px;
-    height: 50px;
+    height: 45px;
     justify-content: space-evenly;
     align-items: center;
     position: absolute;
     right: 220px;
-    top: 54px;
+    top: 55px;
     transform: translateY(-50%);
     background-color: #fe6971;
     border-radius: 38px;

@@ -3,7 +3,7 @@ import { BigNumber, utils } from "ethers";
 import './CreateModal.css';
 
 import CrossImg from '../../assets/img/cross.svg';
-import VelvetLogo from '../../assets/img/velvetlogo3x.png';
+import VelvetCapitalLogo from '../../assets/img/newvelvetcapitallogo.svg';
 import MetaverseLogo from '../../assets/img/metaverse.svg';
 import BnbImg from '../../assets/img/bnb.png';
 
@@ -37,7 +37,7 @@ function CreateModal(props) {
                 <img src={CrossImg} alt="" id="create-modal-cancle" className="cursor-pointer" onClick={props.toggleModal} />
 
                 <div className="create-modal-details">
-                    <img src={props.portfolioName === 'META' ? MetaverseLogo : VelvetLogo} alt="" id="create-modal-logo" />
+                    <img src={props.portfolioName === 'META' ? MetaverseLogo : VelvetCapitalLogo} alt="" id="create-modal-logo" />
                     <span>{props.portfolioName}</span>
                 </div>
                 <div className="create-modal-action-tab flex">
