@@ -24,7 +24,7 @@
     align-items: center;
     gap: 75px;
     position: absolute;
-    left: 50%;
+    right: 30%;
 }
 
 .header-investor-data span {

@@ -736,7 +736,7 @@ function App() {
 
                         <div className="portfolio-box-user-balance">
                             <span>Value</span>
-                            <span style={formatDecimal(top7IndexBalance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}} >$ { (top7IndexBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1}) }</span>
+                            <span style={formatDecimal(top7IndexBalance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}} >$ { (top7IndexBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1}) } / {parseFloat(top7IndexBalance).toLocaleString('en-US', {maximumFractionDigits: 2})} TOP7</span>
                         </div>
 
                         <div className="portfolio-box-user-return">
@@ -807,7 +807,7 @@ function App() {
 
                             <div className="portfolio-box-user-balance">
                                 <span>Value</span>
-                                <span style={formatDecimal(bluechipBalance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}}>$ { (bluechipBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1}) }</span>
+                                <span style={formatDecimal(bluechipBalance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}}>$ { (bluechipBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1})} / {parseFloat(bluechipBalance).toLocaleString('en-US', {maximumFractionDigits: 2})} BLUECHIP </span>
                             </div>
 
                             <div className="portfolio-box-user-return">
@@ -881,7 +881,7 @@ function App() {
 
                             <div className="portfolio-box-user-balance">
                                 <span>Value</span>
-                                <span style={formatDecimal(metaBalance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}} >$ { (metaBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1}) }</span>
+                                <span style={formatDecimal(metaBalance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}} >$ { (metaBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1})} / {parseFloat(metaBalance).toLocaleString('en-US', {maximumFractionDigits: 2})} META</span>
                             </div>
 
                             <div className="portfolio-box-user-return">
@@ -950,7 +950,7 @@ function App() {
 
                             <div className="portfolio-box-user-balance">
                                 <span>Value</span>
-                                <span style={formatDecimal(top10Balance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}} >$ { (top10Balance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1}) }</span>
+                                <span style={formatDecimal(top10Balance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}} >$ { (top10Balance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1})} / {parseFloat(top10Balance).toLocaleString('en-US', {maximumFractionDigits: 2})} TOP10</span>
                             </div>
 
                             <div className="portfolio-box-user-return">
