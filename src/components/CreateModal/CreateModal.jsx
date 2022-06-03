@@ -27,6 +27,14 @@ function CreateModal(props) {
     else if(props.portfolioName === 'TOP7')
         indexTokenBalance = parseFloat(props.top7Balance);
 
+    function checkHasEnoughFunds(amount, fund) {
+        if(parseFloat(amount) > parseFloat(fund.toString())) 
+            setHasEnoughFunds(false)
+        
+        else 
+            setHasEnoughFunds(true);
+    }
+
 
     if(!props.show) return null;
 
@@ -41,11 +49,11 @@ function CreateModal(props) {
                     <span>{props.portfolioName}</span>
                 </div>
                 <div className="create-modal-action-tab flex">
-                    <div className="cursor-pointer" onClick={props.toggleCreateModalTab}>
+                    <div className="cursor-pointer" onClick={() => {props.toggleCreateModalTab(); checkHasEnoughFunds(amount.toString(), props.bnbBalance);}} >
                         <span className={props.createModalTab === 'redeem' && "unactive"}> Create </span>
                         <div className={`line ${props.createModalTab === 'create' && "active"}`} ></div>
                     </div>
-                    <div className="cursor-pointer" onClick={props.toggleCreateModalTab}>
+                    <div className="cursor-pointer" onClick={() => {props.toggleCreateModalTab(); checkHasEnoughFunds(amount.toString(), indexTokenBalance);}} >
                         <span className={props.createModalTab === 'create' && "unactive"}> Redeem </span>
                         <div className={`line ${props.createModalTab === 'redeem' && "active"}`} ></div>
                     </div>
@@ -86,11 +94,12 @@ function CreateModal(props) {
                             onChange={(e) => {
                                 e.target.value <= 1000000000 && setAmount(e.target.value);
                                 if(props.createModalTab === 'create'){
-                                    parseFloat(e.target.value) > parseFloat(props.bnbBalance) ? setHasEnoughFunds(false) : setHasEnoughFunds(true);
+                                    checkHasEnoughFunds(e.target.value, props.bnbBalance);
                                 }
 
-                                else
-                                    parseFloat(e.target.value) > indexTokenBalance ? setHasEnoughFunds(false) : setHasEnoughFunds(true);
+                                else {
+                                    checkHasEnoughFunds(e.target.value, indexTokenBalance);
+                                }
                             }} 
                         />
                     </div>
