@@ -29,6 +29,13 @@
     margin: 40px 0;
 }
 
+.success-or-error-msg-modal-copy-icon {
+    width: 20px;
+    position: absolute;
+    right: 9.5%;
+    bottom: 29%;
+}
+
 .success-or-error-msg-modal-btn {
     color: #fff;
     background-color: #7e77dd;

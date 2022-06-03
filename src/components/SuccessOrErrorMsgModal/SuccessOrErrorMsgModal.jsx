@@ -4,6 +4,7 @@ import './SuccessOrErrorMsgModal.css';
 import CrossImg from '../../assets/img/cross.svg';
 import SuccessImg from '../../assets/img/success-mark.svg';
 import ErrorImg from '../../assets/img/error-mark.svg';
+import CopyIcon from '../../assets/img/copyicon.png';
 
 function SuccessOrErrorMsgModal(props) {
 
@@ -34,6 +35,12 @@ function SuccessOrErrorMsgModal(props) {
         }
     }
 
+    function copyTokenAddress(portfolioName) {
+        console.log(portfolioName);
+        navigator.clipboard.writeText(tokensAddress[portfolioName]);
+
+    }
+
     if(!props.show) return null;
 
     return (
@@ -51,6 +58,8 @@ function SuccessOrErrorMsgModal(props) {
                                     <>
                                         <p className="success-or-error-msg-modal-message c-purple text-center fn-md">You have successfully  invested {props.amount} BNB in {props.portfolioName} basket </p>
                                         <p className="success-or-error-msg-modal-message c-purple text-center fn-md cursor-pointer" onClick={() => addTokenToWallet(tokensAddress[props.portfolioName], props.portfolioName)} style={{margin: '20px 0'}}>Add {props.portfolioName} Token to your wallet: <u style={{color: 'blue'}}>{tokensAddress[props.portfolioName]}</u> </p>
+                                        <img src={CopyIcon} alt="" className="cursor-pointer success-or-error-msg-modal-copy-icon" onClick={() => copyTokenAddress(props.portfolioName)} />
+                                        
                                     </>
                                 ) : (
                                     <p className="success-or-error-msg-modal-message c-purple text-center fn-md">You have successfully redeemed {props.amount} {props.portfolioName} from basket </p>
