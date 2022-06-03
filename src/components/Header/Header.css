@@ -167,3 +167,14 @@
     background-color: #f94c56;
     justify-content: center;
 }
+
+.header-dropdown-menu-btn:hover {
+    box-shadow: 0 0 16px 0 #FF7F7F , 0 0 16px 0 #FF7F7F;
+}
+
+.header-dropdown-menu-btn:active {
+    box-shadow: none;
+    background-color: #f94c56;
+    
+}
+
