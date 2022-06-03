@@ -104,6 +104,8 @@ function CreateModal(props) {
                         />
                     </div>
                 </div>
+
+                { props.createModalTab === 'redeem' && hasEnoughFunds && <span className="create-modal-max-btn cursor-pointer" onClick={() => setAmount(indexTokenBalance.toString().slice(0, -5))}> max </span> }
     
                 {props.createModalTab === 'create' ? <p className="create-modal-inf font-normal fn-sm text-center c-purple">You will get ~ {amount.toString()} {props.portfolioName} tokens representing your basket</p> : <p className="create-modal-inf font-normal fn-sm text-center c-purple">You will get ~ {amount.toString()} BNB </p> }
 

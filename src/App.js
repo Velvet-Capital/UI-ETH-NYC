@@ -394,7 +394,7 @@ function App() {
 
             //Getting Top7 Balance
             const contract = new Contract(top7IndexContractAddressTestnet, indexSwapAbi, provider);
-            const top7Balance = (utils.formatEther(await contract.balanceOf(accountAddress))).toLocaleString('en-US');
+            const top7Balance = (utils.formatEther(await contract.balanceOf(accountAddress)));
             top7Balance === '0.000' ? setTop7IndexBalance('0') : setTop7IndexBalance(top7Balance);
             //Getting Top7 Vault Balance
             let top7IndexVaultBalance = utils.formatEther( (await contract.getTokenAndVaultBalance())[1] );
@@ -464,7 +464,8 @@ function App() {
             const top10Balance = (utils.formatEther(await top10Contract.balanceOf(accountAddress)));
             top10Balance === '0.000' ? setTop10Balance('0') : setTop10Balance(top10Balance);
             //Getting TOP10 Vault Balance
-            setTop10IndexVaultBalance( utils.formatEther((await top10Contract.getTokenAndVaultBalance())[1]) );
+            let top10IndexVaultBalance = utils.formatEther((await top10Contract.getTokenAndVaultBalance())[1]);
+            setTop10IndexVaultBalance( top10IndexVaultBalance );
             console.log("Top10 vault Balance" , top10IndexVaultBalance);
             //Getting TOP10 Tokens Weight
             const top10TokensBalance = (await top10Contract.getTokenAndVaultBalance())[0];

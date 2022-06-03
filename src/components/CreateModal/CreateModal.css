@@ -116,6 +116,18 @@
     color: #b3b3b3 !important;
 }
 
+.create-modal-max-btn {
+    position: absolute;
+    right: 9%;
+    bottom: 32%;
+    font-size: 14px;
+    color: blue;
+}
+
+.create-modal-max-btn:hover {
+    color: lightblue;
+}
+
 .create-modal-action-btn {
     margin: 21px 0;
     background-color: var(--green);
