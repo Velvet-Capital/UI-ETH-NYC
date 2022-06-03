@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Magic} from 'magic-sdk';
-import { providers, Contract, utils} from 'ethers';
+import { providers, Contract, utils, BigNumber} from 'ethers';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './styles/App.css';
@@ -56,6 +56,10 @@ function App() {
         amount: '',
         status: 0
     })
+    const [metaIndexVaultBalance, setMetaIndexVaultBalance] = useState('');
+    const [bluechipIndexVaultBalance, setBluechipIndexVaultBalance] = useState('');
+    const [top10IndexVaultBalance, setTop10IndexVaultBalance] = useState('');
+    const [top7IndexVaultBalance, setTop7IndexVaultBalance] = useState('');
     const [metaIndexTokensWeight, setMetaIndexTokensWeight] = useState({})
     const [bluechipIndexTokensWeight, setBluechipIndexTokensWeight] = useState({})
     const [top10IndexTokensWeight, setTop10IndexTokensWeight] = useState({})
@@ -67,10 +71,6 @@ function App() {
     const top7IndexContractAddressTestnet = '0x5DA92941262768deA5018114e64EB73b937B5Cb0';
     const indexSwapAbi = indexSwap.abi;
 
-    let metaIndexVaultBalance;
-    let bluechipIndexVaultBalance;
-    let top10IndexVaultBalance;
-    let top7IndexVaultBalance;
     const metaTokens = [['Decentraland', 'MANA'], ['The Sandbox', 'SAND'], ['Axie Infinity', 'AXS']];
     const bluechipTokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA']];
     const top10Tokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA'], ['Avalanche', 'AVAX'], ['Polkadot', 'DOT'], ['TRON', 'TRX'], ['Dogecoin', 'DOGE'], ['Solana', 'SOL'], ['WBNB', 'WBNB']]
@@ -397,7 +397,9 @@ function App() {
             const top7Balance = (utils.formatEther(await contract.balanceOf(accountAddress))).toLocaleString('en-US');
             top7Balance === '0.000' ? setTop7IndexBalance('0') : setTop7IndexBalance(top7Balance);
             //Getting Top7 Vault Balance
-            top7IndexVaultBalance = utils.formatEther( (await contract.getTokenAndVaultBalance())[1] );
+            let top7IndexVaultBalance = utils.formatEther( (await contract.getTokenAndVaultBalance())[1] );
+            //-!-!-!- there is some issue in contract side so for now need to formatEther twice
+            setTop7IndexVaultBalance( utils.formatEther( BigNumber.from(parseInt(top7IndexVaultBalance).toString()) ) );
             console.log('Top7 Vault Balance: ' + top7IndexVaultBalance);  
             //Getting Top7 Tokens Weight
             const tokensBalance = (await contract.getTokenAndVaultBalance())[0];
@@ -425,7 +427,9 @@ function App() {
             const metaBalance = (utils.formatEther(await metaContract.balanceOf(accountAddress)));
             metaBalance === '0.000' ? setMetaBalance('0') : setMetaBalance(metaBalance);
             //Getting META Vault Balance
-            metaIndexVaultBalance = utils.formatEther( (await metaContract.getTokenAndVaultBalance())[1] );
+            let metaIndexVaultBalance = utils.formatEther( (await metaContract.getTokenAndVaultBalance())[1] );
+            //-!-!-!- there is some issue in contract side so for now need to formatEther twice
+            setMetaIndexVaultBalance( utils.formatEther( BigNumber.from(parseInt(metaIndexVaultBalance).toString()) ) );
             console.log("META vault Balance" ,metaIndexVaultBalance);
             //Getting META Tokens Weight
             const metaTokensBalance = (await metaContract.getTokenAndVaultBalance())[0];
@@ -442,7 +446,9 @@ function App() {
             const bluechipBalance = (utils.formatEther(await bluechipContract.balanceOf(accountAddress)));
             bluechipBalance === '0.000' ? setBluechipBalance('0') : setBluechipBalance(bluechipBalance);
             //Getting BLUECHIP Vault Balance
-            bluechipIndexVaultBalance = utils.formatEther( (await bluechipContract.getTokenAndVaultBalance())[1] );
+            let bluechipIndexVaultBalance = utils.formatEther( (await bluechipContract.getTokenAndVaultBalance())[1] );
+            //-!-!-!- there is some issue in contract side so for now need to use formatEther twice
+            setBluechipIndexVaultBalance( utils.formatEther( BigNumber.from(parseInt(bluechipIndexVaultBalance).toString()) ) );
             console.log("bluechip vault Balance" ,bluechipIndexVaultBalance);
             //Getting BLUECHIP Tokens Weight
             const bluechipTokensBalance = (await bluechipContract.getTokenAndVaultBalance())[0];
@@ -458,7 +464,7 @@ function App() {
             const top10Balance = (utils.formatEther(await top10Contract.balanceOf(accountAddress)));
             top10Balance === '0.000' ? setTop10Balance('0') : setTop10Balance(top10Balance);
             //Getting TOP10 Vault Balance
-            top10IndexVaultBalance = utils.formatEther( (await top10Contract.getTokenAndVaultBalance())[1] );
+            setTop10IndexVaultBalance( utils.formatEther((await top10Contract.getTokenAndVaultBalance())[1]) );
             console.log("Top10 vault Balance" , top10IndexVaultBalance);
             //Getting TOP10 Tokens Weight
             const top10TokensBalance = (await top10Contract.getTokenAndVaultBalance())[0];
@@ -757,7 +763,7 @@ function App() {
 
                             <div className="right">
                                 <img src={DollarImg} alt="" />
-                                <span className="marketcap fn-sm">1,507,455</span>
+                                <span className="marketcap fn-sm">{ (top7IndexVaultBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits:1}) }</span>
                             </div>
                         </div>
 
@@ -828,7 +834,7 @@ function App() {
 
                                 <div className="right">
                                     <img src={DollarImg} alt="" />
-                                    <span className="marketcap fn-sm">1,507,455</span>
+                                    <span className="marketcap fn-sm">{ (bluechipIndexVaultBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits:1}) }</span>
                                 </div>
                             </div>
 
@@ -902,7 +908,7 @@ function App() {
 
                                 <div className="right">
                                     <img src={DollarImg} alt="" />
-                                    <span className="marketcap fn-sm">1,900,842</span>
+                                    <span className="marketcap fn-sm">{ (metaIndexVaultBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits:1}) }</span>
                                 </div>
                             </div>
                         </div>
@@ -966,12 +972,12 @@ function App() {
                             <div className="portfolio-data">
                                 <div className="left">
                                     <img src={PeopleImg} alt="" />
-                                    <span className="num-of-investors fn-sm">5,012</span>
+                                    <span className="num-of-investors fn-sm">3,432</span>
                                 </div>
 
                                 <div className="right">
                                     <img src={DollarImg} alt="" />
-                                    <span className="marketcap fn-sm">1,900,842</span>
+                                    <span className="marketcap fn-sm">{ (top10IndexVaultBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits:1}) }</span>
                                 </div>
                             </div>
                         </div>
