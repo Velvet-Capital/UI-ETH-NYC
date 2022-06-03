@@ -4,7 +4,8 @@ import '../../styles/utils.css'
 
 import GhostLogo from '../../assets/img/ghost-logo.png';
 import Logo from '../../assets/img/headerlogo.png';
-import WalletImg from '../../assets/img/wallet.png';
+import WalletNotConnectedImg from '../../assets/img/wallet-notconnected.png';
+import WalletConnectedImg from '../../assets/img/wallet-connected.png';
 import ArrowUPImg from '../../assets/img/chevron-down (1).svg';
 import ArrowDownImg from '../../assets/img/chevron-down.svg';
 import ExitImg from '../../assets/img/exit.svg';
@@ -53,12 +54,12 @@ function Header({toggleConnectWalletModal, toggleHeaderDropdownMenu, showHeaderD
 
             {!isWalletConnected ? (
                 <button className="connect-btn" onClick={toggleConnectWalletModal}>
-                    <img src={WalletImg} alt="" />
+                    <img src={isWalletConnected ? WalletConnectedImg : WalletNotConnectedImg} alt="" />
                     <span className="fn-sm">Connect a wallet</span>
                 </button>
             ) : (
                 <button className={isWrongNetwork ? "border-red connect-btn" : "connect-btn"} onClick={toggleHeaderDropdownMenu}>
-                    <img src={WalletImg} alt="" />
+                    <img src={isWalletConnected ? WalletConnectedImg : WalletNotConnectedImg} alt="" />
                     <span className="fn-sm"> {currentAccount.slice(0,4) + '...' + currentAccount.slice(-3)} </span>
                     <img src={showHeaderDropdownMenu ? ArrowUPImg : ArrowDownImg} className="connect-btn-icon" alt="" />
                 </button> 
