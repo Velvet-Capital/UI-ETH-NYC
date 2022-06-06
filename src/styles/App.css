@@ -38,3 +38,15 @@
   box-shadow: none;
   background-color: #44a863;
 }
+
+/* @media only screen and (min-width: 1586px) {
+  .app {
+    height: 100vh;
+  }
+}
+
+@media only screen and (max-width: 1583px) {
+  .app {
+    height: 150%;
+  }
+} */

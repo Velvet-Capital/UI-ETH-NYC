@@ -12,7 +12,8 @@ function SuccessOrErrorMsgModal(props) {
         'BLUECHIP': '0x55204c31E725C7635393bdBdE738d73c1e10E178',
         'META': '0xB757F1D8c40D49313f716906d7c3107a877367AD',
         'TOP10': '0x210b31776fA73c72CCaD41A65AcAF1Ab3317440E',
-        'TOP7': '0x5DA92941262768deA5018114e64EB73b937B5Cb0'
+        'TOP7': '0x5DA92941262768deA5018114e64EB73b937B5Cb0',
+        'VTOP3': '0xF35aAB62FCCFaAB83652a52540e8d01aa5B15cCf'
     }
 
     async function addTokenToWallet(tokenAddress, tokenSymbol) {

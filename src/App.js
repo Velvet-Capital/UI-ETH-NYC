@@ -75,14 +75,14 @@ function App() {
     const bluechipIndexContractAddressMainnet = '0x55204c31E725C7635393bdBdE738d73c1e10E178';
     const metaIndexContractAddressMainnet = '0xB757F1D8c40D49313f716906d7c3107a877367AD';
     const top10IndexContractAddressMainnet = '0x210b31776fA73c72CCaD41A65AcAF1Ab3317440E';
-    const top3VenusContractAddressMainnet = '0x886803005FA2967aBb40Fb6FCC7259B211558428';
+    const top3VenusContractAddressMainnet = '0xF35aAB62FCCFaAB83652a52540e8d01aa5B15cCf';
     const top7IndexContractAddressTestnet = '0x5DA92941262768deA5018114e64EB73b937B5Cb0';
     const indexSwapAbi = indexSwap.abi;
 
     const metaTokens = [['Decentraland', 'MANA'], ['The Sandbox', 'SAND'], ['Axie Infinity', 'AXS']];
     const bluechipTokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA']];
     const top10Tokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA'], ['Avalanche', 'AVAX'], ['Polkadot', 'DOT'], ['TRON', 'TRX'], ['Dogecoin', 'DOGE'], ['Solana', 'SOL'], ['WBNB', 'WBNB']]
-    const vtop3Tokens = [[], [], []];
+    const vtop3Tokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['BNB', 'BNB']];
     const top7Tokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA'], ['Avalanche', 'AVAX'], ['Polkadot', 'DOT'], ['TRON', 'TRX']];
 
     function toggleConnectWalletModal() {
@@ -490,24 +490,19 @@ function App() {
             const vtop3Balance = (utils.formatEther(await vtop3Contract.balanceOf(accountAddress)));
             formatDecimal(vtop3Balance) === '0.000' ? setVtop3Balance('0') : setVtop3Balance(vtop3Balance);
             // Getting VTOP3 Vault Balance and Tokens Balance
-            const values = await vtop3Contract.getTokenAndVaultBalance();
-            const receipt = await values.wait();
+            const tx = await vtop3Contract.getTokenAndVaultBalance();
+            // console.log(tx);
+            let vtop3VaultBalance = utils.formatEther( tx[1] );
+            let vtop3TokenBalances = tx[0];
+            setVtop3IndexVaultBalance(vtop3VaultBalance);
+            console.log("VTOP3 Tokens ", vtop3TokenBalances);
 
-            let vtop3VaultBalance;
-            let vtop3TokenBalances;
-
-            if(
-                receipt.events &&
-                receipt.events[3] &&
-                receipt.events[3].args &&
-                receipt.events[3].args.tokenBalances
-            ) {
-                vtop3TokenBalances = receipt.events[3].args.tokenBalances;
-                vtop3VaultBalance = receipt.events[3].args.vaultValue;
-            }
-            console.log("VTOP3 Token ", vtop3TokenBalances);
-            console.log("VTOP3 vault", vtop3VaultBalance);
-
+            const vtop3TokensWeight = {};
+            vtop3TokenBalances.forEach((tokenBalance, index) => {
+                vtop3TokensWeight[vtop3Tokens[index][1]] = ((utils.formatEther(tokenBalance) / vtop3VaultBalance) * 100).toFixed(1);
+            })
+            console.log(vtop3TokensWeight);
+            setVtop3IndexTokensWeight(vtop3TokensWeight);
         }
         catch(err) {
             console.log(err);
@@ -1061,7 +1056,7 @@ function App() {
                         </div> }
                     </div>
 
-                    {/* <div className="portfolio-box">
+                    <div className="portfolio-box">
                         { portfolioBox4FlipHandler === 'front' ? 
 
                         <div className="portfolio-box-front" >
@@ -1112,15 +1107,15 @@ function App() {
                             <h3>Rebalancing Weekly</h3>
                             <div className="portfolio-box-back-assets">
                                 {
-                                    top10Tokens.map((token, index) => {
+                                    vtop3Tokens.map((token, index) => {
                                         return (
                                             <div className="portfolio-box-back-asset" key={index}>
                                                 <img src={AssestsLogo[token[1]]} alt="" className='portfolio-box-back-asset-icon' />
                                                 <span className="portfolio-box-back-asset-name">{token[0]}</span>
                                                 <span className="portfolio-box-back-asset-symbol">{token[1]}</span>
                                                 {
-                                                    Object.keys(top10IndexTokensWeight).length > 0 ? (
-                                                        <span className="portfolio-box-back-asset-allocation">{top10IndexTokensWeight[token[1]] === '0.0' ? '0' : top10IndexTokensWeight[token[1]].charAt(3) === '0' ? top10IndexTokensWeight[token[1]].slice(0,-2) : top10IndexTokensWeight[token[1]]} %</span>
+                                                    Object.keys(vtop3IndexTokensWeight).length > 0 ? (
+                                                        <span className="portfolio-box-back-asset-allocation">{[token[1]] === '0.0' ? '0' : vtop3IndexTokensWeight[token[1]].charAt(3) === '0' ? vtop3IndexTokensWeight[token[1]].slice(0,-2) : vtop3IndexTokensWeight[token[1]]} %</span>
                                                     ) : (
                                                         <span className="portfolio-box-back-asset-allocation">0 %</span>
                                                     )
@@ -1131,7 +1126,7 @@ function App() {
                                 }                            
                             </div>
                         </div> }
-                    </div> */}
+                    </div>
                 </>
             )}
         </div>
