@@ -765,7 +765,7 @@ function App() {
                 <div className="portfolio-box">
                     { portfolioBox1FlipHandler === 'front' ?
                     <div className='portfolio-box-front'>
-                        <Tippy placement='top' animation='scale' content={'Top 7 Cryptocurrencies by Total Market Capitalization, Equally weighted (excluding stablecoins) '}>
+                        <Tippy placement='top' animation='scale' animateFill={true} content={'Top 7 Cryptocurrencies by Total Market Capitalization, Equally weighted (excluding stablecoins) '}>
                             <img src={InfoImg} alt="" className='portfolio-box-front-info-img cursor-pointer' />
                         </Tippy>
                         <div className="level1">
