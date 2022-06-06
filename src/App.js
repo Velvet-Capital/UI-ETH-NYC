@@ -38,11 +38,13 @@ function App() {
     const [portfolioBox1FlipHandler, setPortfolioBox1FlipHandler] = useState('front');
     const [portfolioBox2FlipHandler, setPortfolioBox2FlipHandler] = useState('front');
     const [portfolioBox3FlipHandler, setPortfolioBox3FlipHandler] = useState('front');
+    const [portfolioBox4FlipHandler, setPortfolioBox4FlipHandler] = useState('front');
     const [createModalTab, setCreateModalTab] = useState('create');
     const [bnbBalance, setBnbBalance] = useState('0');
     const [metaBalance, setMetaBalance] = useState('0');
     const [bluechipBalance, setBluechipBalance] = useState('0')
     const [top10Balance, setTop10Balance] = useState('0');
+    const [vtop3Balance, setVtop3Balance] = useState('0');
     const [top7IndexBalance, setTop7IndexBalance] = useState('0')
     const [currentBnbPrice, setCurrentBnbPrice] = useState(null);
     const [isTestnet, setIsTestnet] = useState(false);
@@ -59,21 +61,25 @@ function App() {
     const [metaIndexVaultBalance, setMetaIndexVaultBalance] = useState('');
     const [bluechipIndexVaultBalance, setBluechipIndexVaultBalance] = useState('');
     const [top10IndexVaultBalance, setTop10IndexVaultBalance] = useState('');
+    const [vtop3IndexVaultBalance, setVtop3IndexVaultBalance] = useState('');
     const [top7IndexVaultBalance, setTop7IndexVaultBalance] = useState('');
-    const [metaIndexTokensWeight, setMetaIndexTokensWeight] = useState({})
-    const [bluechipIndexTokensWeight, setBluechipIndexTokensWeight] = useState({})
-    const [top10IndexTokensWeight, setTop10IndexTokensWeight] = useState({})
-    const [top7IndexTokensWeight, setTop7IndexTokensWeight] = useState({})
+    const [metaIndexTokensWeight, setMetaIndexTokensWeight] = useState({});
+    const [bluechipIndexTokensWeight, setBluechipIndexTokensWeight] = useState({});
+    const [top10IndexTokensWeight, setTop10IndexTokensWeight] = useState({});
+    const [vtop3IndexTokensWeight,setVtop3IndexTokensWeight] = useState({});
+    const [top7IndexTokensWeight, setTop7IndexTokensWeight] = useState({});
     
     const bluechipIndexContractAddressMainnet = '0x55204c31E725C7635393bdBdE738d73c1e10E178';
     const metaIndexContractAddressMainnet = '0xB757F1D8c40D49313f716906d7c3107a877367AD';
     const top10IndexContractAddressMainnet = '0x210b31776fA73c72CCaD41A65AcAF1Ab3317440E';
+    const top3VenusContractAddressMainnet = '0x886803005FA2967aBb40Fb6FCC7259B211558428';
     const top7IndexContractAddressTestnet = '0x5DA92941262768deA5018114e64EB73b937B5Cb0';
     const indexSwapAbi = indexSwap.abi;
 
     const metaTokens = [['Decentraland', 'MANA'], ['The Sandbox', 'SAND'], ['Axie Infinity', 'AXS']];
     const bluechipTokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA']];
     const top10Tokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA'], ['Avalanche', 'AVAX'], ['Polkadot', 'DOT'], ['TRON', 'TRX'], ['Dogecoin', 'DOGE'], ['Solana', 'SOL'], ['WBNB', 'WBNB']]
+    const vtop3Tokens = [[], [], []];
     const top7Tokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA'], ['Avalanche', 'AVAX'], ['Polkadot', 'DOT'], ['TRON', 'TRX']];
 
     function toggleConnectWalletModal() {
@@ -425,7 +431,7 @@ function App() {
             //Getting META Balance
             const metaContract = new Contract(metaIndexContractAddressMainnet, indexSwapAbi, provider); 
             const metaBalance = (utils.formatEther(await metaContract.balanceOf(accountAddress)));
-            metaBalance === '0.000' ? setMetaBalance('0') : setMetaBalance(metaBalance);
+            formatDecimal(metaBalance) === '0.000' ? setMetaBalance('0') : setMetaBalance(metaBalance);
             //Getting META Vault Balance
             let metaIndexVaultBalance = utils.formatEther( (await metaContract.getTokenAndVaultBalance())[1] );
             //-!-!-!- there is some issue in contract side so for now need to formatEther twice
@@ -444,7 +450,7 @@ function App() {
             //Getting BLUECHIP Balance
             const bluechipContract = new Contract(bluechipIndexContractAddressMainnet, indexSwapAbi, provider); 
             const bluechipBalance = (utils.formatEther(await bluechipContract.balanceOf(accountAddress)));
-            bluechipBalance === '0.000' ? setBluechipBalance('0') : setBluechipBalance(bluechipBalance);
+            formatDecimal(bluechipBalance) === '0.000' ? setBluechipBalance('0') : setBluechipBalance(bluechipBalance);
             //Getting BLUECHIP Vault Balance
             let bluechipIndexVaultBalance = utils.formatEther( (await bluechipContract.getTokenAndVaultBalance())[1] );
             //-!-!-!- there is some issue in contract side so for now need to use formatEther twice
@@ -462,7 +468,7 @@ function App() {
             //Getting TOP10 Balance
             const top10Contract = new Contract(top10IndexContractAddressMainnet, indexSwapAbi, provider); 
             const top10Balance = (utils.formatEther(await top10Contract.balanceOf(accountAddress)));
-            top10Balance === '0.000' ? setTop10Balance('0') : setTop10Balance(top10Balance);
+            formatDecimal(top10Balance) === '0.000' ? setTop10Balance('0') : setTop10Balance(top10Balance);
             //Getting TOP10 Vault Balance
             let top10IndexVaultBalance = utils.formatEther((await top10Contract.getTokenAndVaultBalance())[1]);
             setTop10IndexVaultBalance( top10IndexVaultBalance );
@@ -475,6 +481,29 @@ function App() {
             })
             console.log(top10TokensWeight);
             setTop10IndexTokensWeight(top10TokensWeight);
+
+            //Getting VTOP3 Balance
+            const vtop3Contract = new Contract(top3VenusContractAddressMainnet, indexSwapAbi, provider);
+            const vtop3Balance = (utils.formatEther(await vtop3Contract.balanceOf(accountAddress)));
+            formatDecimal(vtop3Balance) === '0.000' ? setVtop3Balance('0') : setVtop3Balance(vtop3Balance);
+            // Getting VTOP3 Vault Balance and Tokens Balance
+            const values = await vtop3Contract.getTokenAndVaultBalance();
+            const receipt = await values.wait();
+
+            let vtop3VaultBalance;
+            let vtop3TokenBalances;
+
+            if(
+                receipt.events &&
+                receipt.events[3] &&
+                receipt.events[3].args &&
+                receipt.events[3].args.tokenBalances
+            ) {
+                vtop3TokenBalances = receipt.events[3].args.tokenBalances;
+                vtop3VaultBalance = receipt.events[3].args.vaultValue;
+            }
+            console.log("VTOP3 Token ", vtop3TokenBalances);
+            console.log("VTOP3 vault", vtop3VaultBalance);
 
         }
         catch(err) {
@@ -497,6 +526,9 @@ function App() {
             }
             else if(portfolioName === 'TOP10') {
                 contract = new Contract(top10IndexContractAddressMainnet, indexSwapAbi, signer);
+            }
+            else if(portfolioName === 'VTOP3') {
+                contract = new Contract(top3VenusContractAddressMainnet, indexSwapAbi, signer);
             }
             else if(portfolioName === 'TOP7') {
                 contract = new Contract(top7IndexContractAddressTestnet, indexSwapAbi, signer);
@@ -584,6 +616,9 @@ function App() {
             }
             else if(portfolioName === 'TOP10') {
                 contract = new Contract(top10IndexContractAddressMainnet, indexSwapAbi, signer);
+            }
+            else if(portfolioName === 'VTOP3') {
+                contract = new Contract(top3VenusContractAddressMainnet, indexSwapAbi, signer);
             }
             else if(portfolioName === 'TOP7') {
                 contract = new Contract(top7IndexContractAddressTestnet, indexSwapAbi, signer);
@@ -703,6 +738,7 @@ function App() {
             bluechipBalance = {bluechipBalance}
             top10Balance = {top10Balance}
             top7Balance = {top7IndexBalance}
+            vtop3Balance = {vtop3Balance}
             currentBnbPrice = {currentBnbPrice}
             portfolioName = {createModalPortfolioName}
             isLoading = {isLoading}
@@ -985,6 +1021,75 @@ function App() {
                             :
                         <div className="portfolio-box-back">
                             <img src={CrossImg} alt="" id="portfolio-box-back-cross" onClick={() => setPortfolioBox3FlipHandler('front')} />
+                            <h2>Allocation</h2>
+                            <h3>Rebalancing Weekly</h3>
+                            <div className="portfolio-box-back-assets">
+                                {
+                                    top10Tokens.map((token, index) => {
+                                        return (
+                                            <div className="portfolio-box-back-asset" key={index}>
+                                                <img src={AssestsLogo[token[1]]} alt="" className='portfolio-box-back-asset-icon' />
+                                                <span className="portfolio-box-back-asset-name">{token[0]}</span>
+                                                <span className="portfolio-box-back-asset-symbol">{token[1]}</span>
+                                                {
+                                                    Object.keys(top10IndexTokensWeight).length > 0 ? (
+                                                        <span className="portfolio-box-back-asset-allocation">{top10IndexTokensWeight[token[1]] === '0.0' ? '0' : top10IndexTokensWeight[token[1]].charAt(3) === '0' ? top10IndexTokensWeight[token[1]].slice(0,-2) : top10IndexTokensWeight[token[1]]} %</span>
+                                                    ) : (
+                                                        <span className="portfolio-box-back-asset-allocation">0 %</span>
+                                                    )
+                                                }
+                                            </div>
+                                        )
+                                    })
+                                }                            
+                            </div>
+                        </div> }
+                    </div>
+
+                    <div className="portfolio-box">
+                        { portfolioBox4FlipHandler === 'front' ? 
+
+                        <div className="portfolio-box-front" >
+                            <div className="level1">
+                                <img src={VelvetCapitalLogo2} alt="" />
+
+                                <div className="portfolio-details">
+                                    <h1 className="portfolio-title fn-lg">Top3 Venus</h1>
+                                    <p className="creator fn-vsm">by alex420</p>
+                                </div>
+                            </div>
+
+                            <img className="portfolio-box-assets-img cursor-pointer" src={AssetsImg2} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox4FlipHandler('back')}/>
+
+                            <div className="portfolio-box-user-balance">
+                                <span>Value</span>
+                                <span style={formatDecimal(vtop3Balance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}} >$ { (vtop3Balance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1})} / {parseFloat(vtop3Balance).toLocaleString('en-US', {maximumFractionDigits: 2})} VTOP3</span>
+                            </div>
+
+                            <div className="portfolio-box-user-return">
+                                <span>Return</span>
+                                <span>-</span>
+                            </div>
+
+                            <button className="btn fn-md" data-portfolio-name="VTOP3" onClick={isWalletConnected ? toggleCreateModal : toggleConnectWalletModal}>
+                                {formatDecimal(vtop3Balance) > 0 ? "Create/ Redeem" : "Create"}
+                            </button>
+
+                            <div className="portfolio-data">
+                                <div className="left">
+                                    <img src={PeopleImg} alt="" />
+                                    <span className="num-of-investors fn-sm">3,432</span>
+                                </div>
+
+                                <div className="right">
+                                    <img src={DollarImg} alt="" />
+                                    <span className="marketcap fn-sm">{ (vtop3IndexVaultBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits:1}) }</span>
+                                </div>
+                            </div>
+                        </div>
+                            :
+                        <div className="portfolio-box-back">
+                            <img src={CrossImg} alt="" id="portfolio-box-back-cross" onClick={() => setPortfolioBox4FlipHandler('front')} />
                             <h2>Allocation</h2>
                             <h3>Rebalancing Weekly</h3>
                             <div className="portfolio-box-back-assets">

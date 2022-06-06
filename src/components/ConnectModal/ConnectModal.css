@@ -1,6 +1,6 @@
 .overlay {
     width: 100vw;
-    height: 100vh;
+    height: 150%;
     position: absolute;
     opacity: 0.9;
     background-image: linear-gradient(to bottom, #4368cd, #7455f6);

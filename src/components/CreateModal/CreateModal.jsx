@@ -16,25 +16,27 @@ function CreateModal(props) {
 
     let indexTokenBalance;
     if(props.portfolioName === 'META')
-        indexTokenBalance = parseFloat(props.metaBalance);
+        indexTokenBalance = props.metaBalance;
 
     else if(props.portfolioName === 'BLUECHIP') 
-        indexTokenBalance = parseFloat(props.bluechipBalance);
+        indexTokenBalance = props.bluechipBalance;
 
-    else if(props.portfolioName === 'TOP10')
-        indexTokenBalance = parseFloat(props.top10Balance);
+    else if(props.portfolioName === 'TOP10') 
+        indexTokenBalance = props.top10Balance;
 
     else if(props.portfolioName === 'TOP7')
-        indexTokenBalance = parseFloat(props.top7Balance);
+        indexTokenBalance = props.top7Balance;
+    
+    else if(props.portfolioName === 'VTOP3')
+        indexTokenBalance = props.vtop3Balance;
 
     function checkHasEnoughFunds(amount, fund) {
-        if(parseFloat(amount) > parseFloat(fund.toString())) 
+        if(parseFloat(amount) > parseFloat(fund)) 
             setHasEnoughFunds(false)
         
         else 
             setHasEnoughFunds(true);
     }
-
 
     if(!props.show) return null;
 
@@ -89,7 +91,7 @@ function CreateModal(props) {
                         <input 
                             type="number" 
                             className={ hasEnoughFunds ? "block" : "block border-red" } 
-                            placeholder={props.createModalTab === 'create' ? 'max ' + formatDecimal(props.bnbBalance) + ' BNB' : 'max ' + formatDecimal(indexTokenBalance.toString()) + ' ' + props.portfolioName} 
+                            placeholder={props.createModalTab === 'create' ? 'max ' + formatDecimal(props.bnbBalance) + ' BNB' : 'max ' + formatDecimal(indexTokenBalance) + ' ' + props.portfolioName} 
                             value={amount == '0' ? null : amount}
                             onChange={(e) => {
                                 e.target.value <= 1000000000 && setAmount(e.target.value);
@@ -105,7 +107,7 @@ function CreateModal(props) {
                     </div>
                 </div>
 
-                { props.createModalTab === 'redeem' && hasEnoughFunds && <span className="create-modal-max-btn cursor-pointer" onClick={() => setAmount(indexTokenBalance.toString().slice(0, -5))}> max </span> }
+                { props.createModalTab === 'redeem' && hasEnoughFunds && <span className="create-modal-max-btn cursor-pointer" onClick={() => setAmount(indexTokenBalance.slice(0, -7))}> max </span> }
     
                 {props.createModalTab === 'create' ? <p className="create-modal-inf font-normal fn-sm text-center c-purple">You will get ~ {amount.toString()} {props.portfolioName} tokens representing your basket</p> : <p className="create-modal-inf font-normal fn-sm text-center c-purple">You will get ~ {amount.toString()} BNB </p> }
 
