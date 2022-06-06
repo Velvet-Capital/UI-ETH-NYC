@@ -1052,7 +1052,7 @@ function App() {
                         </div> }
                     </div>
 
-                    <div className="portfolio-box">
+                    {/* <div className="portfolio-box">
                         { portfolioBox4FlipHandler === 'front' ? 
 
                         <div className="portfolio-box-front" >
@@ -1119,7 +1119,7 @@ function App() {
                                 }                            
                             </div>
                         </div> }
-                    </div>
+                    </div> */}
                 </>
             )}
         </div>
