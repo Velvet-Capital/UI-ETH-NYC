@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Magic} from 'magic-sdk';
 import { providers, Contract, utils, BigNumber} from 'ethers';
 import { ToastContainer, toast } from 'react-toastify';
+import Tippy from '@tippy.js/react';
 import 'react-toastify/dist/ReactToastify.css';
+import 'tippy.js/dist/tippy.css';
 import './styles/App.css';
 import './styles/portfoliobox.css';
 import indexSwap  from './utils/abi/IndexSwap.json';
@@ -22,6 +24,7 @@ import PeopleImg from './assets/img/people.svg';
 import CrossImg from './assets/img/cross.svg';
 import GreenTickImg from './assets/img/green-tick.png';
 import ErrorImg from './assets/img/error.png';
+import InfoImg from './assets/img/info.png';
 
 import AssestsLogo from './utils/assests_logo_helper.js';
 import formatDecimal from './utils/formatDecimal';
@@ -34,7 +37,7 @@ function App() {
     const [showConnectWalletModal, setShowConnectWalletModal] = useState(false);
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showHeaderDropdownMenu, setShowHeaderDropdownMenu] = useState(false);
-    const [provider, setProvider] = useState(null);
+    const [magicProvider, setMagicProvider] = useState(null);
     const [portfolioBox1FlipHandler, setPortfolioBox1FlipHandler] = useState('front');
     const [portfolioBox2FlipHandler, setPortfolioBox2FlipHandler] = useState('front');
     const [portfolioBox3FlipHandler, setPortfolioBox3FlipHandler] = useState('front');
@@ -135,7 +138,7 @@ function App() {
             })
             
             const provider = new providers.Web3Provider(magic.rpcProvider);
-            setProvider(provider);
+            setMagicProvider(provider);
             const signer = provider.getSigner();
             setCurrentAccount(await signer.getAddress());
             setIsWalletConnected(true);
@@ -767,6 +770,9 @@ function App() {
                 <div className="portfolio-box">
                     { portfolioBox1FlipHandler === 'front' ?
                     <div className='portfolio-box-front'>
+                        <Tippy placement='right' animation='scale' animateFill={true} content={'Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip'}>
+                            <img src={InfoImg} alt="" className='portfolio-box-front-info-img cursor-pointer' />
+                        </Tippy>
                         <div className="level1">
                             <img src={VelvetCapitalLogo} alt="" />
 
