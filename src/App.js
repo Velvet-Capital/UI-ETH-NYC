@@ -770,7 +770,7 @@ function App() {
                 <div className="portfolio-box">
                     { portfolioBox1FlipHandler === 'front' ?
                     <div className='portfolio-box-front'>
-                        <Tippy placement='right' animation='scale' animateFill={true} content={'Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip Hello this is a tool tip'}>
+                        <Tippy placement='top' animation='scale' animateFill={true} content={'Top 7 Cryptocurrencies by Total Market Capitalization, Equally weighted (excluding stablecoins) '}>
                             <img src={InfoImg} alt="" className='portfolio-box-front-info-img cursor-pointer' />
                         </Tippy>
                         <div className="level1">
@@ -844,6 +844,9 @@ function App() {
                     <div className="portfolio-box">
                         { portfolioBox1FlipHandler === 'front' ?
                         <div className='portfolio-box-front'>
+                            <Tippy placement='top' animation='scale' animateFill={true} content={'Top 5 Cryptocurrencies by Total Market Capitalization, Equally weighted (excluding stablecoins)'}>
+                                <img src={InfoImg} alt="" className='portfolio-box-front-info-img cursor-pointer' />
+                            </Tippy>
                             <div className="level1">
                                 <img src={VelvetCapitalLogo} alt="" />
 
@@ -918,6 +921,9 @@ function App() {
                         { portfolioBox2FlipHandler === 'front' ? 
 
                         <div className="portfolio-box-front" >
+                            <Tippy placement='top' animation='scale' animateFill={true} content={'Top 4 Tokens from the Metaverse sector on BNB chain by Total Market Capitalization, Equally weighted'}>
+                                <img src={InfoImg} alt="" className='portfolio-box-front-info-img cursor-pointer' />
+                            </Tippy>
                             <div className="level1">
                                 <img src={MetaverseLogo} alt="" />
 
@@ -987,6 +993,9 @@ function App() {
                         { portfolioBox3FlipHandler === 'front' ? 
 
                         <div className="portfolio-box-front" >
+                            <Tippy placement='top' animation='scale' animateFill={true} content={'Top 10 Cryptocurrencies by Total Market Capitalization, Equally weighted (excluding stablecoins) '}>
+                                <img src={InfoImg} alt="" className='portfolio-box-front-info-img cursor-pointer' />
+                            </Tippy>
                             <div className="level1">
                                 <img src={VelvetCapitalLogo2} alt="" />
 
@@ -1056,6 +1065,9 @@ function App() {
                         { portfolioBox4FlipHandler === 'front' ? 
 
                         <div className="portfolio-box-front" >
+                            <Tippy placement='top' animation='scale' animateFill={true} content={'Yield generating portfolio powered by Venus'}>
+                                <img src={InfoImg} alt="" className='portfolio-box-front-info-img cursor-pointer' />
+                            </Tippy>
                             <div className="level1">
                                 <img src={VelvetCapitalLogo2} alt="" />
 
