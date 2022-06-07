@@ -19,6 +19,11 @@ import SuccessOrErrorMsgModal from './components/SuccessOrErrorMsgModal/SuccessO
 import VelvetCapitalLogo from './assets/img/newvelvetcapitallogo.svg';
 import VelvetCapitalLogo2 from './assets/img/velvetcapitallogo2.svg';
 import MetaverseLogo from './assets/img/metaverse.svg';
+import VenusLogo from './assets/img/venuslogo.png';
+import VenusAssestsImg from './assets/img/venusassests.png';
+import Top10AssestsImg from './assets/img/top10assests.png';
+import BluechipAssetsImg from './assets/img/bluechipassets.png';
+import MetaverseAssetsImg from './assets/img/metaverseassets.png';
 import AssetsImg1 from './assets/img/assetsimg1.png';
 import AssetsImg2 from './assets/img/assetsimg2.png';
 import DollarImg from './assets/img/dollar.svg';
@@ -26,7 +31,7 @@ import PeopleImg from './assets/img/people.svg';
 import CrossImg from './assets/img/cross.svg';
 import GreenTickImg from './assets/img/green-tick.png';
 import ErrorImg from './assets/img/error.png';
-import InfoImg from './assets/img/info.png';
+import InfoImg from './assets/img/info.svg';
 
 import AssestsLogo from './utils/assests_logo_helper.js';
 import formatDecimal from './utils/formatDecimal';
@@ -496,7 +501,7 @@ function App() {
             //Another way -  get balanceOf(top3venusContractAddress) from invidual token in portfolio and convert them to bnb  
 
             // put all the address in a array and loop through it and get balance for each and convert them to BNB and store in an array and sum it up and get vault Balance and find token percentage also
-            const venusTokenAddress = [
+            const venusTokenAddresses = [
                 "0x882C173bC7Ff3b7786CA16dfeD3DFFfb9Ee7847B", // BTC
                 "0xf508fCD89b8bd15579dc79A6827cB4686A3592c8", //ETH
                 "0xA07c5b74C9B40447a954e1466938b865b6BBea36", //WBNB
@@ -788,19 +793,20 @@ function App() {
                 <div className="portfolio-box">
                     { portfolioBox1FlipHandler === 'front' ?
                     <div className='portfolio-box-front'>
-                        <Tippy placement='top' animation='scale' animateFill={true} content={'Top 7 Cryptocurrencies by Total Market Capitalization, Equally weighted (excluding stablecoins) '}>
-                            <img src={InfoImg} alt="" className='portfolio-box-front-info-img cursor-pointer' />
-                        </Tippy>
                         <div className="level1">
                             <img src={VelvetCapitalLogo} alt="" />
 
                             <div className="portfolio-details">
-                                <h1 className="portfolio-title fn-lg">Top 7</h1>
-                                <p className="creator fn-vsm">by Andreas555</p>
+                                <h1 className="portfolio-title">Top 7</h1>
+                                <p className="creator fn-vsm">by Test</p>
                             </div>
+
+                            <Tippy placement='top' animation='scale' animateFill={true} content={'Top 7 Cryptocurrencies by Total Market Capitalization, Equally weighted (excluding stablecoins) '}>
+                                <img src={InfoImg} alt="" className='portfolio-box-front-info-img cursor-pointer' />
+                            </Tippy>
                         </div>
 
-                        <img className="portfolio-box-assets-img cursor-pointer" src={AssetsImg2} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox1FlipHandler('back')}/>
+                        <img className="portfolio-box-assets-img cursor-pointer" src={BluechipAssetsImg} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox1FlipHandler('back')}/>
 
                         <div className="portfolio-box-user-balance">
                             <span>Value</span>
@@ -862,19 +868,20 @@ function App() {
                     <div className="portfolio-box">
                         { portfolioBox1FlipHandler === 'front' ?
                         <div className='portfolio-box-front'>
-                            <Tippy placement='top' animation='scale' content={'Top 5 Cryptocurrencies by Total Market Capitalization, Equally weighted (excluding stablecoins)'}>
-                                <img src={InfoImg} alt="" className='portfolio-box-front-info-img cursor-pointer' />
-                            </Tippy>
                             <div className="level1">
                                 <img src={VelvetCapitalLogo} alt="" />
 
                                 <div className="portfolio-details">
-                                    <h1 className="portfolio-title fn-lg">Blue Chip</h1>
-                                    <p className="creator fn-vsm">by Andreas555</p>
+                                    <h1 className="portfolio-title">Blue Chip</h1>
+                                    <p className="creator fn-vsm">by Test</p>
                                 </div>
+
+                                <Tippy placement='top' animation='scale' content={'Top 5 Cryptocurrencies by Total Market Capitalization, Equally weighted (excluding stablecoins)'}>
+                                    <img src={InfoImg} alt="" className='portfolio-box-front-info-img cursor-pointer' />
+                                </Tippy>
                             </div>
 
-                            <img className="portfolio-box-assets-img cursor-pointer" src={AssetsImg2} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox1FlipHandler('back')}/>
+                            <img className="portfolio-box-assets-img cursor-pointer" src={BluechipAssetsImg} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox1FlipHandler('back')}/>
 
                             <div className="portfolio-box-user-balance">
                                 <span>Value</span>
@@ -939,19 +946,20 @@ function App() {
                         { portfolioBox2FlipHandler === 'front' ? 
 
                         <div className="portfolio-box-front" >
-                            <Tippy placement='top' animation='scale' content={'Top 4 Tokens from the Metaverse sector on BNB chain by Total Market Capitalization, Equally weighted'}>
-                                <img src={InfoImg} alt="" className='portfolio-box-front-info-img cursor-pointer' />
-                            </Tippy>
                             <div className="level1">
                                 <img src={MetaverseLogo} alt="" />
 
                                 <div className="portfolio-details">
-                                    <h1 className="portfolio-title fn-lg">Metaverse</h1>
-                                    <p className="creator fn-vsm">by kate14</p>
+                                    <h1 className="portfolio-title">Metaverse</h1>
+                                    <p className="creator fn-vsm">by Test</p>
                                 </div>
+
+                                <Tippy placement='top' animation='scale' content={'Top 4 Tokens from the Metaverse sector on BNB chain by Total Market Capitalization, Equally weighted'}>
+                                    <img src={InfoImg} alt="" className='portfolio-box-front-info-img cursor-pointer' />
+                                </Tippy>
                             </div>
 
-                            <img className="portfolio-box-assets-img cursor-pointer" src={AssetsImg1} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox2FlipHandler('back')}/>
+                            <img className="portfolio-box-assets-img cursor-pointer" src={MetaverseAssetsImg} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox2FlipHandler('back')}/>
 
                             <div className="portfolio-box-user-balance">
                                 <span>Value</span>
@@ -1011,19 +1019,20 @@ function App() {
                         { portfolioBox4FlipHandler === 'front' ? 
 
                         <div className="portfolio-box-front" >
-                            <Tippy placement='top' animation='scale' content={'Yield generating portfolio powered by Venus'}>
-                                <img src={InfoImg} alt="" className='portfolio-box-front-info-img cursor-pointer' />
-                            </Tippy>
                             <div className="level1">
-                                <img src={VelvetCapitalLogo2} alt="" />
+                                <img src={VenusLogo} alt="" />
 
                                 <div className="portfolio-details">
-                                    <h1 className="portfolio-title fn-lg">Yield By Venus</h1>
-                                    <p className="creator fn-vsm">by alex420</p>
+                                    <h1 className="portfolio-title">Yield By Venus</h1>
+                                    <p className="creator fn-vsm">by Test</p>
                                 </div>
+
+                                <Tippy placement='top' animation='scale' content={'Yield generating portfolio powered by Venus'}>
+                                    <img src={InfoImg} alt="" className='portfolio-box-front-info-img cursor-pointer' />
+                                </Tippy>
                             </div>
 
-                            <img className="portfolio-box-assets-img cursor-pointer" src={AssetsImg2} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox4FlipHandler('back')}/>
+                            <img className="portfolio-box-assets-img cursor-pointer" src={VenusAssestsImg} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox4FlipHandler('back')}/>
 
                             <div className="portfolio-box-user-balance">
                                 <span>Value</span>
@@ -1083,19 +1092,20 @@ function App() {
                         { portfolioBox3FlipHandler === 'front' ? 
 
                         <div className="portfolio-box-front" >
-                            <Tippy placement='top' animation='scale' content={'Top 10 Cryptocurrencies by Total Market Capitalization, Equally weighted (excluding stablecoins) '}>
-                                <img src={InfoImg} alt="" className='portfolio-box-front-info-img cursor-pointer' />
-                            </Tippy>
                             <div className="level1">
                                 <img src={VelvetCapitalLogo2} alt="" />
 
                                 <div className="portfolio-details">
-                                    <h1 className="portfolio-title fn-lg">Top10</h1>
-                                    <p className="creator fn-vsm">by rambo23</p>
+                                    <h1 className="portfolio-title">Top10</h1>
+                                    <p className="creator fn-vsm">by Test</p>
                                 </div>
+
+                                <Tippy placement='top' animation='scale' content={'Top 10 Cryptocurrencies by Total Market Capitalization, Equally weighted (excluding stablecoins) '}>
+                                    <img src={InfoImg} alt="" className='portfolio-box-front-info-img cursor-pointer' />
+                                </Tippy>
                             </div>
 
-                            <img className="portfolio-box-assets-img cursor-pointer" src={AssetsImg2} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox3FlipHandler('back')}/>
+                            <img className="portfolio-box-assets-img cursor-pointer" src={Top10AssestsImg} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox3FlipHandler('back')}/>
 
                             <div className="portfolio-box-user-balance">
                                 <span>Value</span>

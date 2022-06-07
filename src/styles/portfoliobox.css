@@ -12,15 +12,12 @@
 }
 
 .portfolio-box-front-info-img {
-    width: 18px;
-    position: absolute;
-    right: 2%;
-    top: 11.5%;
+    width: 16px !important; 
+    align-self: flex-start;
 }
 
 .level1 {
     display: flex;
-    justify-content: space-between;
 }
 
 .level1 img {
@@ -29,13 +26,19 @@
 }
 
 .portfolio-title {
-    margin-bottom: 7px;
+    font-size: 21px;
     font-weight: 600;
+    margin-bottom: 7px;
     color: #564dd0;
 }
 
+.portfolio-details {
+    margin-left: 20px;
+    margin-right: 8px;
+}
+
 .portfolio-details .creator {
-    text-align: right;
+    text-align: left;
     margin: none;
     font-weight: 500;
     color: #7e77dd;
