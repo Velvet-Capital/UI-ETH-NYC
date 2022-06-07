@@ -27,8 +27,8 @@ function CreateModal(props) {
     else if(props.portfolioName === 'TOP7')
         indexTokenBalance = props.top7Balance;
     
-    else if(props.portfolioName === 'VTOP3')
-        indexTokenBalance = props.vtop3Balance;
+    else if(props.portfolioName === 'VTOP10')
+        indexTokenBalance = props.vtop10Balance;
 
     function checkHasEnoughFunds(amount, fund) {
         if(parseFloat(amount) > parseFloat(fund)) 

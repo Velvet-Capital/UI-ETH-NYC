@@ -43,10 +43,10 @@
   .app {
     height: 100vh;
   }
-}
+} */
 
-@media only screen and (max-width: 1583px) {
+@media only screen and (max-width: 1585px) {
   .app {
     height: 150%;
   }
-} */
+}

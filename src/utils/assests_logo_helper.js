@@ -11,6 +11,10 @@ import ManaImg from '../assets/img/mana.png';
 import SandImg from '../assets/img/sand.png';
 import AxsImg from '../assets/img/axs.png';
 import DogeImg from '../assets/img/doge.png';
+import CakeImg from '../assets/img/cake.png';
+import BchImg from '../assets/img/bch.png';
+import FilImg from '../assets/img/fil.png';
+
 
 export default {
     'BTC' : BtcImg,
@@ -26,5 +30,8 @@ export default {
     'SAND' : SandImg,
     'AXS' : AxsImg,
     'DOGE' : DogeImg,
-    'WBNB' : BnbImg
+    'WBNB' : BnbImg,
+    'CAKE' : CakeImg,
+    'BCH' : BchImg,
+    'FIL' : FilImg
 };
