@@ -57,8 +57,8 @@ function SuccessOrErrorMsgModal(props) {
                                 props.transactionType === 'invest' ? (
                                     <>
                                         <p className="success-or-error-msg-modal-message c-purple text-center fn-md">You have successfully  invested {props.amount} BNB in {props.portfolioName} basket </p>
-                                        <p className="success-or-error-msg-modal-message c-purple text-center fn-md cursor-pointer" onClick={() => addTokenToWallet(tokensAddress[props.portfolioName], props.portfolioName)} style={{margin: '20px 0'}}>Add {props.portfolioName} Token to your wallet: <u style={{color: 'blue'}}>{tokensAddress[props.portfolioName]}</u> </p>
-                                        <img src={CopyIcon} alt="" className="cursor-pointer success-or-error-msg-modal-copy-icon" onClick={() => copyTokenAddress(props.portfolioName)} />
+                                        <p className="success-or-error-msg-modal-message c-purple text-center fn-md cursor-pointer" onClick={() => addTokenToWallet(tokensAddress[props.portfolioName], props.portfolioName)} style={{margin: '20px 0'}}> <u> Click here to Add <b>{props.portfolioName}</b> Token to your wallet </u> </p>
+                                        {/* <img src={CopyIcon} alt="" className="cursor-pointer success-or-error-msg-modal-copy-icon" onClick={() => copyTokenAddress(props.portfolioName)} /> */}
                                         
                                     </>
                                 ) : (

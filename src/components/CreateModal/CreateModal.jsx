@@ -38,6 +38,14 @@ function CreateModal(props) {
             setHasEnoughFunds(true);
     }
 
+    const createModalTitle = {
+        'META' : 'Metaverse',
+        'BLUECHIP': 'Bluechip',
+        'TOP10' : 'TOP10',
+        'TOP7' : 'TOP7',
+        'VTOP10' : 'Yield By Venus'
+    }
+
     if(!props.show) return null;
 
     return (
@@ -48,7 +56,7 @@ function CreateModal(props) {
 
                 <div className="create-modal-details">
                     <img src={props.portfolioName === 'META' ? MetaverseLogo : VelvetCapitalLogo} alt="" id="create-modal-logo" />
-                    <span>{props.portfolioName}</span>
+                    <span>{ createModalTitle[props.portfolioName] }</span>
                 </div>
                 <div className="create-modal-action-tab flex">
                     <div className="cursor-pointer" onClick={() => {props.toggleCreateModalTab(); checkHasEnoughFunds(amount.toString(), props.bnbBalance);}} >
