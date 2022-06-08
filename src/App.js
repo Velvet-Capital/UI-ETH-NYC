@@ -10,6 +10,8 @@ import './styles/portfoliobox.css';
 import indexSwap  from './utils/abi/IndexSwap.json';
 import VBep20Interface from './utils/abi/VBep20Interface.json';
 import Top10Venus from './utils/abi/Top10Venus.json';
+import PriceOracle from './utils/abi/PriceOracle.json';
+
 
 import Header from './components/Header/Header.jsx';
 import ConnectModal from './components/ConnectModal/ConnectModal.jsx';
@@ -496,11 +498,20 @@ function App() {
             const vtop10Contract = new Contract(top10VenusContractAddressMainnet, indexSwapAbi, provider);
             const vtop10Balance = (utils.formatEther(await vtop10Contract.balanceOf(accountAddress)));
             setVtop10Balance(vtop10Balance);
-            // Getting VTOP10 Vault Balance and Tokens Balance
-            //get vault and token Balances from another way this way it will cost gas events way will not work
-            //Another way -  get balanceOf(top3venusContractAddress) from invidual token in portfolio and convert them to bnb  
+            // Getting VTOP10 Vault Balance and Tokens Weights 
+            const venusTokenUnderlyingTokenAddresses = [
+                '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c', // BTC
+                '0x2170Ed0880ac9A755fd29B2688956BD959F933F8', // ETH
+                '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c', // WBNB
+                '0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE', // XRP
+                '0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47', // ADA
+                '0x7083609fCE4d1d8Dc0C979AAb8c869Ea2C873402', // DOT
+                '0x85EAC5Ac2F758618dFa09bDbe0cf174e7d574D5B', // TRX
+                '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82', // CAKE
+                '0x8fF795a6F4D97E7887C79beA79aba5cc76444aDf', // BCH
+                '0x0D8Ce2A99Bb6e3B7Db580eD848240e4a0F9aE153' // FIL
+            ]
 
-            // put all the address in a array and loop through it and get balance for each and convert them to BNB and store in an array and sum it up and get vault Balance and find token percentage also
             const venusTokenAddresses = [
                 "0x882C173bC7Ff3b7786CA16dfeD3DFFfb9Ee7847B", // BTC
                 "0xf508fCD89b8bd15579dc79A6827cB4686A3592c8", //ETH
@@ -514,16 +525,40 @@ function App() {
                 "0xf91d58b5aE142DAcC749f58A49FCBac340Cb0343", // FIL
             ]
 
-            let tokenContract;
-            // for(let i=0; i<10; i++) {
-            //     tokenContract = new
-            // }
-            
-            // let vBTC = new Contract("0xf508fCD89b8bd15579dc79A6827cB4686A3592c8", VBep20Interface.abi, provider);
-            // //convert this balance to BNB
-            // console.log(await vBTC.balanceOf(top10VenusContractAddressMainnet));
- 
+            const balanceOfEachToken = [];
+            let vtop10VaultBalanceInBNB = 0;
+            const top10VenusVaultAddress = "0x175D8654f8453626824412F0FB16F84B133BB443";
 
+            const oracle = new Contract('0x9c6Daa2CCc08CeD096fa01Bc87F80a057d839862', PriceOracle.abi, provider);
+            let tokenContract;
+            for(let i=0; i<10; i++) {
+                //Initialize contract for every token
+                tokenContract = new Contract(venusTokenAddresses[i], VBep20Interface.abi, provider);
+                //Getting underlying balance
+                let tokenBalance = utils.formatEther(await tokenContract.balanceOfUnderlying(top10VenusVaultAddress));
+                let priceToken;
+                if(venusTokenAddresses[i] === '0xA07c5b74C9B40447a954e1466938b865b6BBea36') {
+                    vtop10VaultBalanceInBNB += parseFloat(tokenBalance);
+                    balanceOfEachToken.push(parseFloat(tokenBalance));
+                }
+                else{
+                    priceToken = (await oracle.getTokenPrice(venusTokenUnderlyingTokenAddresses[i], '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c')) / 1e18;
+                    //converting underlyling Asset Balance to BNB
+                    let tokenBalanceBNB = priceToken * tokenBalance;
+                    balanceOfEachToken.push(tokenBalanceBNB);
+                    vtop10VaultBalanceInBNB += tokenBalanceBNB;
+                }
+            }
+
+            console.log(balanceOfEachToken);
+            setVtop10IndexVaultBalance(vtop10VaultBalanceInBNB);
+            //calculating VTOP10 Tokens Weight
+            const vtop10TokensWeight = {};
+            balanceOfEachToken.forEach((tokenBalance, index) => {
+                vtop10TokensWeight[vtop10Tokens[index][1]] = ( ( tokenBalance / vtop10VaultBalanceInBNB ) * 100).toFixed(1);
+            })
+            setVtop10IndexTokensWeight(vtop10TokensWeight);
+            console.log(vtop10TokensWeight);
         }
         catch(err) {
             console.log(err);
@@ -788,7 +823,6 @@ function App() {
         <h2 className = 'title fn-lg'>Community Portfolios</h2>
 
         <div className="container">
-
             {isTestnet ? (
                 <div className="portfolio-box">
                     { portfolioBox1FlipHandler === 'front' ?
@@ -850,7 +884,7 @@ function App() {
                                             <span className="portfolio-box-back-asset-symbol">{token[1]}</span>
                                             {
                                                 Object.keys(top7IndexTokensWeight).length > 0 ? (
-                                                    <span className="portfolio-box-back-asset-allocation">{top7IndexTokensWeight[token[1]] === '0.0' ? '0' : top7IndexTokensWeight[token[1]].charAt(3) === '0' ? top7IndexTokensWeight[token[1]].slice(0,-2) : top7IndexTokensWeight[token[1]]} %</span>
+                                                    <span className="portfolio-box-back-asset-allocation">{top7IndexTokensWeight[token[1]] === '0.0' ? '0' : top7IndexTokensWeight[token[1]].slice(-1) === '0' ? top7IndexTokensWeight[token[1]].slice(0,-2) : top7IndexTokensWeight[token[1]]} %</span>
                                                 ) : (
                                                     <span className="portfolio-box-back-asset-allocation">0 %</span>
                                                 )
@@ -928,7 +962,7 @@ function App() {
                                                 <span className="portfolio-box-back-asset-symbol">{token[1]}</span>
                                                 {
                                                     Object.keys(bluechipIndexTokensWeight).length > 0 ? (
-                                                        <span className="portfolio-box-back-asset-allocation">{bluechipIndexTokensWeight[token[1]] === '0.0' ? '0' : bluechipIndexTokensWeight[token[1]].charAt(3) === '0' ? bluechipIndexTokensWeight[token[1]].slice(0,-2) : bluechipIndexTokensWeight[token[1]]} %</span>
+                                                        <span className="portfolio-box-back-asset-allocation">{bluechipIndexTokensWeight[token[1]] === '0.0' ? '0' : bluechipIndexTokensWeight[token[1]].slice(-1) === '0' ? bluechipIndexTokensWeight[token[1]].slice(0,-2) : bluechipIndexTokensWeight[token[1]]} %</span>
                                                     ) : (
                                                         <span className="portfolio-box-back-asset-allocation">0 %</span>
                                                     )
@@ -1002,7 +1036,7 @@ function App() {
                                                 <span className="portfolio-box-back-asset-symbol">{token[1]}</span>
                                                 {
                                                     Object.keys(metaIndexTokensWeight).length > 0 ? (
-                                                        <span className="portfolio-box-back-asset-allocation">{metaIndexTokensWeight[token[1]] === '0.0' ? '0' : metaIndexTokensWeight[token[1]].charAt(3) === '0' ? metaIndexTokensWeight[token[1]].slice(0,-2) : metaIndexTokensWeight[token[1]]} %</span>
+                                                        <span className="portfolio-box-back-asset-allocation">{metaIndexTokensWeight[token[1]] === '0.0' ? '0' : metaIndexTokensWeight[token[1]].slice(-1) === '0' ? metaIndexTokensWeight[token[1]].slice(0,-2) : metaIndexTokensWeight[token[1]]} %</span>
                                                     ) : (
                                                         <span className="portfolio-box-back-asset-allocation">0 %</span>
                                                     )
@@ -1075,7 +1109,7 @@ function App() {
                                                 <span className="portfolio-box-back-asset-symbol">{token[1]}</span>
                                                 {
                                                     Object.keys(vtop10IndexTokensWeight).length > 0 ? (
-                                                        <span className="portfolio-box-back-asset-allocation">{[token[1]] === '0.0' ? '0' : vtop10IndexTokensWeight[token[1]].charAt(3) === '0' ? vtop10IndexTokensWeight[token[1]].slice(0,-2) : vtop10IndexTokensWeight[token[1]]} %</span>
+                                                        <span className="portfolio-box-back-asset-allocation">{[token[1]] === '0.0' ? '0' : vtop10IndexTokensWeight[token[1]].slice(-1) === '0' ? vtop10IndexTokensWeight[token[1]].slice(0,-2) : vtop10IndexTokensWeight[token[1]]} %</span>
                                                     ) : (
                                                         <span className="portfolio-box-back-asset-allocation">0 %</span>
                                                     )
@@ -1148,7 +1182,7 @@ function App() {
                                                 <span className="portfolio-box-back-asset-symbol">{token[1]}</span>
                                                 {
                                                     Object.keys(top10IndexTokensWeight).length > 0 ? (
-                                                        <span className="portfolio-box-back-asset-allocation">{top10IndexTokensWeight[token[1]] === '0.0' ? '0' : top10IndexTokensWeight[token[1]].charAt(3) === '0' ? top10IndexTokensWeight[token[1]].slice(0,-2) : top10IndexTokensWeight[token[1]]} %</span>
+                                                        <span className="portfolio-box-back-asset-allocation">{top10IndexTokensWeight[token[1]] === '0.0' ? '0' : top10IndexTokensWeight[token[1]].slice(-1) === '0' ? top10IndexTokensWeight[token[1]].slice(0,-2) : top10IndexTokensWeight[token[1]]} %</span>
                                                     ) : (
                                                         <span className="portfolio-box-back-asset-allocation">0 %</span>
                                                     )
