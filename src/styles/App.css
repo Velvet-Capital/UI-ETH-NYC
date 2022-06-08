@@ -1,6 +1,6 @@
 .App {
   width: 100vw;
-  height: 100vh;
+  height: 150vh;
   background-image: linear-gradient(to bottom, #4368cd, #7455f6);
 }
 
@@ -39,14 +39,8 @@
   background-color: #44a863;
 }
 
-/* @media only screen and (min-width: 1586px) {
-  .app {
-    height: 100vh;
-  }
-} */
-
-@media only screen and (max-width: 1585px) {
-  .app {
-    height: 150%;
+@media only screen and (min-width: 1585px) {
+  .App {
+      height: 100vh;
   }
 }

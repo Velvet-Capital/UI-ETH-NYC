@@ -4,7 +4,9 @@ import './CreateModal.css';
 
 import CrossImg from '../../assets/img/cross.svg';
 import VelvetCapitalLogo from '../../assets/img/newvelvetcapitallogo.svg';
+import VelvetCapitalLogo2 from '../../assets/img/velvetcapitallogo2.svg';
 import MetaverseLogo from '../../assets/img/metaverse.svg';
+import VenusLogo from '../../assets/img/venuslogo.png';
 import BnbImg from '../../assets/img/bnb.png';
 
 import formatDecimal from "../../utils/formatDecimal";
@@ -46,6 +48,14 @@ function CreateModal(props) {
         'VTOP10' : 'Yield By Venus'
     }
 
+    const createModalImg = {
+        'META' : MetaverseLogo,
+        'BLUECHIP': VelvetCapitalLogo,
+        'TOP10' : VelvetCapitalLogo2,
+        'TOP7' : VelvetCapitalLogo,
+        'VTOP10' : VenusLogo
+    }
+
     if(!props.show) return null;
 
     return (
@@ -55,7 +65,7 @@ function CreateModal(props) {
                 <img src={CrossImg} alt="" id="create-modal-cancle" className="cursor-pointer" onClick={props.toggleModal} />
 
                 <div className="create-modal-details">
-                    <img src={props.portfolioName === 'META' ? MetaverseLogo : VelvetCapitalLogo} alt="" id="create-modal-logo" />
+                    <img src={createModalImg[props.portfolioName]} alt="" id="create-modal-logo" />
                     <span>{ createModalTitle[props.portfolioName] }</span>
                 </div>
                 <div className="create-modal-action-tab flex">
