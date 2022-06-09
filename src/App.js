@@ -12,7 +12,6 @@ import VBep20Interface from './utils/abi/VBep20Interface.json';
 import Top10Venus from './utils/abi/Top10Venus.json';
 import PriceOracle from './utils/abi/PriceOracle.json';
 
-
 import Header from './components/Header/Header.jsx';
 import ConnectModal from './components/ConnectModal/ConnectModal.jsx';
 import CreateModal from './components/CreateModal/CreateModal.jsx';
@@ -26,8 +25,6 @@ import VenusAssestsImg from './assets/img/venusassests.png';
 import Top10AssestsImg from './assets/img/top10assests.png';
 import BluechipAssetsImg from './assets/img/bluechipassets.png';
 import MetaverseAssetsImg from './assets/img/metaverseassets.png';
-import AssetsImg1 from './assets/img/assetsimg1.png';
-import AssetsImg2 from './assets/img/assetsimg2.png';
 import DollarImg from './assets/img/dollar.svg';
 import PeopleImg from './assets/img/people.svg';
 import CrossImg from './assets/img/cross.svg';
@@ -407,8 +404,8 @@ function App() {
         try { 
             //Getting BNB Balance
             const provider = getProviderOrSigner();
-            const bnbBalance = (utils.formatEther(await provider.getBalance(accountAddress)).toLocaleString('en-US'));
-            bnbBalance === '0.000' ? setBnbBalance('0') : setBnbBalance(bnbBalance);
+            const bnbBalance = utils.formatEther(await provider.getBalance(accountAddress));
+            setBnbBalance(bnbBalance);
 
             //Getting Top7 Balance
             const contract = new Contract(top7IndexContractAddressTestnet, indexSwapAbi, provider);
@@ -437,8 +434,8 @@ function App() {
         try { 
             //Getting BNB Balance
             const provider = getProviderOrSigner();
-            const bnbBalance = ( +(utils.formatEther(await provider.getBalance(accountAddress))) ).toFixed(3);
-            bnbBalance === '0.000' ? setBnbBalance('0') : setBnbBalance(bnbBalance);
+            const bnbBalance = utils.formatEther(await provider.getBalance(accountAddress));
+            setBnbBalance(bnbBalance);
 
             //Getting META Balance
             const metaContract = new Contract(metaIndexContractAddressMainnet, indexSwapAbi, provider); 
@@ -451,13 +448,12 @@ function App() {
             // console.log("META vault Balance" ,metaIndexVaultBalance);
             //Getting META Tokens Weight
             const metaTokensBalance = (await metaContract.getTokenAndVaultBalance())[0];
-            const tokensWeight = {};
+            const metaTokensWeight = {};
             metaTokensBalance.forEach((tokenBalance, index) => {
-                tokensWeight[metaTokens[index][1]] = ((utils.formatEther(tokenBalance) / metaIndexVaultBalance) * 100).toFixed(1);
+                metaTokensWeight[metaTokens[index][1]] = ((utils.formatEther(tokenBalance) / metaIndexVaultBalance) * 100).toFixed(1);
             })
-            // console.log(tokensWeight);
-            setMetaIndexTokensWeight(tokensWeight);
-
+            console.log(Object.values(metaTokensWeight).sort(function(a, b) {return parseFloat(b) - parseFloat(a)}));
+            setMetaIndexTokensWeight(metaTokensWeight);
 
             //Getting BLUECHIP Balance
             const bluechipContract = new Contract(bluechipIndexContractAddressMainnet, indexSwapAbi, provider); 
@@ -474,6 +470,7 @@ function App() {
             bluechipTokensBalance.forEach((tokenBalance, index) => {
                 bluechipTokensWeight[bluechipTokens[index][1]] = ((utils.formatEther(tokenBalance) / bluechipIndexVaultBalance) * 100).toFixed(1);
             })
+            console.log(Object.values(bluechipTokensWeight).sort(function(a, b) {return parseFloat(b) - parseFloat(a)}));
             // console.log(bluechipTokensWeight);
             setBluechipIndexTokensWeight(bluechipTokensWeight);
 
@@ -525,10 +522,9 @@ function App() {
                 "0xf91d58b5aE142DAcC749f58A49FCBac340Cb0343", // FIL
             ]
 
-            const balanceOfEachToken = [];
+            const balanceOfEachTokenInBNB = [];
             let vtop10VaultBalanceInBNB = 0;
             const top10VenusVaultAddress = "0x175D8654f8453626824412F0FB16F84B133BB443";
-
             const oracle = new Contract('0x9c6Daa2CCc08CeD096fa01Bc87F80a057d839862', PriceOracle.abi, provider);
             let tokenContract;
             for(let i=0; i<10; i++) {
@@ -539,22 +535,22 @@ function App() {
                 let priceToken;
                 if(venusTokenAddresses[i] === '0xA07c5b74C9B40447a954e1466938b865b6BBea36') {
                     vtop10VaultBalanceInBNB += parseFloat(tokenBalance);
-                    balanceOfEachToken.push(parseFloat(tokenBalance));
+                    balanceOfEachTokenInBNB.push(parseFloat(tokenBalance));
                 }
                 else{
                     priceToken = (await oracle.getTokenPrice(venusTokenUnderlyingTokenAddresses[i], '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c')) / 1e18;
                     //converting underlyling Asset Balance to BNB
                     let tokenBalanceBNB = priceToken * tokenBalance;
-                    balanceOfEachToken.push(tokenBalanceBNB);
+                    balanceOfEachTokenInBNB.push(tokenBalanceBNB);
                     vtop10VaultBalanceInBNB += tokenBalanceBNB;
                 }
             }
 
-            console.log(balanceOfEachToken);
+            console.log(balanceOfEachTokenInBNB);
             setVtop10IndexVaultBalance(vtop10VaultBalanceInBNB);
             //calculating VTOP10 Tokens Weight
             const vtop10TokensWeight = {};
-            balanceOfEachToken.forEach((tokenBalance, index) => {
+            balanceOfEachTokenInBNB.forEach((tokenBalance, index) => {
                 vtop10TokensWeight[vtop10Tokens[index][1]] = ( ( tokenBalance / vtop10VaultBalanceInBNB ) * 100).toFixed(1);
             })
             setVtop10IndexTokensWeight(vtop10TokensWeight);
@@ -857,15 +853,19 @@ function App() {
                         </button>
 
                         <div className="portfolio-data">
-                            <div className="left">
-                                <img src={PeopleImg} alt="" />
-                                <span className="num-of-investors fn-sm">7,587</span>
-                            </div>
+                            <Tippy placement='top' animation='scale' arrow={false} content={'Total No. Of Investor'} >
+                                <div className="left">
+                                    <img src={PeopleImg} alt="" />
+                                    <span className="num-of-investors fn-sm">7,587</span>
+                                </div>
+                            </Tippy>
 
-                            <div className="right">
-                                <img src={DollarImg} alt="" />
-                                <span className="marketcap fn-sm">{ (top7IndexVaultBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits:1}) }</span>
-                            </div>
+                            <Tippy placement='top' animation='scale' arrow={false} content={'Amount Invested In Basket'} >
+                                <div className="right">
+                                    <img src={DollarImg} alt="" />
+                                    <span className="marketcap fn-sm">{ (top7IndexVaultBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits:1}) }</span>
+                                </div>
+                            </Tippy>
                         </div>
 
                     </div>
@@ -932,15 +932,18 @@ function App() {
                             </button>
 
                             <div className="portfolio-data">
-                                <div className="left">
-                                    <img src={PeopleImg} alt="" />
-                                    <span className="num-of-investors fn-sm">7,587</span>
-                                </div>
-
-                                <div className="right">
-                                    <img src={DollarImg} alt="" />
-                                    <span className="marketcap fn-sm">{ (bluechipIndexVaultBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits:1}) }</span>
-                                </div>
+                                <Tippy placement='top' animation='scale' arrow={false} content={'Total No. Of Investor'} >
+                                    <div className="left">
+                                        <img src={PeopleImg} alt="" />
+                                        <span className="num-of-investors fn-sm">7,587</span>
+                                    </div>
+                                </Tippy>
+                                <Tippy placement='top' animation='scale' arrow={false} content={'Amount Invested In Basket'} >
+                                    <div className="right">
+                                        <img src={DollarImg} alt="" />
+                                        <span className="marketcap fn-sm">{ (bluechipIndexVaultBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits:1}) }</span>
+                                    </div>
+                                </Tippy>
                             </div>
 
                         </div>
@@ -1010,15 +1013,18 @@ function App() {
                             </button>
 
                             <div className="portfolio-data">
-                                <div className="left">
-                                    <img src={PeopleImg} alt="" />
-                                    <span className="num-of-investors fn-sm">5,012</span>
-                                </div>
-
-                                <div className="right">
-                                    <img src={DollarImg} alt="" />
-                                    <span className="marketcap fn-sm">{ (metaIndexVaultBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits:1}) }</span>
-                                </div>
+                                <Tippy placement='top' animation='scale' arrow={false} content={'Total No. Of Investor'} >
+                                    <div className="left">
+                                        <img src={PeopleImg} alt="" />
+                                        <span className="num-of-investors fn-sm">5,012</span>
+                                    </div>
+                                </Tippy>
+                                <Tippy placement='top' animation='scale' arrow={false} content={'Amount Invested In Basket'} >
+                                    <div className="right">
+                                        <img src={DollarImg} alt="" />
+                                        <span className="marketcap fn-sm">{ (metaIndexVaultBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits:1}) }</span>
+                                    </div>
+                                </Tippy>
                             </div>
                         </div>
                             :
@@ -1083,15 +1089,18 @@ function App() {
                             </button>
 
                             <div className="portfolio-data">
-                                <div className="left">
-                                    <img src={PeopleImg} alt="" />
-                                    <span className="num-of-investors fn-sm">3,432</span>
-                                </div>
-
-                                <div className="right">
-                                    <img src={DollarImg} alt="" />
-                                    <span className="marketcap fn-sm">{ (vtop10IndexVaultBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits:1}) }</span>
-                                </div>
+                                <Tippy placement='top' animation='scale' arrow={false} content={'Total No. Of Investor'} >
+                                    <div className="left">
+                                        <img src={PeopleImg} alt="" />
+                                        <span className="num-of-investors fn-sm">3,432</span>
+                                    </div>
+                                </Tippy>
+                                <Tippy placement='top' animation='scale' arrow={false} content={'Amount Invested In Basket'} >
+                                    <div className="right">
+                                        <img src={DollarImg} alt="" />
+                                        <span className="marketcap fn-sm">{ (vtop10IndexVaultBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits:1}) }</span>
+                                    </div>
+                                </Tippy>
                             </div>
                         </div>
                             :
@@ -1156,15 +1165,19 @@ function App() {
                             </button>
 
                             <div className="portfolio-data">
-                                <div className="left">
-                                    <img src={PeopleImg} alt="" />
-                                    <span className="num-of-investors fn-sm">3,432</span>
-                                </div>
+                                <Tippy placement='top' animation='scale' arrow={false} content={'Total No. Of Investor'} >
+                                    <div className="left">
+                                        <img src={PeopleImg} alt="" />
+                                        <span className="num-of-investors fn-sm">3,432</span>
+                                    </div>
+                                </Tippy>
 
-                                <div className="right">
-                                    <img src={DollarImg} alt="" />
-                                    <span className="marketcap fn-sm">{ (top10IndexVaultBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits:1}) }</span>
-                                </div>
+                                <Tippy placement='top' animation='scale' arrow={false} content={'Amount Invested In Basket'} >
+                                    <div className="right">
+                                        <img src={DollarImg} alt="" />
+                                        <span className="marketcap fn-sm">{ (top10IndexVaultBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits:1}) }</span>
+                                    </div>
+                                </Tippy>
                             </div>
                         </div>
                             :

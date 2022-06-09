@@ -15,7 +15,7 @@ import formatDecimal from "../../utils/formatDecimal";
 
 function Header({toggleConnectWalletModal, toggleHeaderDropdownMenu, showHeaderDropdownMenu, isWalletConnected, currentAccount, bnbBalance, currentBnbPrice, isTestnet, isWrongNetwork, switchToMainnet, switchToTestnet, disconnectWallet}) {
 
-    const bnbBalanceInDollar = parseFloat(bnbBalance * currentBnbPrice).toFixed(2).toLocaleString();
+    const bnbBalanceInDollar = parseFloat(bnbBalance * currentBnbPrice).toFixed(2).toLocaleString('en-US');
 
     return (
         <div className="header">
