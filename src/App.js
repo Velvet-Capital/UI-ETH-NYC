@@ -78,7 +78,7 @@ function App() {
     const [vtop10IndexTokensWeight,setVtop10IndexTokensWeight] = useState({});
     const [top7IndexTokensWeight, setTop7IndexTokensWeight] = useState({});
     
-    const bluechipIndexContractAddressMainnet = '0x55204c31E725C7635393bdBdE738d73c1e10E178';
+    const bluechipIndexContractAddressMainnet = '0x0eCc8ed9f1157d85E5e078BDc68B7C98eb8A251A';
     const metaIndexContractAddressMainnet = '0xB757F1D8c40D49313f716906d7c3107a877367AD';
     const top10IndexContractAddressMainnet = '0x210b31776fA73c72CCaD41A65AcAF1Ab3317440E';
     const top10VenusContractAddressMainnet = '0x187b397599d81285a987466bD14790CF779B69E8';
@@ -86,10 +86,11 @@ function App() {
     const indexSwapAbi = indexSwap.abi;
 
     const metaTokens = [['Decentraland', 'MANA'], ['The Sandbox', 'SAND'], ['Axie Infinity', 'AXS']];
-    const bluechipTokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA']];
+    const bluechipTokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA'], ['WBNB', 'WBNB']];
     const top10Tokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA'], ['Avalanche', 'AVAX'], ['Polkadot', 'DOT'], ['TRON', 'TRX'], ['Dogecoin', 'DOGE'], ['Solana', 'SOL'], ['WBNB', 'WBNB']];
     const vtop10Tokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['WBNB', 'WBNB'], ['XRP', 'XRP'], ['Cardano', 'ADA'], ['Polkadot', 'DOT'], ['TRON', 'TRX'], ['PancakeSwap', 'CAKE'], ['Bitcoin Cash', 'BCH'], ['Filecoin', 'FIL']];
     const top7Tokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA'], ['Avalanche', 'AVAX'], ['Polkadot', 'DOT'], ['TRON', 'TRX']];
+    const bluechipTokensSortedByWeight = [];
 
     function toggleConnectWalletModal() {
         if(showConnectWalletModal)
@@ -452,7 +453,7 @@ function App() {
             metaTokensBalance.forEach((tokenBalance, index) => {
                 metaTokensWeight[metaTokens[index][1]] = ((utils.formatEther(tokenBalance) / metaIndexVaultBalance) * 100).toFixed(1);
             })
-            console.log(Object.values(metaTokensWeight).sort(function(a, b) {return parseFloat(b) - parseFloat(a)}));
+            // console.log(Object.values(metaTokensWeight).sort(function(a, b) {return parseFloat(b) - parseFloat(a)}));
             setMetaIndexTokensWeight(metaTokensWeight);
 
             //Getting BLUECHIP Balance
@@ -470,8 +471,13 @@ function App() {
             bluechipTokensBalance.forEach((tokenBalance, index) => {
                 bluechipTokensWeight[bluechipTokens[index][1]] = ((utils.formatEther(tokenBalance) / bluechipIndexVaultBalance) * 100).toFixed(1);
             })
-            console.log(Object.values(bluechipTokensWeight).sort(function(a, b) {return parseFloat(b) - parseFloat(a)}));
-            // console.log(bluechipTokensWeight);
+            //sorting token according to weight
+            for(let symbol in bluechipTokensWeight) {
+                bluechipTokensSortedByWeight.push([symbol, bluechipTokensWeight[symbol]]);
+            }
+            bluechipTokensSortedByWeight.sort(function(a, b ) { return b[1] - a[1]});
+            console.log(bluechipTokensWeight);
+            console.log(bluechipTokensSortedByWeight);
             setBluechipIndexTokensWeight(bluechipTokensWeight);
 
             //Getting TOP10 Balance
@@ -508,7 +514,6 @@ function App() {
                 '0x8fF795a6F4D97E7887C79beA79aba5cc76444aDf', // BCH
                 '0x0D8Ce2A99Bb6e3B7Db580eD848240e4a0F9aE153' // FIL
             ]
-
             const venusTokenAddresses = [
                 "0x882C173bC7Ff3b7786CA16dfeD3DFFfb9Ee7847B", // BTC
                 "0xf508fCD89b8bd15579dc79A6827cB4686A3592c8", //ETH
@@ -853,7 +858,7 @@ function App() {
                         </button>
 
                         <div className="portfolio-data">
-                            <Tippy placement='top' animation='scale' arrow={false} content={'Total No. Of Investor'} >
+                            <Tippy placement='top' animation='scale' arrow={false} content={'Total No. Of Investors'} >
                                 <div className="left">
                                     <img src={PeopleImg} alt="" />
                                     <span className="num-of-investors fn-sm">7,587</span>
@@ -932,7 +937,7 @@ function App() {
                             </button>
 
                             <div className="portfolio-data">
-                                <Tippy placement='top' animation='scale' arrow={false} content={'Total No. Of Investor'} >
+                                <Tippy placement='top' animation='scale' arrow={false} content={'Total No. Of Investors'} >
                                     <div className="left">
                                         <img src={PeopleImg} alt="" />
                                         <span className="num-of-investors fn-sm">7,587</span>
@@ -956,6 +961,7 @@ function App() {
                             <h3>Rebalancing Weekly</h3>
                             
                             <div className="portfolio-box-back-assets">
+
                                 {
                                     bluechipTokens.map((token, index) => {
                                         return (
@@ -1013,7 +1019,7 @@ function App() {
                             </button>
 
                             <div className="portfolio-data">
-                                <Tippy placement='top' animation='scale' arrow={false} content={'Total No. Of Investor'} >
+                                <Tippy placement='top' animation='scale' arrow={false} content={'Total No. Of Investors'} >
                                     <div className="left">
                                         <img src={PeopleImg} alt="" />
                                         <span className="num-of-investors fn-sm">5,012</span>
@@ -1089,7 +1095,7 @@ function App() {
                             </button>
 
                             <div className="portfolio-data">
-                                <Tippy placement='top' animation='scale' arrow={false} content={'Total No. Of Investor'} >
+                                <Tippy placement='top' animation='scale' arrow={false} content={'Total No. Of Investors'} >
                                     <div className="left">
                                         <img src={PeopleImg} alt="" />
                                         <span className="num-of-investors fn-sm">3,432</span>
@@ -1165,7 +1171,7 @@ function App() {
                             </button>
 
                             <div className="portfolio-data">
-                                <Tippy placement='top' animation='scale' arrow={false} content={'Total No. Of Investor'} >
+                                <Tippy placement='top' animation='scale' arrow={false} content={'Total No. Of Investors'} >
                                     <div className="left">
                                         <img src={PeopleImg} alt="" />
                                         <span className="num-of-investors fn-sm">3,432</span>
