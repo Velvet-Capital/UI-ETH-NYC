@@ -4,12 +4,11 @@ import './SuccessOrErrorMsgModal.css';
 import CrossImg from '../../assets/img/cross.svg';
 import SuccessImg from '../../assets/img/success-mark.svg';
 import ErrorImg from '../../assets/img/error-mark.svg';
-import CopyIcon from '../../assets/img/copyicon.png';
 
 function SuccessOrErrorMsgModal(props) {
 
     const tokensAddress = {
-        'BLUECHIP': '0x55204c31E725C7635393bdBdE738d73c1e10E178',
+        'BLUECHIP': '0x0eCc8ed9f1157d85E5e078BDc68B7C98eb8A251A',
         'META': '0xB757F1D8c40D49313f716906d7c3107a877367AD',
         'TOP10': '0x210b31776fA73c72CCaD41A65AcAF1Ab3317440E',
         'VTOP10': '0x187b397599d81285a987466bD14790CF779B69E8',
@@ -58,8 +57,6 @@ function SuccessOrErrorMsgModal(props) {
                                     <>
                                         <p className="success-or-error-msg-modal-message c-purple text-center fn-md">You have successfully  invested {props.amount} BNB in {props.portfolioName} basket </p>
                                         <p className="success-or-error-msg-modal-message c-purple text-center fn-md cursor-pointer" onClick={() => addTokenToWallet(tokensAddress[props.portfolioName], props.portfolioName)} style={{margin: '20px 0'}}> <u> Click here to Add <b>{props.portfolioName}</b> Token to your wallet </u> </p>
-                                        {/* <img src={CopyIcon} alt="" className="cursor-pointer success-or-error-msg-modal-copy-icon" onClick={() => copyTokenAddress(props.portfolioName)} /> */}
-                                        
                                     </>
                                 ) : (
                                     <p className="success-or-error-msg-modal-message c-purple text-center fn-md">You have successfully redeemed {props.amount} {props.portfolioName} from basket </p>
