@@ -89,8 +89,8 @@ function App() {
     const bluechipTokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA'], ['WBNB', 'WBNB']];
     const top10Tokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA'], ['Avalanche', 'AVAX'], ['Polkadot', 'DOT'], ['TRON', 'TRX'], ['Dogecoin', 'DOGE'], ['Solana', 'SOL'], ['WBNB', 'WBNB']];
     const vtop10Tokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['WBNB', 'WBNB'], ['XRP', 'XRP'], ['Cardano', 'ADA'], ['Polkadot', 'DOT'], ['TRON', 'TRX'], ['PancakeSwap', 'CAKE'], ['Bitcoin Cash', 'BCH'], ['Filecoin', 'FIL']];
-    const top7Tokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA'], ['Avalanche', 'AVAX'], ['Polkadot', 'DOT'], ['TRON', 'TRX']];
-    const bluechipTokensSortedByWeight = [];
+    // const top7Tokens = [['Bitcoin', 'BTC', '0'], ['Ethereum', 'ETH', '0'], ['XRP', 'XRP', '0'], ['Cardano', 'ADA', '0'], ['Avalanche', 'AVAX', '0'], ['Polkadot', 'DOT', '0'], ['TRON', 'TRX', '0']];
+    const [top7Tokens, setTop7Tokens] = useState([['Bitcoin', 'BTC', '0'], ['Ethereum', 'ETH', '0'], ['XRP', 'XRP', '0'], ['Cardano', 'ADA', '0'], ['Avalanche', 'AVAX', '0'], ['Polkadot', 'DOT', '0'], ['TRON', 'TRX', '0']]);
 
     function toggleConnectWalletModal() {
         if(showConnectWalletModal)
@@ -416,13 +416,18 @@ function App() {
             let top7IndexVaultBalance = utils.formatEther( (await contract.getTokenAndVaultBalance())[1] );
             //-!-!-!- there is some issue in contract side so for now need to formatEther twice
             setTop7IndexVaultBalance( utils.formatEther( BigNumber.from(parseInt(top7IndexVaultBalance).toString()) ) );
-            console.log('Top7 Vault Balance: ' + top7IndexVaultBalance);  
+            console.log('Top7 Vault Balance: ' , top7IndexVaultBalance);  
             //Getting Top7 Tokens Weight
             const tokensBalance = (await contract.getTokenAndVaultBalance())[0];
             const tokensWeight = {};
+            let top7TokensInformation = top7Tokens;
             tokensBalance.forEach((tokenBalance, index) => {
                 tokensWeight[top7Tokens[index][1]] = ((utils.formatEther(tokenBalance) / top7IndexVaultBalance) * 100).toFixed(1);
+                top7TokensInformation[index][2] = ((utils.formatEther(tokenBalance) / top7IndexVaultBalance) * 100).toFixed(1);
             })
+            top7TokensInformation.sort(function(a, b ) { return b[2] - a[2]});
+            console.log(top7TokensInformation);
+            setTop7Tokens(top7TokensInformation);
             console.log(tokensWeight);
             setTop7IndexTokensWeight(tokensWeight);
         }
@@ -472,12 +477,13 @@ function App() {
                 bluechipTokensWeight[bluechipTokens[index][1]] = ((utils.formatEther(tokenBalance) / bluechipIndexVaultBalance) * 100).toFixed(1);
             })
             //sorting token according to weight
+            let sortable = []
             for(let symbol in bluechipTokensWeight) {
-                bluechipTokensSortedByWeight.push([symbol, bluechipTokensWeight[symbol]]);
+                sortable.push([symbol, bluechipTokensWeight[symbol]]);
             }
-            bluechipTokensSortedByWeight.sort(function(a, b ) { return b[1] - a[1]});
+            sortable.sort(function(a, b ) { return b[1] - a[1]});
             console.log(bluechipTokensWeight);
-            console.log(bluechipTokensSortedByWeight);
+            console.log(sortable);
             setBluechipIndexTokensWeight(bluechipTokensWeight);
 
             //Getting TOP10 Balance
@@ -881,6 +887,22 @@ function App() {
                         <h3>Rebalancing Weekly</h3>
                         <div className="portfolio-box-back-assets">
                             {
+                                top7Tokens.map(([tokenName, tokenSymbol, tokenWeight], index) => {
+                                    return (
+                                        <div className="portfolio-box-back-asset" key={index}>
+                                            <img src={AssestsLogo[tokenSymbol]} alt="" className='portfolio-box-back-asset-icon' />
+                                            <span className="portfolio-box-back-asset-name">{tokenName}</span>
+                                            <span className="portfolio-box-back-asset-symbol">{tokenSymbol}</span>
+                                            {tokenWeight === '0' ? 
+                                                <span className="portfolio-box-back-asset-allocation">0 %</span>
+                                            : 
+                                                <span className="portfolio-box-back-asset-allocation">{tokenWeight.slice(-1) === '0' ? tokenWeight.slice(0,-2) : tokenWeight} %</span>
+                                            }
+                                        </div>
+                                    )
+                                })
+                            }
+                            {/* {
                                 top7Tokens.map((token, index) => {
                                     return (
                                         <div className="portfolio-box-back-asset" key={index}>
@@ -897,7 +919,7 @@ function App() {
                                         </div>
                                     )
                                 })
-                            }
+                            } */}
                         </div>
                     </div>}
 
