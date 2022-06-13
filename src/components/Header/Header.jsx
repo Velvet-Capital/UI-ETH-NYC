@@ -13,9 +13,9 @@ import WrongNetworkImg from '../../assets/img/wrong-network.svg';
 
 import formatDecimal from "../../utils/formatDecimal";
 
-function Header({toggleConnectWalletModal, toggleHeaderDropdownMenu, showHeaderDropdownMenu, isWalletConnected, currentAccount, bnbBalance, currentBnbPrice, isTestnet, isWrongNetwork, switchToMainnet, switchToTestnet, disconnectWallet}) {
+function Header({toggleConnectWalletModal, toggleHeaderDropdownMenu, showHeaderDropdownMenu, isWalletConnected, currentAccount, bnbBalance, totalUserValue, currentBnbPrice, isTestnet, isWrongNetwork, switchToMainnet, switchToTestnet, disconnectWallet}) {
 
-    const bnbBalanceInDollar = parseFloat(bnbBalance * currentBnbPrice).toFixed(2).toLocaleString('en-US');
+    const totalUserValueInDollar = parseFloat(totalUserValue * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 2});
 
     return (
         <div className="header">
@@ -26,7 +26,7 @@ function Header({toggleConnectWalletModal, toggleHeaderDropdownMenu, showHeaderD
             <div className="header-investor-data hide-for-mobile">
                 <div>
                     <span className="header-investor-data-title fn-sm">Value (USD)</span>
-                    <span className="header-investor-data-balance fn-lg">$ {bnbBalanceInDollar === '0.00' ? '0' : bnbBalanceInDollar}</span>
+                    <span className="header-investor-data-balance fn-lg"> $ {totalUserValueInDollar} </span>
                 </div>
 
                 <div>

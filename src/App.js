@@ -808,6 +808,7 @@ function App() {
             isWalletConnected = {isWalletConnected} 
             currentAccount = {currentAccount} 
             bnbBalance = {bnbBalance}
+            totalUserValue = {parseFloat(bluechipBalance) + parseFloat(metaBalance) + parseFloat(top10Balance) + parseFloat(vtop10Balance)}
             currentBnbPrice = {currentBnbPrice}
             isTestnet = {isTestnet}
             isWrongNetwork = {isWrongNetwork}
