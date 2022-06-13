@@ -448,14 +448,12 @@ function App() {
             const metaBalance = (utils.formatEther(await metaContract.balanceOf(accountAddress)));
             setMetaBalance(metaBalance);
             //Getting META Vault Balance
-            let metaIndexVaultBalance = utils.formatEther( (await metaContract.getTokenAndVaultBalance())[1] );
-            // console.log("META vault Balance" ,metaIndexVaultBalance);
-            setMetaIndexVaultBalance(metaIndexVaultBalance);
+            const [metaTokensBalance, metaIndexVaultBalance] = await metaContract.getTokenAndVaultBalance();
+            setMetaIndexVaultBalance(utils.formatEther(metaIndexVaultBalance));
             //Getting META Tokens Weight
-            const metaTokensBalance = (await metaContract.getTokenAndVaultBalance())[0];
             const metaTokensWeight = {};
             metaTokensBalance.forEach((tokenBalance, index) => {
-                metaTokensWeight[metaTokens[index][1]] = ((utils.formatEther(tokenBalance) / metaIndexVaultBalance) * 100).toFixed(1);
+                metaTokensWeight[metaTokens[index][1]] = ((utils.formatEther(tokenBalance) / utils.formatEther(metaIndexVaultBalance)) * 100).toFixed(1);
             })
             // console.log(Object.values(metaTokensWeight).sort(function(a, b) {return parseFloat(b) - parseFloat(a)}));
             setMetaIndexTokensWeight(metaTokensWeight);
@@ -465,40 +463,35 @@ function App() {
             const bluechipBalance = (utils.formatEther(await bluechipContract.balanceOf(accountAddress)));
             setBluechipBalance(bluechipBalance);
             //Getting BLUECHIP Vault Balance
-            let bluechipIndexVaultBalance = utils.formatEther( (await bluechipContract.getTokenAndVaultBalance())[1] );
-            // console.log("bluechip vault Balance" ,bluechipIndexVaultBalance);
-            setBluechipIndexVaultBalance(bluechipIndexVaultBalance);
+            const [bluechipTokensBalance, bluechipIndexVaultBalance] = await bluechipContract.getTokenAndVaultBalance();
+            setBluechipIndexVaultBalance(utils.formatEther(bluechipIndexVaultBalance));
             //Getting BLUECHIP Tokens Weight
-            const bluechipTokensBalance = (await bluechipContract.getTokenAndVaultBalance())[0];
             const bluechipTokensWeight = {};
             bluechipTokensBalance.forEach((tokenBalance, index) => {
-                bluechipTokensWeight[bluechipTokens[index][1]] = ((utils.formatEther(tokenBalance) / bluechipIndexVaultBalance) * 100).toFixed(1);
+                bluechipTokensWeight[bluechipTokens[index][1]] = ((utils.formatEther(tokenBalance) / utils.formatEther(bluechipIndexVaultBalance)) * 100).toFixed(1);
             })
-            //sorting token according to weight
-            let sortable = []
-            for(let symbol in bluechipTokensWeight) {
-                sortable.push([symbol, bluechipTokensWeight[symbol]]);
-            }
-            sortable.sort(function(a, b ) { return b[1] - a[1]});
-            console.log(bluechipTokensWeight);
-            console.log(sortable);
             setBluechipIndexTokensWeight(bluechipTokensWeight);
+            //sorting token according to weight
+            // let sortable = []
+            // for(let symbol in bluechipTokensWeight) {
+            //     sortable.push([symbol, bluechipTokensWeight[symbol]]);
+            // }
+            // sortable.sort(function(a, b ) { return b[1] - a[1]});
+            // console.log(bluechipTokensWeight);
+            // console.log(sortable);
 
             //Getting TOP10 Balance
             const top10Contract = new Contract(top10IndexContractAddressMainnet, indexSwapAbi, provider); 
             const top10Balance = (utils.formatEther(await top10Contract.balanceOf(accountAddress)));
             setTop10Balance(top10Balance);
             //Getting TOP10 Vault Balance
-            let top10IndexVaultBalance = utils.formatEther((await top10Contract.getTokenAndVaultBalance())[1]);
-            setTop10IndexVaultBalance( top10IndexVaultBalance );
-            // console.log("Top10 vault Balance" , top10IndexVaultBalance);
+            const [top10TokensBalance, top10IndexVaultBalance] = await top10Contract.getTokenAndVaultBalance();
+            setTop10IndexVaultBalance( utils.formatEther(top10IndexVaultBalance) );
             //Getting TOP10 Tokens Weight
-            const top10TokensBalance = (await top10Contract.getTokenAndVaultBalance())[0];
             const top10TokensWeight = {};
             top10TokensBalance.forEach((tokenBalance, index) => {
-                top10TokensWeight[top10Tokens[index][1]] = ((utils.formatEther(tokenBalance) / top10IndexVaultBalance) * 100).toFixed(1);
+                top10TokensWeight[top10Tokens[index][1]] = ((utils.formatEther(tokenBalance) / utils.formatEther(top10IndexVaultBalance)) * 100).toFixed(1);
             })
-            // console.log(top10TokensWeight);
             setTop10IndexTokensWeight(top10TokensWeight);
 
             //Getting VTOP10 Balance
@@ -554,8 +547,6 @@ function App() {
                     vtop10VaultBalanceInBNB += tokenBalanceBNB;
                 }
             }
-
-            console.log(balanceOfEachTokenInBNB);
             setVtop10IndexVaultBalance(vtop10VaultBalanceInBNB);
             //calculating VTOP10 Tokens Weight
             const vtop10TokensWeight = {};
@@ -563,7 +554,6 @@ function App() {
                 vtop10TokensWeight[vtop10Tokens[index][1]] = ( ( tokenBalance / vtop10VaultBalanceInBNB ) * 100).toFixed(1);
             })
             setVtop10IndexTokensWeight(vtop10TokensWeight);
-            console.log(vtop10TokensWeight);
         }
         catch(err) {
             console.log(err);
@@ -758,7 +748,7 @@ function App() {
     useEffect(() => { 
         getBalancesMainnet('0x0000000000000000000000000000000000000000');
         checkIfWalletConnected(); 
-        //fetching bnb price from binance api
+        //fetching bnb price in $
         fetch('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT')
         .then( res => res.json() )
         .then( data => {
