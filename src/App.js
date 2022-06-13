@@ -449,9 +449,8 @@ function App() {
             setMetaBalance(metaBalance);
             //Getting META Vault Balance
             let metaIndexVaultBalance = utils.formatEther( (await metaContract.getTokenAndVaultBalance())[1] );
-            //-!-!-!- there is some issue in contract side so for now need to formatEther twice
-            setMetaIndexVaultBalance( utils.formatEther( BigNumber.from(parseInt(metaIndexVaultBalance).toString()) ) );
             // console.log("META vault Balance" ,metaIndexVaultBalance);
+            setMetaIndexVaultBalance(metaIndexVaultBalance);
             //Getting META Tokens Weight
             const metaTokensBalance = (await metaContract.getTokenAndVaultBalance())[0];
             const metaTokensWeight = {};
@@ -467,9 +466,8 @@ function App() {
             setBluechipBalance(bluechipBalance);
             //Getting BLUECHIP Vault Balance
             let bluechipIndexVaultBalance = utils.formatEther( (await bluechipContract.getTokenAndVaultBalance())[1] );
-            //-!-!-!- there is some issue in contract side so for now need to use formatEther twice
-            setBluechipIndexVaultBalance( utils.formatEther( BigNumber.from(parseInt(bluechipIndexVaultBalance).toString()) ) );
             // console.log("bluechip vault Balance" ,bluechipIndexVaultBalance);
+            setBluechipIndexVaultBalance(bluechipIndexVaultBalance);
             //Getting BLUECHIP Tokens Weight
             const bluechipTokensBalance = (await bluechipContract.getTokenAndVaultBalance())[0];
             const bluechipTokensWeight = {};
