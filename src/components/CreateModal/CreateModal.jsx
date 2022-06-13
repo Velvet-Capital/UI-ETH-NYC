@@ -70,11 +70,11 @@ function CreateModal(props) {
                 </div>
                 <div className="create-modal-action-tab flex">
                     <div className="cursor-pointer" onClick={() => {props.toggleCreateModalTab(); checkHasEnoughFunds(amount.toString(), props.bnbBalance);}} >
-                        <span className={props.createModalTab === 'redeem' && "unactive"}> Create </span>
+                        <span className={props.createModalTab === 'redeem' && "unactive"}> Deposit </span>
                         <div className={`line ${props.createModalTab === 'create' && "active"}`} ></div>
                     </div>
                     <div className="cursor-pointer" onClick={() => {props.toggleCreateModalTab(); checkHasEnoughFunds(amount.toString(), indexTokenBalance);}} >
-                        <span className={props.createModalTab === 'create' && "unactive"}> Redeem </span>
+                        <span className={props.createModalTab === 'create' && "unactive"}> Withdraw </span>
                         <div className={`line ${props.createModalTab === 'redeem' && "active"}`} ></div>
                     </div>
                 </div>
@@ -135,7 +135,7 @@ function CreateModal(props) {
                     disabled = {!hasEnoughFunds || props.isLoading}
                     style = {hasEnoughFunds ? {opacity: 1} : {opacity: 0.5}}
                     onClick={props.createModalTab === 'create' ? () => props.invest(props.portfolioName, utils.parseEther(amount.toString())) : () => props.withdraw(props.portfolioName, utils.parseEther(amount.toString()))}>
-                       {props.isLoading && props.createModalTab === 'create' ? 'Investing...' : props.isLoading && props.createModalTab === 'redeem' ? 'Redeeming...' : props.createModalTab === 'create' ? "Create" : "Redeem"}
+                       {props.isLoading && props.createModalTab === 'create' ? 'Investing...' : props.isLoading && props.createModalTab === 'redeem' ? 'Withdrawing...' : props.createModalTab === 'create' ? "Deposit" : "Withdraw"}
                 </button>
             </div>
         </>

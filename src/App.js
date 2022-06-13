@@ -858,7 +858,7 @@ function App() {
                         </div>
 
                         <button className="btn fn-md" data-portfolio-name="TOP7" onClick={isWalletConnected ? toggleCreateModal : toggleConnectWalletModal}>
-                            {formatDecimal(top7IndexBalance) > 0 ? "Create/ Redeem" : "Create"}
+                            {formatDecimal(top7IndexBalance) > 0 ? "Deposit/ Withdraw" : "Deposit"}
                         </button>
 
                         <div className="portfolio-data">
@@ -953,7 +953,7 @@ function App() {
                             </div>
 
                             <button className="btn fn-md" data-portfolio-name="BLUECHIP" onClick={isWalletConnected ? toggleCreateModal : toggleConnectWalletModal}>
-                                {formatDecimal(bluechipBalance) > 0 ? "Create/ Redeem" : "Create"}
+                                {formatDecimal(bluechipBalance) > 0 ? "Deposit/ Withdraw" : "Deposit"}
                             </button>
 
                             <div className="portfolio-data">
@@ -1035,7 +1035,7 @@ function App() {
                             </div>
 
                             <button className="btn fn-md" data-portfolio-name="META" onClick={isWalletConnected ? toggleCreateModal : toggleConnectWalletModal}>
-                                {formatDecimal(metaBalance) > 0 ? "Create/ Redeem" : "Create"}
+                                {formatDecimal(metaBalance) > 0 ? "Deposit/ Withdraw" : "Deposit"}
                             </button>
 
                             <div className="portfolio-data">
@@ -1111,7 +1111,7 @@ function App() {
                             </div>
 
                             <button className="btn fn-md" data-portfolio-name="VTOP10" onClick={isWalletConnected ? toggleCreateModal : toggleConnectWalletModal}>
-                                {formatDecimal(vtop10Balance) > 0 ? "Create/ Redeem" : "Create"}
+                                {formatDecimal(vtop10Balance) > 0 ? "Deposit/ Withdraw" : "Deposit"}
                             </button>
 
                             <div className="portfolio-data">
@@ -1187,7 +1187,7 @@ function App() {
                             </div>
 
                             <button className="btn fn-md" data-portfolio-name="TOP10" onClick={isWalletConnected ? toggleCreateModal : toggleConnectWalletModal}>
-                                {formatDecimal(top10Balance) > 0 ? "Create/ Redeem" : "Create"}
+                                {formatDecimal(top10Balance) > 0 ? "Deposit/ Withdraw" : "Deposit"}
                             </button>
 
                             <div className="portfolio-data">
