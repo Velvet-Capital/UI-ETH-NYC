@@ -60,9 +60,9 @@ function CreateModal(props) {
 
     return (
         <>
-            <div className="overlay" onClick={props.toggleModal}></div>
+            <div className="overlay" onClick={() => { setAmount(BigNumber.from(0)); setHasEnoughFunds(true); props.toggleModal()}}></div>
             <div className="modal create-modal">
-                <img src={CrossImg} alt="" id="create-modal-cancle" className="cursor-pointer" onClick={props.toggleModal} />
+                <img src={CrossImg} alt="" id="create-modal-cancle" className="cursor-pointer" onClick={() => {setAmount(BigNumber.from(0)); setHasEnoughFunds(true); props.toggleModal()} } />
 
                 <div className="create-modal-details">
                     <img src={createModalImg[props.portfolioName]} alt="" id="create-modal-logo" />
