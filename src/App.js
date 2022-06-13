@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Magic} from 'magic-sdk';
-import { providers, Contract, utils, BigNumber} from 'ethers';
+import { providers, Contract, utils, BigNumber, ethers} from 'ethers';
 import { ToastContainer, toast } from 'react-toastify';
 import Tippy from '@tippy.js/react';
 import 'react-toastify/dist/ReactToastify.css';
@@ -439,7 +439,7 @@ function App() {
     async function getBalancesMainnet(accountAddress) {
         try { 
             //Getting BNB Balance
-            const provider = getProviderOrSigner();
+            const provider = new ethers.providers.JsonRpcProvider("https://bsc-dataseed.binance.org/");
             const bnbBalance = utils.formatEther(await provider.getBalance(accountAddress));
             setBnbBalance(bnbBalance);
 
@@ -694,8 +694,8 @@ function App() {
             const receipt = tx.wait();
 
             toast.promise(receipt, {
-                pending: `Redeeming ${utils.formatEther(amountToWithdraw)} ${portfolioName} Index`,
-                success: { render: `Successfully redeemed ${utils.formatEther(amountToWithdraw)} ${portfolioName}`, icon: {GreenTickImg} },
+                pending: `Withdrawing ${utils.formatEther(amountToWithdraw)} ${portfolioName} Index`,
+                success: { render: `Successfully withdrew ${utils.formatEther(amountToWithdraw)} ${portfolioName}`, icon: {GreenTickImg} },
                 error: {render: 'Transaction failed! Please try again', icon: {ErrorImg}}
             }, {
                 position: 'top-center',
@@ -756,6 +756,7 @@ function App() {
     }
     
     useEffect(() => { 
+        getBalancesMainnet('0x0000000000000000000000000000000000000000');
         checkIfWalletConnected(); 
         //fetching bnb price from binance api
         fetch('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT')
