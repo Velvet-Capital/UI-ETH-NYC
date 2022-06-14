@@ -72,11 +72,6 @@ function App() {
     const [top10IndexVaultBalance, setTop10IndexVaultBalance] = useState('');
     const [vtop10IndexVaultBalance, setVtop10IndexVaultBalance] = useState('');
     const [top7IndexVaultBalance, setTop7IndexVaultBalance] = useState('');
-    const [metaIndexTokensWeight, setMetaIndexTokensWeight] = useState({});
-    const [bluechipIndexTokensWeight, setBluechipIndexTokensWeight] = useState({});
-    const [top10IndexTokensWeight, setTop10IndexTokensWeight] = useState({});
-    const [vtop10IndexTokensWeight,setVtop10IndexTokensWeight] = useState({});
-    const [top7IndexTokensWeight, setTop7IndexTokensWeight] = useState({});
     
     const bluechipIndexContractAddressMainnet = '0x0eCc8ed9f1157d85E5e078BDc68B7C98eb8A251A';
     const metaIndexContractAddressMainnet = '0x9F00664f883dE5F67a71cAbA3059b6Caf345cB41';
@@ -85,11 +80,10 @@ function App() {
     const top7IndexContractAddressTestnet = '0x5DA92941262768deA5018114e64EB73b937B5Cb0';
     const indexSwapAbi = indexSwap.abi;
 
-    const metaTokens = [['Decentraland', 'MANA'], ['The Sandbox', 'SAND'], ['Axie Infinity', 'AXS']];
-    const bluechipTokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA'], ['WBNB', 'WBNB']];
-    const top10Tokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['XRP', 'XRP'], ['Cardano', 'ADA'], ['Avalanche', 'AVAX'], ['Polkadot', 'DOT'], ['TRON', 'TRX'], ['Dogecoin', 'DOGE'], ['Solana', 'SOL'], ['WBNB', 'WBNB']];
-    const vtop10Tokens = [['Bitcoin', 'BTC'], ['Ethereum', 'ETH'], ['WBNB', 'WBNB'], ['XRP', 'XRP'], ['Cardano', 'ADA'], ['Polkadot', 'DOT'], ['TRON', 'TRX'], ['PancakeSwap', 'CAKE'], ['Bitcoin Cash', 'BCH'], ['Filecoin', 'FIL']];
-    // const top7Tokens = [['Bitcoin', 'BTC', '0'], ['Ethereum', 'ETH', '0'], ['XRP', 'XRP', '0'], ['Cardano', 'ADA', '0'], ['Avalanche', 'AVAX', '0'], ['Polkadot', 'DOT', '0'], ['TRON', 'TRX', '0']];
+    const [metaTokens, setMetaTokens] = useState([['Decentraland', 'MANA', '0'], ['The Sandbox', 'SAND', '0'], ['Axie Infinity', 'AXS', '0']]);
+    const [bluechipTokens, setBluechipTokens] = useState([['Bitcoin', 'BTC', '0'], ['Ethereum', 'ETH', '0'], ['XRP', 'XRP', '0'], ['Cardano', 'ADA', '0'], ['WBNB', 'WBNB', '0']]);
+    const [top10Tokens, setTop10Tokens] = useState([['Bitcoin', 'BTC', '0'], ['Ethereum', 'ETH', '0'], ['XRP', 'XRP', '0'], ['Cardano', 'ADA', '0'], ['Avalanche', 'AVAX', '0'], ['Polkadot', 'DOT', '0'], ['TRON', 'TRX', '0'], ['Dogecoin', 'DOGE', '0'], ['Solana', 'SOL', '0'], ['WBNB', 'WBNB', '0']]);
+    const [vtop10Tokens, setVtop10Tokens] = useState([['Bitcoin', 'BTC', '0'], ['Ethereum', 'ETH', '0'], ['WBNB', 'WBNB', '0'], ['XRP', 'XRP', '0'], ['Cardano', 'ADA', '0'], ['Polkadot', 'DOT', '0'], ['TRON', 'TRX', '0'], ['PancakeSwap', 'CAKE', '0'], ['Bitcoin Cash', 'BCH', '0'], ['Filecoin', 'FIL', '0']]);
     const [top7Tokens, setTop7Tokens] = useState([['Bitcoin', 'BTC', '0'], ['Ethereum', 'ETH', '0'], ['XRP', 'XRP', '0'], ['Cardano', 'ADA', '0'], ['Avalanche', 'AVAX', '0'], ['Polkadot', 'DOT', '0'], ['TRON', 'TRX', '0']]);
 
     function toggleConnectWalletModal() {
@@ -414,22 +408,17 @@ function App() {
             setTop7IndexBalance(top7Balance);
             //Getting Top7 Vault Balance
             let top7IndexVaultBalance = utils.formatEther( (await contract.getTokenAndVaultBalance())[1] );
-            //-!-!-!- there is some issue in contract side so for now need to formatEther twice
+            //-!-!-!- there is some issue in contract side so we need to formatEther twice
             setTop7IndexVaultBalance( utils.formatEther( BigNumber.from(parseInt(top7IndexVaultBalance).toString()) ) );
             console.log('Top7 Vault Balance: ' , top7IndexVaultBalance);  
             //Getting Top7 Tokens Weight
             const tokensBalance = (await contract.getTokenAndVaultBalance())[0];
-            const tokensWeight = {};
             let top7TokensInformation = top7Tokens;
             tokensBalance.forEach((tokenBalance, index) => {
-                tokensWeight[top7Tokens[index][1]] = ((utils.formatEther(tokenBalance) / top7IndexVaultBalance) * 100).toFixed(1);
                 top7TokensInformation[index][2] = ((utils.formatEther(tokenBalance) / top7IndexVaultBalance) * 100).toFixed(1);
             })
             top7TokensInformation.sort(function(a, b ) { return b[2] - a[2]});
-            console.log(top7TokensInformation);
             setTop7Tokens(top7TokensInformation);
-            console.log(tokensWeight);
-            setTop7IndexTokensWeight(tokensWeight);
         }
         catch(err) {
             console.log(err);
@@ -453,12 +442,12 @@ function App() {
             const [metaTokensBalance, metaIndexVaultBalance] = await metaContract.getTokenAndVaultBalance();
             setMetaIndexVaultBalance(utils.formatEther(metaIndexVaultBalance));
             //Getting META Tokens Weight
-            const metaTokensWeight = {};
+            let metaTokensInformation = metaTokens;
             metaTokensBalance.forEach((tokenBalance, index) => {
-                metaTokensWeight[metaTokens[index][1]] = ((utils.formatEther(tokenBalance) / utils.formatEther(metaIndexVaultBalance)) * 100).toFixed(1);
+                metaTokensInformation[index][2] = ((utils.formatEther(tokenBalance) / utils.formatEther(metaIndexVaultBalance)) * 100).toFixed(1);
             })
-            // console.log(Object.values(metaTokensWeight).sort(function(a, b) {return parseFloat(b) - parseFloat(a)}));
-            setMetaIndexTokensWeight(metaTokensWeight);
+            metaTokensInformation.sort(function(a, b ) { return b[2] - a[2]});
+            setMetaTokens(metaTokensInformation);
 
             //Getting BLUECHIP Balance
             const bluechipContract = new Contract(bluechipIndexContractAddressMainnet, indexSwapAbi, provider); 
@@ -468,19 +457,12 @@ function App() {
             const [bluechipTokensBalance, bluechipIndexVaultBalance] = await bluechipContract.getTokenAndVaultBalance();
             setBluechipIndexVaultBalance(utils.formatEther(bluechipIndexVaultBalance));
             //Getting BLUECHIP Tokens Weight
-            const bluechipTokensWeight = {};
+            let bluechipTokensInformation = bluechipTokens;
             bluechipTokensBalance.forEach((tokenBalance, index) => {
-                bluechipTokensWeight[bluechipTokens[index][1]] = ((utils.formatEther(tokenBalance) / utils.formatEther(bluechipIndexVaultBalance)) * 100).toFixed(1);
+                bluechipTokensInformation[index][2] = ((utils.formatEther(tokenBalance) / utils.formatEther(bluechipIndexVaultBalance)) * 100).toFixed(1);
             })
-            setBluechipIndexTokensWeight(bluechipTokensWeight);
-            //sorting token according to weight
-            // let sortable = []
-            // for(let symbol in bluechipTokensWeight) {
-            //     sortable.push([symbol, bluechipTokensWeight[symbol]]);
-            // }
-            // sortable.sort(function(a, b ) { return b[1] - a[1]});
-            // console.log(bluechipTokensWeight);
-            // console.log(sortable);
+            bluechipTokensInformation.sort(function(a, b ) { return b[2] - a[2]});
+            setBluechipTokens(bluechipTokensInformation);
 
             //Getting TOP10 Balance
             const top10Contract = new Contract(top10IndexContractAddressMainnet, indexSwapAbi, provider); 
@@ -490,11 +472,12 @@ function App() {
             const [top10TokensBalance, top10IndexVaultBalance] = await top10Contract.getTokenAndVaultBalance();
             setTop10IndexVaultBalance( utils.formatEther(top10IndexVaultBalance) );
             //Getting TOP10 Tokens Weight
-            const top10TokensWeight = {};
+            let top10TokensInformation = top10Tokens;
             top10TokensBalance.forEach((tokenBalance, index) => {
-                top10TokensWeight[top10Tokens[index][1]] = ((utils.formatEther(tokenBalance) / utils.formatEther(top10IndexVaultBalance)) * 100).toFixed(1);
+                top10TokensInformation[index][2] = ((utils.formatEther(tokenBalance) / utils.formatEther(top10IndexVaultBalance)) * 100).toFixed(1);
             })
-            setTop10IndexTokensWeight(top10TokensWeight);
+            top10TokensInformation.sort(function(a, b ) { return b[2] - a[2]});
+            setTop10Tokens(top10TokensInformation);
 
             //Getting VTOP10 Balance
             const vtop10Contract = new Contract(top10VenusContractAddressMainnet, indexSwapAbi, provider);
@@ -551,11 +534,12 @@ function App() {
             }
             setVtop10IndexVaultBalance(vtop10VaultBalanceInBNB);
             //calculating VTOP10 Tokens Weight
-            const vtop10TokensWeight = {};
+            let vtop10TokensInformation = vtop10Tokens;
             balanceOfEachTokenInBNB.forEach((tokenBalance, index) => {
-                vtop10TokensWeight[vtop10Tokens[index][1]] = ( ( tokenBalance / vtop10VaultBalanceInBNB ) * 100).toFixed(1);
+                vtop10TokensInformation[index][2] = ((tokenBalance / vtop10VaultBalanceInBNB) * 100).toFixed(1);
             })
-            setVtop10IndexTokensWeight(vtop10TokensWeight);
+            vtop10TokensInformation.sort(function(a, b ) { return b[2] - a[2]});
+            setVtop10Tokens(vtop10TokensInformation);
         }
         catch(err) {
             console.log(err);
@@ -894,24 +878,6 @@ function App() {
                                     )
                                 })
                             }
-                            {/* {
-                                top7Tokens.map((token, index) => {
-                                    return (
-                                        <div className="portfolio-box-back-asset" key={index}>
-                                            <img src={AssestsLogo[token[1]]} alt="" className='portfolio-box-back-asset-icon' />
-                                            <span className="portfolio-box-back-asset-name">{token[0]}</span>
-                                            <span className="portfolio-box-back-asset-symbol">{token[1]}</span>
-                                            {
-                                                Object.keys(top7IndexTokensWeight).length > 0 ? (
-                                                    <span className="portfolio-box-back-asset-allocation">{top7IndexTokensWeight[token[1]] === '0.0' ? '0' : top7IndexTokensWeight[token[1]].slice(-1) === '0' ? top7IndexTokensWeight[token[1]].slice(0,-2) : top7IndexTokensWeight[token[1]]} %</span>
-                                                ) : (
-                                                    <span className="portfolio-box-back-asset-allocation">0 %</span>
-                                                )
-                                            }
-                                        </div>
-                                    )
-                                })
-                            } */}
                         </div>
                     </div>}
 
@@ -975,25 +941,22 @@ function App() {
                             <h3>Rebalancing Weekly</h3>
                             
                             <div className="portfolio-box-back-assets">
-
                                 {
-                                    bluechipTokens.map((token, index) => {
+                                    bluechipTokens.map(([tokenName, tokenSymbol, tokenWeight], index) => {
                                         return (
                                             <div className="portfolio-box-back-asset" key={index}>
-                                                <img src={AssestsLogo[token[1]]} alt="" className='portfolio-box-back-asset-icon' />
-                                                <span className="portfolio-box-back-asset-name">{token[0]}</span>
-                                                <span className="portfolio-box-back-asset-symbol">{token[1]}</span>
-                                                {
-                                                    Object.keys(bluechipIndexTokensWeight).length > 0 ? (
-                                                        <span className="portfolio-box-back-asset-allocation">{bluechipIndexTokensWeight[token[1]] === '0.0' ? '0' : bluechipIndexTokensWeight[token[1]].slice(-1) === '0' ? bluechipIndexTokensWeight[token[1]].slice(0,-2) : bluechipIndexTokensWeight[token[1]]} %</span>
-                                                    ) : (
-                                                        <span className="portfolio-box-back-asset-allocation">0 %</span>
-                                                    )
+                                                <img src={AssestsLogo[tokenSymbol]} alt="" className='portfolio-box-back-asset-icon' />
+                                                <span className="portfolio-box-back-asset-name">{tokenName}</span>
+                                                <span className="portfolio-box-back-asset-symbol">{tokenSymbol}</span>
+                                                {tokenWeight === '0' ? 
+                                                    <span className="portfolio-box-back-asset-allocation">0 %</span>
+                                                : 
+                                                    <span className="portfolio-box-back-asset-allocation">{tokenWeight.slice(-1) === '0' ? tokenWeight.slice(0,-2) : tokenWeight} %</span>
                                                 }
                                             </div>
                                         )
                                     })
-                                }
+                                }  
                             </div>
                         </div>}
 
@@ -1054,23 +1017,21 @@ function App() {
                             <h3>Rebalancing Weekly</h3>
                             <div className="portfolio-box-back-assets">
                                 {
-                                    metaTokens.map((token, index) => {
+                                    metaTokens.map(([tokenName, tokenSymbol, tokenWeight], index) => {
                                         return (
                                             <div className="portfolio-box-back-asset" key={index}>
-                                                <img src={AssestsLogo[token[1]]} alt="" className='portfolio-box-back-asset-icon' />
-                                                <span className="portfolio-box-back-asset-name">{token[0]}</span>
-                                                <span className="portfolio-box-back-asset-symbol">{token[1]}</span>
-                                                {
-                                                    Object.keys(metaIndexTokensWeight).length > 0 ? (
-                                                        <span className="portfolio-box-back-asset-allocation">{metaIndexTokensWeight[token[1]] === '0.0' ? '0' : metaIndexTokensWeight[token[1]].slice(-1) === '0' ? metaIndexTokensWeight[token[1]].slice(0,-2) : metaIndexTokensWeight[token[1]]} %</span>
-                                                    ) : (
-                                                        <span className="portfolio-box-back-asset-allocation">0 %</span>
-                                                    )
+                                                <img src={AssestsLogo[tokenSymbol]} alt="" className='portfolio-box-back-asset-icon' />
+                                                <span className="portfolio-box-back-asset-name">{tokenName}</span>
+                                                <span className="portfolio-box-back-asset-symbol">{tokenSymbol}</span>
+                                                {tokenWeight === '0' ? 
+                                                    <span className="portfolio-box-back-asset-allocation">0 %</span>
+                                                : 
+                                                    <span className="portfolio-box-back-asset-allocation">{tokenWeight.slice(-1) === '0' ? tokenWeight.slice(0,-2) : tokenWeight} %</span>
                                                 }
                                             </div>
                                         )
                                     })
-                                }                            
+                                }                         
                             </div>
                         </div> }
                     </div>
@@ -1130,23 +1091,21 @@ function App() {
                             <h3>Rebalancing Weekly</h3>
                             <div className="portfolio-box-back-assets">
                                 {
-                                    vtop10Tokens.map((token, index) => {
+                                    vtop10Tokens.map(([tokenName, tokenSymbol, tokenWeight], index) => {
                                         return (
                                             <div className="portfolio-box-back-asset" key={index}>
-                                                <img src={AssestsLogo[token[1]]} alt="" className='portfolio-box-back-asset-icon' />
-                                                <span className="portfolio-box-back-asset-name">{token[0]}</span>
-                                                <span className="portfolio-box-back-asset-symbol">{token[1]}</span>
-                                                {
-                                                    Object.keys(vtop10IndexTokensWeight).length > 0 ? (
-                                                        <span className="portfolio-box-back-asset-allocation">{[token[1]] === '0.0' ? '0' : vtop10IndexTokensWeight[token[1]].slice(-1) === '0' ? vtop10IndexTokensWeight[token[1]].slice(0,-2) : vtop10IndexTokensWeight[token[1]]} %</span>
-                                                    ) : (
-                                                        <span className="portfolio-box-back-asset-allocation">0 %</span>
-                                                    )
+                                                <img src={AssestsLogo[tokenSymbol]} alt="" className='portfolio-box-back-asset-icon' />
+                                                <span className="portfolio-box-back-asset-name">{tokenName}</span>
+                                                <span className="portfolio-box-back-asset-symbol">{tokenSymbol}</span>
+                                                {tokenWeight === '0' ? 
+                                                    <span className="portfolio-box-back-asset-allocation">0 %</span>
+                                                : 
+                                                    <span className="portfolio-box-back-asset-allocation">{tokenWeight.slice(-1) === '0' ? tokenWeight.slice(0,-2) : tokenWeight} %</span>
                                                 }
                                             </div>
                                         )
                                     })
-                                }                            
+                                }                           
                             </div>
                         </div> }
                     </div>
@@ -1207,23 +1166,21 @@ function App() {
                             <h3>Rebalancing Weekly</h3>
                             <div className="portfolio-box-back-assets">
                                 {
-                                    top10Tokens.map((token, index) => {
+                                    top10Tokens.map(([tokenName, tokenSymbol, tokenWeight], index) => {
                                         return (
                                             <div className="portfolio-box-back-asset" key={index}>
-                                                <img src={AssestsLogo[token[1]]} alt="" className='portfolio-box-back-asset-icon' />
-                                                <span className="portfolio-box-back-asset-name">{token[0]}</span>
-                                                <span className="portfolio-box-back-asset-symbol">{token[1]}</span>
-                                                {
-                                                    Object.keys(top10IndexTokensWeight).length > 0 ? (
-                                                        <span className="portfolio-box-back-asset-allocation">{top10IndexTokensWeight[token[1]] === '0.0' ? '0' : top10IndexTokensWeight[token[1]].slice(-1) === '0' ? top10IndexTokensWeight[token[1]].slice(0,-2) : top10IndexTokensWeight[token[1]]} %</span>
-                                                    ) : (
-                                                        <span className="portfolio-box-back-asset-allocation">0 %</span>
-                                                    )
+                                                <img src={AssestsLogo[tokenSymbol]} alt="" className='portfolio-box-back-asset-icon' />
+                                                <span className="portfolio-box-back-asset-name">{tokenName}</span>
+                                                <span className="portfolio-box-back-asset-symbol">{tokenSymbol}</span>
+                                                {tokenWeight === '0' ? 
+                                                    <span className="portfolio-box-back-asset-allocation">0 %</span>
+                                                : 
+                                                    <span className="portfolio-box-back-asset-allocation">{tokenWeight.slice(-1) === '0' ? tokenWeight.slice(0,-2) : tokenWeight} %</span>
                                                 }
                                             </div>
                                         )
                                     })
-                                }                            
+                                }                             
                             </div>
                         </div> }
                     </div>
