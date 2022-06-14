@@ -732,8 +732,11 @@ function App() {
     }
     
     useEffect(() => { 
-        getBalancesMainnet('0x0000000000000000000000000000000000000000');
         checkIfWalletConnected(); 
+        
+        if(!isWalletConnected) 
+            getBalancesMainnet('0x0000000000000000000000000000000000000000');
+
         //fetching bnb price in $
         fetch('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT')
         .then( res => res.json() )
