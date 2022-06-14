@@ -440,8 +440,10 @@ function App() {
         try { 
             //Getting BNB Balance
             const provider = new ethers.providers.JsonRpcProvider("https://bsc-dataseed.binance.org/");
-            const bnbBalance = utils.formatEther(await provider.getBalance(accountAddress));
-            setBnbBalance(bnbBalance);
+            if (accountAddress !== '0x0000000000000000000000000000000000000000') {
+                const bnbBalance = utils.formatEther(await provider.getBalance(accountAddress));
+                setBnbBalance(bnbBalance);
+            }
 
             //Getting META Balance
             const metaContract = new Contract(metaIndexContractAddressMainnet, indexSwapAbi, provider); 
