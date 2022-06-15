@@ -1,6 +1,7 @@
 .header {
     height: 100px;
     margin: 0 0 70px;
+    position: relative;
     padding: 0 50px 0 55px;
     box-shadow: 0 2px 25px 0 rgba(0, 0, 0, 0.31);
     background-image: linear-gradient(to bottom, #4368cd, #7455f6);
@@ -69,8 +70,9 @@
 .header-wrong-network-rounded-box {
     width: 125px;
     height: 45px;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
+    gap: 9px;
     position: absolute;
     right: 220px;
     top: 55px;

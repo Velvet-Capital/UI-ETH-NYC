@@ -45,8 +45,8 @@ function Header({toggleConnectWalletModal, toggleHeaderDropdownMenu, showHeaderD
                         
                         <div className="header-wrong-network-modal">
                             <h2 className="font-semibold" style={{fontSize:'12px', color: '#fe6971', margin: '15px 0'}}>Wrong Network</h2>
-                            <p style={{fontSize:'10px', fontWeight: 500}}>Please Connect BSC Network</p>
-                            <button className="btn header-wrong-network-modal-btn" onClick={switchToMainnet}> Switch to BSC Network </button>
+                            <p style={{fontSize:'10px', fontWeight: 500}}>Please connect to a supported network (BNB Chain)</p>
+                            <button className="btn header-wrong-network-modal-btn" onClick={switchToMainnet}> Switch to BNB chain </button>
                         </div>
                     </>
                 )
