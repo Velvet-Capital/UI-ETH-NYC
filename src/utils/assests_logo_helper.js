@@ -30,7 +30,6 @@ export default {
     'SAND' : SandImg,
     'AXS' : AxsImg,
     'DOGE' : DogeImg,
-    'WBNB' : BnbImg,
     'CAKE' : CakeImg,
     'BCH' : BchImg,
     'FIL' : FilImg

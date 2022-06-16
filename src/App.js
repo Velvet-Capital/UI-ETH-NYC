@@ -81,9 +81,9 @@ function App() {
     const indexSwapAbi = indexSwap.abi;
 
     const [metaTokens, setMetaTokens] = useState([['Decentraland', 'MANA', '0'], ['The Sandbox', 'SAND', '0'], ['Axie Infinity', 'AXS', '0']]);
-    const [bluechipTokens, setBluechipTokens] = useState([['Bitcoin', 'BTC', '0'], ['Ethereum', 'ETH', '0'], ['XRP', 'XRP', '0'], ['Cardano', 'ADA', '0'], ['WBNB', 'WBNB', '0']]);
-    const [top10Tokens, setTop10Tokens] = useState([['Bitcoin', 'BTC', '0'], ['Ethereum', 'ETH', '0'], ['XRP', 'XRP', '0'], ['Cardano', 'ADA', '0'], ['Avalanche', 'AVAX', '0'], ['Polkadot', 'DOT', '0'], ['TRON', 'TRX', '0'], ['Dogecoin', 'DOGE', '0'], ['Solana', 'SOL', '0'], ['WBNB', 'WBNB', '0']]);
-    const [vtop10Tokens, setVtop10Tokens] = useState([['Bitcoin', 'BTC', '0'], ['Ethereum', 'ETH', '0'], ['WBNB', 'WBNB', '0'], ['XRP', 'XRP', '0'], ['Cardano', 'ADA', '0'], ['Polkadot', 'DOT', '0'], ['TRON', 'TRX', '0'], ['PancakeSwap', 'CAKE', '0'], ['Bitcoin Cash', 'BCH', '0'], ['Filecoin', 'FIL', '0']]);
+    const [bluechipTokens, setBluechipTokens] = useState([['Bitcoin', 'BTC', '0'], ['Ethereum', 'ETH', '0'], ['XRP', 'XRP', '0'], ['Cardano', 'ADA', '0'], ['BNB', 'BNB', '0']]);
+    const [top10Tokens, setTop10Tokens] = useState([['Bitcoin', 'BTC', '0'], ['Ethereum', 'ETH', '0'], ['XRP', 'XRP', '0'], ['Cardano', 'ADA', '0'], ['Avalanche', 'AVAX', '0'], ['Polkadot', 'DOT', '0'], ['TRON', 'TRX', '0'], ['Dogecoin', 'DOGE', '0'], ['Solana', 'SOL', '0'], ['BNB', 'BNB', '0']]);
+    const [vtop10Tokens, setVtop10Tokens] = useState([['Bitcoin', 'BTC', '0'], ['Ethereum', 'ETH', '0'], ['BNB', 'BNB', '0'], ['XRP', 'XRP', '0'], ['Cardano', 'ADA', '0'], ['Polkadot', 'DOT', '0'], ['TRON', 'TRX', '0'], ['PancakeSwap', 'CAKE', '0'], ['Bitcoin Cash', 'BCH', '0'], ['Filecoin', 'FIL', '0']]);
     const [top7Tokens, setTop7Tokens] = useState([['Bitcoin', 'BTC', '0'], ['Ethereum', 'ETH', '0'], ['XRP', 'XRP', '0'], ['Cardano', 'ADA', '0'], ['Avalanche', 'AVAX', '0'], ['Polkadot', 'DOT', '0'], ['TRON', 'TRX', '0']]);
 
     function toggleConnectWalletModal() {
