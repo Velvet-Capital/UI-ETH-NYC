@@ -63,18 +63,18 @@
     filter: brightness(0.7);
 }
 
-.portfolio-box-user-return span, .portfolio-box-user-balance span{
+.portfolio-box-user-return span, .portfolio-box-user-balance span, .portfolio-box-user-amount span{
     font-size: 16px;
     color: #b3b3b3;
 }
 
-.portfolio-box-user-balance, .portfolio-box-user-return {
+.portfolio-box-user-balance, .portfolio-box-user-return, .portfolio-box-user-amount {
     display: flex;
     justify-content: space-between;
 }
 
-.portfolio-box-user-balance {
-    margin-bottom: 25px;
+.portfolio-box-user-balance, .portfolio-box-user-amount {
+    margin-bottom: 10px;
 }
 
 .portfolio-data {
