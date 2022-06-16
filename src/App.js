@@ -593,7 +593,7 @@ function App() {
                     portfolioName: portfolioName,
                     transactionType: 'invest',
                     amount: utils.formatEther(amountToInvest),
-                    status: 1
+                    status: 0
                 })
                 if(isTestnet)
                     await getBalancesTestnet(currentAccount);
@@ -606,7 +606,7 @@ function App() {
                     portfolioName: portfolioName,
                     transactionType: 'invest',
                     amount: utils.formatEther(amountToInvest),
-                    status: 0
+                    status: 1
                 })
                 console.log(err)
                 toggleCreateModal();
@@ -686,7 +686,7 @@ function App() {
                     portfolioName: portfolioName,
                     transactionType: 'redeem',
                     amount: utils.formatEther(amountToWithdraw),
-                    status: 1
+                    status: 0
                 })
                 if(isTestnet)
                     await getBalancesTestnet(currentAccount);
@@ -699,7 +699,7 @@ function App() {
                     portfolioName: portfolioName,
                     transactionType: 'redeem',
                     amount: utils.formatEther(amountToWithdraw),
-                    status: 0
+                    status: 1
                 })
                 toggleCreateModal();
                 console.log(err);

@@ -48,7 +48,7 @@ function SuccessOrErrorMsgModal(props) {
             <div className="modal success-or-error-msg-modal">
                 <img src={CrossImg} alt="" id="success-or-error-msg-modal-cancle" className="cursor-pointer" onClick={props.toggleSuccessOrErrorMsgModal} />
                 {
-                    props.status == 1 ? (
+                    props.status == 0 ? (
                         <>
                             <img src={SuccessImg} alt="" className="horizontally-centred success-or-error-msg-modal-img" />
                             <h2 className="success-or-error-msg-modal-title c-purple text-center" style={{fontSize: '30px'}}>Success!</h2>
