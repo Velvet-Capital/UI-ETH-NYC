@@ -25,7 +25,7 @@ function Header({toggleConnectWalletModal, toggleHeaderDropdownMenu, showHeaderD
             {isWalletConnected && (
             <div className="header-investor-data hide-for-mobile">
                 <div>
-                    <span className="header-investor-data-title fn-sm">Value (USD)</span>
+                    <span className="header-investor-data-title fn-sm">Value (USDT)</span>
                     <span className="header-investor-data-balance fn-lg"> $ {totalUserValueInDollar} </span>
                 </div>
 
