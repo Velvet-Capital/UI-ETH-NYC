@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { BigNumber, utils } from "ethers";
+import {BeatLoader} from 'react-spinners';
 import './CreateModal.css';
 
 import CrossImg from '../../assets/img/cross.svg';
@@ -130,12 +131,13 @@ function CreateModal(props) {
                 {props.createModalTab === 'create' ? <p className="create-modal-inf font-normal fn-sm text-center c-purple">You will get ~ {amount.toString()} {props.portfolioName} tokens representing your basket</p> : <p className="create-modal-inf font-normal fn-sm text-center c-purple">You will get ~ {amount.toString()} BNB </p> }
 
                 <button 
-                    className="create-modal-action-btn btn fn-md" 
+                    className="create-modal-action-btn btn fn-md flex" 
                     data-portfolio-name= {props.portfolioName}
                     disabled = {!hasEnoughFunds || props.isLoading}
                     style = {hasEnoughFunds ? {opacity: 1} : {opacity: 0.5}}
                     onClick={props.createModalTab === 'create' ? () => props.invest(props.portfolioName, utils.parseEther(amount.toString())) : () => props.withdraw(props.portfolioName, utils.parseEther(amount.toString()))}>
-                       {props.isLoading && props.createModalTab === 'create' ? 'Investing...' : props.isLoading && props.createModalTab === 'redeem' ? 'Withdrawing...' : props.createModalTab === 'create' ? "Deposit" : "Withdraw"}
+                       {props.isLoading && props.createModalTab === 'create' ? 'Investing' : props.isLoading && props.createModalTab === 'redeem' ? 'Withdrawing' : props.createModalTab === 'create' ? "Deposit" : "Withdraw"}
+                       <BeatLoader loading = {props.isLoading} size = {16} color='white' />
                 </button>
             </div>
         </>
