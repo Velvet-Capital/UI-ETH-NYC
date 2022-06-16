@@ -570,7 +570,7 @@ function App() {
             }
             let tx;
             if(portfolioName === 'VTOP10') 
-                tx = await contract.investInFund({value: amountToInvest.toString()});
+                tx = await contract.investInFund({value: amountToInvest.toString(), gasLimit: 6500000});
             
             else
                 tx = await contract.investInFund({value: amountToInvest, gasLimit: 2220806 });
