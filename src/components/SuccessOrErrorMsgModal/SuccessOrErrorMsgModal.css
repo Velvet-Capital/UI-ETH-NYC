@@ -43,3 +43,12 @@
     box-shadow: none;
     background-color: #565298;
 }
+
+.success-or-error-msg-modal-blockexplorer-link {
+    text-decoration: none;
+}
+
+.success-or-error-msg-modal-blockexplorer-link p {
+    margin: 20px 0;
+    
+}

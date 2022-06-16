@@ -73,6 +73,7 @@ function SuccessOrErrorMsgModal(props) {
                         </>
                     )
                 }
+                <a className="success-or-error-msg-modal-blockexplorer-link" href={`https://bscscan.com/tx/${props.txHash}`} target='_blank' rel="noreferrer"> <p className="text-center font-semibold c-purple"> View Txn On Bscscan </p> </a>
             </div>
         </>
     );

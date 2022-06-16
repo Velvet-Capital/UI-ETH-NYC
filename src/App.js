@@ -65,6 +65,7 @@ function App() {
         portfolioName: '',
         transactionType: '',
         amount: '',
+        txHash: '',
         status: 0
     })
     const [metaIndexVaultBalance, setMetaIndexVaultBalance] = useState('');
@@ -568,12 +569,13 @@ function App() {
             else if(portfolioName === 'TOP7') {
                 contract = new Contract(top7IndexContractAddressTestnet, indexSwapAbi, signer);
             }
+            let txHash;
             let tx;
             if(portfolioName === 'VTOP10') 
                 tx = await contract.investInFund({value: amountToInvest.toString(), gasLimit: 6500000});
-            
             else
                 tx = await contract.investInFund({value: amountToInvest, gasLimit: 2220806 });
+            txHash = tx.hash;
             const receipt = tx.wait();
 
             toast.promise(receipt, {
@@ -593,6 +595,7 @@ function App() {
                     portfolioName: portfolioName,
                     transactionType: 'invest',
                     amount: utils.formatEther(amountToInvest),
+                    txHash: txHash,
                     status: 0
                 })
                 if(isTestnet)
@@ -606,6 +609,7 @@ function App() {
                     portfolioName: portfolioName,
                     transactionType: 'invest',
                     amount: utils.formatEther(amountToInvest),
+                    txHash: txHash,
                     status: 1
                 })
                 console.log(err)
@@ -662,11 +666,13 @@ function App() {
             else if(portfolioName === 'TOP7') {
                 contract = new Contract(top7IndexContractAddressTestnet, indexSwapAbi, signer);
             }
+            let txHash;
             let tx;
             if(portfolioName === 'VTOP10') 
                 tx = await contract.withdrawFromFundNew(amountToWithdraw.toString(), {gasLimit: 7440729});
             else
                 tx = await contract.withdrawFromFundNew(amountToWithdraw.toString());
+            txHash = tx.hash;
             const receipt = tx.wait();
 
             toast.promise(receipt, {
@@ -686,6 +692,7 @@ function App() {
                     portfolioName: portfolioName,
                     transactionType: 'redeem',
                     amount: utils.formatEther(amountToWithdraw),
+                    txHash: txHash,
                     status: 0
                 })
                 if(isTestnet)
@@ -699,6 +706,7 @@ function App() {
                     portfolioName: portfolioName,
                     transactionType: 'redeem',
                     amount: utils.formatEther(amountToWithdraw),
+                    txHash: txHash,
                     status: 1
                 })
                 toggleCreateModal();
@@ -1216,7 +1224,7 @@ function App() {
             )}
         </div>
 
-        <SuccessOrErrorMsgModal show={successOrErrorModalInf.show} portfolioName={successOrErrorModalInf.portfolioName} transactionType={successOrErrorModalInf.transactionType} amount={successOrErrorModalInf.amount} status={successOrErrorModalInf.status}  toggleSuccessOrErrorMsgModal={toggleSuccessOrErrorMsgModal} />
+        <SuccessOrErrorMsgModal show={successOrErrorModalInf.show} portfolioName={successOrErrorModalInf.portfolioName} transactionType={successOrErrorModalInf.transactionType} amount={successOrErrorModalInf.amount} txHash={successOrErrorModalInf.txHash} status={successOrErrorModalInf.status}  toggleSuccessOrErrorMsgModal={toggleSuccessOrErrorMsgModal} />
 
         <ToastContainer />
 
