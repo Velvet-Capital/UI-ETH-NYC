@@ -57,6 +57,28 @@ function CreateModal(props) {
         'VTOP10' : VenusLogo
     }
 
+    const gasRequiredForInvest = {
+        'META': 650000,
+        'BLUECHIP': 900000,
+        'TOP10': 1660000 ,
+        'VTOP10': 4595971,
+        'TOP7': 900000,
+    }
+
+    const gasRequiredForWithdraw = {
+        'META': 600000,
+        'BLUECHIP': 800000,
+        'TOP10': 1600000,
+        'VTOP10': 4200000,
+        'TOP7': 800000
+    }
+
+    let portfolioInvestGasFee, portofolioWithdrawGasFee;
+    if(props.currentSafeGasPrice) {
+        portfolioInvestGasFee = parseFloat(utils.formatEther( utils.parseUnits(props.currentSafeGasPrice, 'gwei') ) * gasRequiredForInvest[props.portfolioName] * props.currentBnbPrice ).toFixed(2)
+        portofolioWithdrawGasFee = parseFloat(utils.formatEther( utils.parseUnits(props.currentSafeGasPrice, 'gwei') ) * gasRequiredForWithdraw[props.portfolioName] * props.currentBnbPrice ).toFixed(2);
+    }
+
     if(!props.show) return null;
 
     return (
@@ -139,6 +161,9 @@ function CreateModal(props) {
                        {props.isLoading && props.createModalTab === 'create' ? 'Investing' : props.isLoading && props.createModalTab === 'redeem' ? 'Withdrawing' : props.createModalTab === 'create' ? "Deposit" : "Withdraw"}
                        <BeatLoader loading = {props.isLoading} size = {16} color='white' />
                 </button>
+             
+                <p className="c-purple fn-sm" style={{textAlign: 'right'}} > Estimated Gas Fee: <b>$ {props.createModalTab === 'create' ? portfolioInvestGasFee  : portofolioWithdrawGasFee }</b> </p>
+
             </div>
         </>
     )

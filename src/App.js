@@ -56,6 +56,7 @@ function App() {
     const [vtop10Balance, setVtop10Balance] = useState('0');
     const [top7IndexBalance, setTop7IndexBalance] = useState('0')
     const [currentBnbPrice, setCurrentBnbPrice] = useState(null);
+    const [currentSafeGasPrice, setCurrentSafeGasPrice] = useState(null);
     const [isTestnet, setIsTestnet] = useState(false);
     const [isWrongNetwork, setIsWrongNetwork] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -745,12 +746,20 @@ function App() {
         if(!isWalletConnected) 
             getBalancesMainnet('0x0000000000000000000000000000000000000000');
 
-        //fetching bnb price in $
+        //fetching bnb price in USDT
         fetch('https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT')
         .then( res => res.json() )
         .then( data => {
             const price = parseFloat(data.price);
-            setCurrentBnbPrice(price)
+            setCurrentBnbPrice(price);
+
+            //fetching current safe gas price
+            fetch('https://api.bscscan.com/api?module=gastracker&action=gasoracle&apikey=AJ4KP2CIWV6DWF2SSPQ5SX16C9YZ78B2B4')
+            .then( res => res.json() )
+            .then( data => {
+                const safeGasPrice = data.result.SafeGasPrice;
+                setCurrentSafeGasPrice(safeGasPrice);
+            })
         })
         .catch(err => console.log(err))
         //checking isWrongNetwork or not
@@ -794,6 +803,7 @@ function App() {
             top7Balance = {top7IndexBalance}
             vtop10Balance = {vtop10Balance}
             currentBnbPrice = {currentBnbPrice}
+            currentSafeGasPrice = {currentSafeGasPrice}
             portfolioName = {createModalPortfolioName}
             isLoading = {isLoading}
         />
