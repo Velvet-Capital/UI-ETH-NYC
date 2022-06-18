@@ -5,14 +5,16 @@ import CrossImg from '../../assets/img/cross.svg';
 import SuccessImg from '../../assets/img/success-mark.svg';
 import ErrorImg from '../../assets/img/error-mark.svg';
 
+import * as constants from "../../utils/constants.js";
+
 function SuccessOrErrorMsgModal(props) {
 
     const tokensAddress = {
-        'BLUECHIP': '0x0eCc8ed9f1157d85E5e078BDc68B7C98eb8A251A',
-        'META': '0x9F00664f883dE5F67a71cAbA3059b6Caf345cB41',
-        'TOP10': '0x2C338E6e014B0aC11Bc06E5cb571A2b12d020B39',
-        'VTOP10': '0x187b397599d81285a987466bD14790CF779B69E8',
-        'TOP7': '0x5DA92941262768deA5018114e64EB73b937B5Cb0'
+        'BLUECHIP': constants.bluechipIndexContractAddressMainnet,
+        'META': constants.metaIndexContractAddressMainnet,
+        'TOP10': constants.top10IndexContractAddressMainnet,
+        'VTOP10': constants.top10VenusContractAddressMainnet,
+        'TOP7': constants.top7IndexContractAddressTestnet
     }
 
     async function addTokenToWallet(tokenAddress, tokenSymbol) {

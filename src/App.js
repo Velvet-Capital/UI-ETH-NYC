@@ -32,6 +32,7 @@ import GreenTickImg from './assets/img/green-tick.png';
 import ErrorImg from './assets/img/error.png';
 import InfoImg from './assets/img/info.svg';
 
+import * as constants from "./utils/constants.js";
 import AssestsLogo from './utils/assests_logo_helper.js';
 import formatDecimal from './utils/formatDecimal';
 
@@ -74,12 +75,16 @@ function App() {
     const [top10IndexVaultBalance, setTop10IndexVaultBalance] = useState('');
     const [vtop10IndexVaultBalance, setVtop10IndexVaultBalance] = useState('');
     const [top7IndexVaultBalance, setTop7IndexVaultBalance] = useState('');
-    
-    const bluechipIndexContractAddressMainnet = '0x0eCc8ed9f1157d85E5e078BDc68B7C98eb8A251A';
-    const metaIndexContractAddressMainnet = '0x9F00664f883dE5F67a71cAbA3059b6Caf345cB41';
-    const top10IndexContractAddressMainnet = '0x2C338E6e014B0aC11Bc06E5cb571A2b12d020B39';
-    const top10VenusContractAddressMainnet = '0x187b397599d81285a987466bD14790CF779B69E8';
-    const top7IndexContractAddressTestnet = '0x5DA92941262768deA5018114e64EB73b937B5Cb0';
+    const [metaTokenTotalSupply, setMetaTokenTotalSupply] = useState();
+    const [bluechipTokenTotalSupply, setBluechipTokenTotalSupply] = useState();
+    const [top10TokenTotalSupply, setTop10TokenTotalSupply] = useState();
+    const [vtop10TokenTotalSupply, setVtop10TokenTotalSupply] = useState();
+
+    const bluechipIndexContractAddressMainnet = constants.bluechipIndexContractAddressMainnet;
+    const metaIndexContractAddressMainnet = constants.metaIndexContractAddressMainnet;
+    const top10IndexContractAddressMainnet = constants.top10IndexContractAddressMainnet;
+    const top10VenusContractAddressMainnet = constants.top10VenusContractAddressMainnet;
+    const top7IndexContractAddressTestnet = constants.top7IndexContractAddressTestnet;
     const indexSwapAbi = indexSwap.abi;
 
     const [metaTokens, setMetaTokens] = useState([['Decentraland', 'MANA', '0'], ['The Sandbox', 'SAND', '0'], ['Axie Infinity', 'AXS', '0']]);
@@ -270,6 +275,7 @@ function App() {
                     const {chainId} = await provider.getNetwork();
                     if(chainId === 56) {
                         await getBalancesMainnet(accounts[0]);
+                        getTokensTotalSupply();
                         setIsWrongNetwork(false);
                     }
                 }
@@ -308,8 +314,10 @@ function App() {
                 setIsWalletConnected(true);
                 const provider = getProviderOrSigner();
                 provider.getNetwork().then(({chainId}) => {
-                    if(chainId === 56)
+                    if(chainId === 56) {
+                        getTokensTotalSupply();
                         getBalancesMainnet(accounts[0]);
+                    }
                     else if (chainId === 97)
                         getBalancesTestnet(accounts[0]);
                 })
@@ -546,6 +554,26 @@ function App() {
         catch(err) {
             console.log(err);
         }
+    }
+
+    async function getTokensTotalSupply() {
+        const provider = getProviderOrSigner();
+        let contract;
+        //Getting META Token Total Supply
+        contract = new Contract(metaIndexContractAddressMainnet, indexSwapAbi, provider);
+        setMetaTokenTotalSupply(utils.formatEther( await contract.totalSupply() ));
+
+        //Getting BLUECHIP Token Total Supply
+        contract = new Contract(bluechipIndexContractAddressMainnet, indexSwapAbi, provider);
+        setBluechipTokenTotalSupply(utils.formatEther( await contract.totalSupply() ));
+
+        //Getting TOP10 Token Total Supply
+        contract = new Contract(top10IndexContractAddressMainnet, indexSwapAbi, provider);
+        setTop10TokenTotalSupply(utils.formatEther( await contract.totalSupply() ));
+
+        //Getting VTOP10 Token Total Supply
+        contract = new Contract(top10VenusContractAddressMainnet, indexSwapAbi, provider);
+        setVtop10TokenTotalSupply(utils.formatEther( await contract.totalSupply() ));
     }
 
     async function invest(portfolioName, amountToInvest) {
@@ -802,6 +830,15 @@ function App() {
             top10Balance = {top10Balance}
             top7Balance = {top7IndexBalance}
             vtop10Balance = {vtop10Balance}
+            metaIndexVaultBalance = {metaIndexVaultBalance}
+            bluechipIndexVaultBalance = {bluechipIndexVaultBalance}
+            top10IndexVaultBalance = {top10IndexVaultBalance}
+            vtop10IndexVaultBalance = {vtop10IndexVaultBalance}
+            top7IndexVaultBalance = {top7IndexVaultBalance}
+            metaTokenTotalSupply = {metaTokenTotalSupply}
+            bluechipTokenTotalSupply = {bluechipTokenTotalSupply}
+            top10TokenTotalSupply = {top10TokenTotalSupply}
+            vtop10TokenTotalSupply = {vtop10TokenTotalSupply}
             currentBnbPrice = {currentBnbPrice}
             currentSafeGasPrice = {currentSafeGasPrice}
             portfolioName = {createModalPortfolioName}
