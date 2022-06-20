@@ -166,7 +166,7 @@ function CreateModal(props) {
 
                 { props.createModalTab === 'redeem' && hasEnoughFunds && <span className="create-modal-max-btn cursor-pointer" onClick={() => setAmount(indexTokenBalance.slice(0, -7))}> max </span> }
     
-                {props.createModalTab === 'create' ? <p className="create-modal-inf font-normal fn-sm text-center c-purple">You will get ~ {amount.toString()} {props.portfolioName} tokens representing your basket</p> : <p className="create-modal-inf font-normal fn-sm text-center c-purple">You will get ~ {amount.toString() * rateOfIndexToken} BNB </p> }
+                {props.createModalTab === 'create' ? <p className="create-modal-inf font-normal fn-sm text-center c-purple">You will get ~ {amount.toString()} {props.portfolioName} tokens representing your basket</p> : <p className="create-modal-inf font-normal fn-sm text-center c-purple">You will get ~ { (amount.toString() * rateOfIndexToken).toFixed(5) } BNB </p> }
 
                 <button 
                     className="create-modal-action-btn btn fn-md flex" 
