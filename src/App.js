@@ -2,11 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Magic} from 'magic-sdk';
 import { providers, Contract, utils, BigNumber, ethers} from 'ethers';
 import { ToastContainer, toast } from 'react-toastify';
-import Tippy from '@tippy.js/react';
 import 'react-toastify/dist/ReactToastify.css';
-import 'tippy.js/dist/tippy.css';
 import './styles/App.css';
-import './styles/portfoliobox.css';
 import indexSwap  from './utils/abi/IndexSwap.json';
 import VBep20Interface from './utils/abi/VBep20Interface.json';
 import Top10Venus from './utils/abi/Top10Venus.json';
@@ -26,16 +23,10 @@ import VenusAssestsImg from './assets/img/venusassests.png';
 import Top10AssestsImg from './assets/img/top10assests.png';
 import BluechipAssetsImg from './assets/img/bluechipassets.png';
 import MetaverseAssetsImg from './assets/img/metaverseassets.png';
-import DollarImg from './assets/img/dollar.svg';
-import PeopleImg from './assets/img/people.svg';
-import CrossImg from './assets/img/cross.svg';
 import GreenTickImg from './assets/img/green-tick.png';
 import ErrorImg from './assets/img/error.png';
-import InfoImg from './assets/img/info.svg';
 
 import * as constants from "./utils/constants.js";
-import AssestsLogo from './utils/assests_logo_helper.js';
-import formatDecimal from './utils/formatDecimal';
 
 function App() {
 
@@ -932,326 +923,62 @@ function App() {
                         toggleCreateModal = {toggleCreateModal}
                     />
 
-                    <div className="portfolio-box">
-                        { portfolioBox1FlipHandler === 'front' ?
-                        <div className='portfolio-box-front'>
-                            <div className="level1">
-                                <img src={VelvetCapitalLogo} alt="" />
+                    <PortfolioBox 
+                        flipHandler = {portfolioBoxesflipHandler}
+                        portfolioBoxSide = {portfolioBox2FlipHandler}
+                        logo = {MetaverseLogo}
+                        title = "Metaverse"
+                        portfolioName = "META"
+                        creator = "Test"
+                        tippyContent = "Top 4 Tokens from the Metaverse sector on BNB chain by Total Market Capitalization, Equally weighted"
+                        assetsImg = {MetaverseAssetsImg}
+                        indexTokenBalance = {metaBalance}
+                        currentBnbPrice = {currentBnbPrice}
+                        numberOfInvestors = "8,471"
+                        indexVaultBalance = {metaIndexVaultBalance}
+                        tokens = {metaTokens}
+                        isWalletConnected = {isWalletConnected}
+                        toggleConnectWalletModal = {toggleConnectWalletModal}
+                        toggleCreateModal = {toggleCreateModal}
+                    />
 
-                                <div className="portfolio-details">
-                                    <h1 className="portfolio-title">Blue Chip</h1>
-                                    <p className="creator fn-vsm">by Test</p>
-                                </div>
+                    <PortfolioBox 
+                        flipHandler = {portfolioBoxesflipHandler}
+                        portfolioBoxSide = {portfolioBox4FlipHandler}
+                        logo = {VenusLogo}
+                        title = "Yield By Venus"
+                        portfolioName = "VTOP10"
+                        creator = "Test"
+                        tippyContent = "Yield generating portfolio powered by Venus"
+                        assetsImg = {VenusAssestsImg}
+                        indexTokenBalance = {vtop10Balance}
+                        currentBnbPrice = {currentBnbPrice}
+                        numberOfInvestors = "5,237"
+                        indexVaultBalance = {vtop10IndexVaultBalance}
+                        tokens = {vtop10Tokens}
+                        isWalletConnected = {isWalletConnected}
+                        toggleConnectWalletModal = {toggleConnectWalletModal}
+                        toggleCreateModal = {toggleCreateModal}
+                    />
 
-                                <Tippy placement='top' animation='scale' content={'Top 5 Cryptocurrencies by Total Market Capitalization, Equally weighted (excluding stablecoins)'}>
-                                    <img src={InfoImg} alt="" className='portfolio-box-front-info-img cursor-pointer' />
-                                </Tippy>
-                            </div>
-
-                            <img className="portfolio-box-assets-img cursor-pointer" src={BluechipAssetsImg} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox1FlipHandler('back')}/>
-
-                            <div className="portfolio-box-user-amount">
-                                <span>Amount</span>
-                                <span style={formatDecimal(bluechipBalance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}}> {formatDecimal(bluechipBalance) == 0 ? '0' : formatDecimal(bluechipBalance)} BLUECHIP </span>
-                            </div>
-
-                            <div className="portfolio-box-user-balance">
-                                <span>Value</span>
-                                <span style={formatDecimal(bluechipBalance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}}> $ { (bluechipBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1}) } </span>
-                            </div>
-
-                            <div className="portfolio-box-user-return">
-                                <span>Return</span>
-                                <span>-</span>
-                            </div>
-
-                            <button className="btn fn-md" data-portfolio-name="BLUECHIP" onClick={isWalletConnected ? toggleCreateModal : toggleConnectWalletModal}>
-                                {formatDecimal(bluechipBalance) > 0 ? "Deposit/ Withdraw" : "Deposit"}
-                            </button>
-
-                            <div className="portfolio-data">
-                                <Tippy placement='top' animation='scale' arrow={false} content={'Total No. Of Investors'} >
-                                    <div className="left">
-                                        <img src={PeopleImg} alt="" />
-                                        <span className="num-of-investors fn-sm">7,587</span>
-                                    </div>
-                                </Tippy>
-                                <Tippy placement='top' animation='scale' arrow={false} content={'Amount Invested In Basket'} >
-                                    <div className="right">
-                                        <img src={DollarImg} alt="" />
-                                        <span className="marketcap fn-sm">{ (bluechipIndexVaultBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits:1}) }</span>
-                                    </div>
-                                </Tippy>
-                            </div>
-
-                        </div>
-                        :  
-                        <div className="portfolio-box-back">
-                            <img src={CrossImg} alt="" id="portfolio-box-back-cross" onClick={() => setPortfolioBox1FlipHandler('front')} />
-
-                            <h2>Allocation</h2>
-
-                            <h3>Rebalancing Weekly</h3>
-                            
-                            <div className="portfolio-box-back-assets">
-                                {
-                                    bluechipTokens.map(([tokenName, tokenSymbol, tokenWeight], index) => {
-                                        return (
-                                            <div className="portfolio-box-back-asset" key={index}>
-                                                <img src={AssestsLogo[tokenSymbol]} alt="" className='portfolio-box-back-asset-icon' />
-                                                <span className="portfolio-box-back-asset-name">{tokenName}</span>
-                                                <span className="portfolio-box-back-asset-symbol">{tokenSymbol}</span>
-                                                {tokenWeight === '0' ? 
-                                                    <span className="portfolio-box-back-asset-allocation">0 %</span>
-                                                : 
-                                                    <span className="portfolio-box-back-asset-allocation">{tokenWeight.slice(-1) === '0' ? tokenWeight.slice(0,-2) : tokenWeight} %</span>
-                                                }
-                                            </div>
-                                        )
-                                    })
-                                }  
-                            </div>
-                        </div>}
-
-                    </div>
-
-                    <div className="portfolio-box">
-                        { portfolioBox2FlipHandler === 'front' ? 
-
-                        <div className="portfolio-box-front" >
-                            <div className="level1">
-                                <img src={MetaverseLogo} alt="" />
-
-                                <div className="portfolio-details">
-                                    <h1 className="portfolio-title">Metaverse</h1>
-                                    <p className="creator fn-vsm">by Test</p>
-                                </div>
-
-                                <Tippy placement='top' animation='scale' content={'Top 4 Tokens from the Metaverse sector on BNB chain by Total Market Capitalization, Equally weighted'}>
-                                    <img src={InfoImg} alt="" className='portfolio-box-front-info-img cursor-pointer' />
-                                </Tippy>
-                            </div>
-
-                            <img className="portfolio-box-assets-img cursor-pointer" src={MetaverseAssetsImg} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox2FlipHandler('back')}/>
-
-                            <div className="portfolio-box-user-amount">
-                                <span>Amount</span>
-                                <span style={formatDecimal(metaBalance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}}> {formatDecimal(metaBalance) == 0 ? '0' : formatDecimal(metaBalance)} META </span>
-                            </div>
-
-                            <div className="portfolio-box-user-balance">
-                                <span>Value</span>
-                                <span style={formatDecimal(metaBalance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}}> $ { (metaBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1}) } </span>
-                            </div>
-
-                            <div className="portfolio-box-user-return">
-                                <span>Return</span>
-                                <span>-</span>
-                            </div>
-
-                            <button className="btn fn-md" data-portfolio-name="META" onClick={isWalletConnected ? toggleCreateModal : toggleConnectWalletModal}>
-                                {formatDecimal(metaBalance) > 0 ? "Deposit/ Withdraw" : "Deposit"}
-                            </button>
-
-                            <div className="portfolio-data">
-                                <Tippy placement='top' animation='scale' arrow={false} content={'Total No. Of Investors'} >
-                                    <div className="left">
-                                        <img src={PeopleImg} alt="" />
-                                        <span className="num-of-investors fn-sm">5,012</span>
-                                    </div>
-                                </Tippy>
-                                <Tippy placement='top' animation='scale' arrow={false} content={'Amount Invested In Basket'} >
-                                    <div className="right">
-                                        <img src={DollarImg} alt="" />
-                                        <span className="marketcap fn-sm">{ (metaIndexVaultBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits:1}) }</span>
-                                    </div>
-                                </Tippy>
-                            </div>
-                        </div>
-                            :
-                        <div className="portfolio-box-back">
-                            <img src={CrossImg} alt="" id="portfolio-box-back-cross" onClick={() => setPortfolioBox2FlipHandler('front')} />
-                            <h2>Allocation</h2>
-                            <h3>Rebalancing Weekly</h3>
-                            <div className="portfolio-box-back-assets">
-                                {
-                                    metaTokens.map(([tokenName, tokenSymbol, tokenWeight], index) => {
-                                        return (
-                                            <div className="portfolio-box-back-asset" key={index}>
-                                                <img src={AssestsLogo[tokenSymbol]} alt="" className='portfolio-box-back-asset-icon' />
-                                                <span className="portfolio-box-back-asset-name">{tokenName}</span>
-                                                <span className="portfolio-box-back-asset-symbol">{tokenSymbol}</span>
-                                                {tokenWeight === '0' ? 
-                                                    <span className="portfolio-box-back-asset-allocation">0 %</span>
-                                                : 
-                                                    <span className="portfolio-box-back-asset-allocation">{tokenWeight.slice(-1) === '0' ? tokenWeight.slice(0,-2) : tokenWeight} %</span>
-                                                }
-                                            </div>
-                                        )
-                                    })
-                                }                         
-                            </div>
-                        </div> }
-                    </div>
-
-                    <div className="portfolio-box">
-                        { portfolioBox4FlipHandler === 'front' ? 
-
-                        <div className="portfolio-box-front" >
-                            <div className="level1">
-                                <img src={VenusLogo} alt="" />
-
-                                <div className="portfolio-details">
-                                    <h1 className="portfolio-title">Yield By Venus</h1>
-                                    <p className="creator fn-vsm">by Test</p>
-                                </div>
-
-                                <Tippy placement='top' animation='scale' content={'Yield generating portfolio powered by Venus'}>
-                                    <img src={InfoImg} alt="" className='portfolio-box-front-info-img cursor-pointer' />
-                                </Tippy>
-                            </div>
-
-                            <img className="portfolio-box-assets-img cursor-pointer" src={VenusAssestsImg} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox4FlipHandler('back')}/>
-
-                            <div className="portfolio-box-user-amount">
-                                <span>Amount</span>
-                                <span style={formatDecimal(vtop10Balance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}}> {formatDecimal(vtop10Balance) == 0 ? '0' : formatDecimal(vtop10Balance)} VTOP10 </span>
-                            </div>
-
-                            <div className="portfolio-box-user-balance">
-                                <span>Value</span>
-                                <span style={formatDecimal(vtop10Balance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}}> $ { (vtop10Balance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1}) } </span>
-                            </div>
-
-                            <div className="portfolio-box-user-return">
-                                <span>Return</span>
-                                <span>-</span>
-                            </div>
-
-                            <button className="btn fn-md" data-portfolio-name="VTOP10" onClick={isWalletConnected ? toggleCreateModal : toggleConnectWalletModal}>
-                                {formatDecimal(vtop10Balance) > 0 ? "Deposit/ Withdraw" : "Deposit"}
-                            </button>
-
-                            <div className="portfolio-data">
-                                <Tippy placement='top' animation='scale' arrow={false} content={'Total No. Of Investors'} >
-                                    <div className="left">
-                                        <img src={PeopleImg} alt="" />
-                                        <span className="num-of-investors fn-sm">3,432</span>
-                                    </div>
-                                </Tippy>
-                                <Tippy placement='top' animation='scale' arrow={false} content={'Amount Invested In Basket'} >
-                                    <div className="right">
-                                        <img src={DollarImg} alt="" />
-                                        <span className="marketcap fn-sm">{ (vtop10IndexVaultBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits:1}) }</span>
-                                    </div>
-                                </Tippy>
-                            </div>
-                        </div>
-                            :
-                        <div className="portfolio-box-back">
-                            <img src={CrossImg} alt="" id="portfolio-box-back-cross" onClick={() => setPortfolioBox4FlipHandler('front')} />
-                            <h2>Allocation</h2>
-                            <h3>Rebalancing Weekly</h3>
-                            <div className="portfolio-box-back-assets">
-                                {
-                                    vtop10Tokens.map(([tokenName, tokenSymbol, tokenWeight], index) => {
-                                        return (
-                                            <div className="portfolio-box-back-asset" key={index}>
-                                                <img src={AssestsLogo[tokenSymbol]} alt="" className='portfolio-box-back-asset-icon' />
-                                                <span className="portfolio-box-back-asset-name">{tokenName}</span>
-                                                <span className="portfolio-box-back-asset-symbol">{tokenSymbol}</span>
-                                                {tokenWeight === '0' ? 
-                                                    <span className="portfolio-box-back-asset-allocation">0 %</span>
-                                                : 
-                                                    <span className="portfolio-box-back-asset-allocation">{tokenWeight.slice(-1) === '0' ? tokenWeight.slice(0,-2) : tokenWeight} %</span>
-                                                }
-                                            </div>
-                                        )
-                                    })
-                                }                           
-                            </div>
-                        </div> }
-                    </div>
-
-                    <div className="portfolio-box">
-                        { portfolioBox3FlipHandler === 'front' ? 
-
-                        <div className="portfolio-box-front" >
-                            <div className="level1">
-                                <img src={VelvetCapitalLogo2} alt="" />
-
-                                <div className="portfolio-details">
-                                    <h1 className="portfolio-title">Top10</h1>
-                                    <p className="creator fn-vsm">by Test</p>
-                                </div>
-
-                                <Tippy placement='top' animation='scale' content={'Top 10 Cryptocurrencies by Total Market Capitalization, Equally weighted (excluding stablecoins) '}>
-                                    <img src={InfoImg} alt="" className='portfolio-box-front-info-img cursor-pointer' />
-                                </Tippy>
-                            </div>
-
-                            <img className="portfolio-box-assets-img cursor-pointer" src={Top10AssestsImg} alt="" title='Click to see assets allocation' onClick={() => setPortfolioBox3FlipHandler('back')}/>
-
-                            <div className="portfolio-box-user-amount">
-                                <span>Amount</span>
-                                <span style={formatDecimal(top10Balance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}}> {formatDecimal(top10Balance) == 0 ? '0' : formatDecimal(top10Balance)} TOP10 </span>
-                            </div>
-
-                            <div className="portfolio-box-user-balance">
-                                <span>Value</span>
-                                <span style={formatDecimal(top10Balance) > 0 ? {color: '#564dd0'} : {color: '#b3b3b3'}}> $ { (top10Balance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1}) } </span>
-                            </div>
-
-                            <div className="portfolio-box-user-return">
-                                <span>Return</span>
-                                <span>-</span>
-                            </div>
-
-                            <button className="btn fn-md" data-portfolio-name="TOP10" onClick={isWalletConnected ? toggleCreateModal : toggleConnectWalletModal}>
-                                {formatDecimal(top10Balance) > 0 ? "Deposit/ Withdraw" : "Deposit"}
-                            </button>
-
-                            <div className="portfolio-data">
-                                <Tippy placement='top' animation='scale' arrow={false} content={'Total No. Of Investors'} >
-                                    <div className="left">
-                                        <img src={PeopleImg} alt="" />
-                                        <span className="num-of-investors fn-sm">3,432</span>
-                                    </div>
-                                </Tippy>
-
-                                <Tippy placement='top' animation='scale' arrow={false} content={'Amount Invested In Basket'} >
-                                    <div className="right">
-                                        <img src={DollarImg} alt="" />
-                                        <span className="marketcap fn-sm">{ (top10IndexVaultBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits:1}) }</span>
-                                    </div>
-                                </Tippy>
-                            </div>
-                        </div>
-                            :
-                        <div className="portfolio-box-back">
-                            <img src={CrossImg} alt="" id="portfolio-box-back-cross" onClick={() => setPortfolioBox3FlipHandler('front')} />
-                            <h2>Allocation</h2>
-                            <h3>Rebalancing Weekly</h3>
-                            <div className="portfolio-box-back-assets">
-                                {
-                                    top10Tokens.map(([tokenName, tokenSymbol, tokenWeight], index) => {
-                                        return (
-                                            <div className="portfolio-box-back-asset" key={index}>
-                                                <img src={AssestsLogo[tokenSymbol]} alt="" className='portfolio-box-back-asset-icon' />
-                                                <span className="portfolio-box-back-asset-name">{tokenName}</span>
-                                                <span className="portfolio-box-back-asset-symbol">{tokenSymbol}</span>
-                                                {tokenWeight === '0' ? 
-                                                    <span className="portfolio-box-back-asset-allocation">0 %</span>
-                                                : 
-                                                    <span className="portfolio-box-back-asset-allocation">{tokenWeight.slice(-1) === '0' ? tokenWeight.slice(0,-2) : tokenWeight} %</span>
-                                                }
-                                            </div>
-                                        )
-                                    })
-                                }                             
-                            </div>
-                        </div> }
-                    </div>
+                    <PortfolioBox 
+                        flipHandler = {portfolioBoxesflipHandler}
+                        portfolioBoxSide = {portfolioBox3FlipHandler}
+                        logo = {VelvetCapitalLogo2}
+                        title = "Top10"
+                        portfolioName = "TOP10"
+                        creator = "Test"
+                        tippyContent = "Top 10 Cryptocurrencies by Total Market Capitalization, Equally weighted (excluding stablecoins)"
+                        assetsImg = {Top10AssestsImg}
+                        indexTokenBalance = {top10Balance}
+                        currentBnbPrice = {currentBnbPrice}
+                        numberOfInvestors = "4,519"
+                        indexVaultBalance = {top10IndexVaultBalance}
+                        tokens = {top10Tokens}
+                        isWalletConnected = {isWalletConnected}
+                        toggleConnectWalletModal = {toggleConnectWalletModal}
+                        toggleCreateModal = {toggleCreateModal}
+                    />
                 </>
             )}
         </div>
