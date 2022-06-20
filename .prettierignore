@@ -1,0 +1,7 @@
+node_modules
+build
+package.json
+assets
+.env
+.*
+README.md
