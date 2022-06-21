@@ -4,6 +4,11 @@ import "./SuccessOrErrorMsgModal.css"
 import CrossImg from "../../assets/img/cross.svg"
 import SuccessImg from "../../assets/img/success-mark.svg"
 import ErrorImg from "../../assets/img/error-mark.svg"
+import BnbImg from "../../assets/img/bnb.png"
+import VelvetCapitalLogo from "../../assets/img/newvelvetcapitallogo.svg"
+import StraightLine from "../../assets/img/straightline.svg"
+import Circle from "../../assets/img/circle.svg"
+
 
 import * as constants from "../../utils/constants.js"
 
@@ -50,11 +55,29 @@ function SuccessOrErrorMsgModal(props) {
                 />
                 {props.status == 0 ? (
                     <>
-                        <img
-                            src={SuccessImg}
-                            alt=""
-                            className="horizontally-centred success-or-error-msg-modal-img"
-                        />
+                        <div className="success-or-error-msg-modal-invested-amount">
+                            <p className="c-purple" >0.31 BNB</p>
+                            <p className="text-center fn-sm c-grey">~100</p>
+                        </div>
+                        <p className="success-or-error-msg-modal-received-amount c-purple">0.05 IDX</p>
+                        <div className="success-or-error-msg-modal-details flex">
+                            <img src={StraightLine} alt="" style={{position:"absolute", zIndex: -1}} />
+                            <div>
+                                <img src={Circle} alt="" style={{position: "absolute", right: "-20%", top: "-18%"}}/>
+                                <img src={BnbImg} alt="" style={{width: "50px"}}/>
+                            </div>
+                            <div>
+                                <img
+                                    src={SuccessImg}
+                                    alt=""
+                                    style={{width: '64px'}}
+                                />
+                            </div>
+                            <div>
+                                <img src={Circle} alt="" style={{position: "absolute", left: "-20%", top: "-18%"}}/>
+                                <img src={VelvetCapitalLogo} alt="" style={{width: "50px"}} />
+                            </div>
+                        </div>
                         <h2
                             className="success-or-error-msg-modal-title c-purple text-center"
                             style={{ fontSize: "30px" }}
@@ -64,8 +87,8 @@ function SuccessOrErrorMsgModal(props) {
                         {props.transactionType === "invest" ? (
                             <>
                                 <p className="success-or-error-msg-modal-message c-purple text-center fn-md">
-                                    You have successfully invested {props.amount} BNB in{" "}
-                                    {props.portfolioName} basket
+                                    You have successfully deposited {props.amount} BNB in{" "}
+                                    {props.portfolioName} portfolio
                                 </p>
                                 <p
                                     className="success-or-error-msg-modal-message c-purple text-center fn-md cursor-pointer"
@@ -98,11 +121,29 @@ function SuccessOrErrorMsgModal(props) {
                     </>
                 ) : (
                     <>
-                        <img
-                            src={ErrorImg}
-                            alt=""
-                            className="horizontally-centred success-or-error-msg-modal-img"
-                        />
+                        <div className="success-or-error-msg-modal-invested-amount">
+                            <p className="c-purple" >0.31 BNB</p>
+                            <p className="text-center fn-sm c-grey">~100</p>
+                        </div>
+                        <p className="success-or-error-msg-modal-received-amount c-purple">0.05 IDX</p>
+                        <div className="success-or-error-msg-modal-details flex">
+                            <img src={StraightLine} alt="" style={{position:"absolute", zIndex: -1}} />
+                            <div>
+                                <img src={Circle} alt="" style={{position: "absolute", right: "-20%", top: "-18%"}}/>
+                                <img src={BnbImg} alt="" style={{width: "50px"}}/>
+                            </div>
+                            <div>
+                                <img
+                                    src={ErrorImg}
+                                    alt=""
+                                    style={{width: '64px'}}
+                                />
+                            </div>
+                            <div>
+                                <img src={Circle} alt="" style={{position: "absolute", left: "-20%", top: "-18%"}}/>
+                                <img src={VelvetCapitalLogo} alt="" style={{width: "50px"}} />
+                            </div>
+                        </div>
                         <h2
                             className="success-or-error-msg-modal-title c-purple text-center"
                             style={{ fontSize: "30px" }}

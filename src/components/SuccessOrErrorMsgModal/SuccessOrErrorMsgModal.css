@@ -18,11 +18,30 @@
     right: 5%;
 }
 
-.success-or-error-msg-modal-img {
-    width: 64px;
+.success-or-error-msg-modal-details {
     margin-top: 80px;
-    margin-bottom: 20px;
+    margin-bottom: 35px;
+    justify-content: center;
+    align-items: center;
+    gap: 103px;
 }
+
+.success-or-error-msg-modal-details div {
+    position: relative;
+}
+
+.success-or-error-msg-modal-invested-amount {
+    position: absolute;
+    top: 31.5%;
+    left: 20%;
+}
+
+.success-or-error-msg-modal-received-amount {
+    position: absolute;
+    top: 31.5%;
+    right: 20%;
+}
+
 
 .success-or-error-msg-modal-message {
     font-weight: 500;
