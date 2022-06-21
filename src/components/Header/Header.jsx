@@ -1,4 +1,5 @@
 import React from "react"
+import Tippy from "@tippy.js/react"
 import "./Header.css"
 import "../../styles/utils.css"
 
@@ -120,7 +121,20 @@ function Header({
                     <div className="header-dropdown-menu-wallet-address">
                         <p className="fn-vsm">Wallet Address</p>
                         <span className="c-purple font-semibold">{currentAccount.slice(0, 6) + "..." + currentAccount.slice(-4)}</span>
-                        <img className="cursor-pointer" src={CopyImg} alt="" style={{width:"18px", marginLeft: "11px"}} onClick={copyWalletAddress} />
+                        <Tippy 
+                            placement="top"
+                            animation="scale"
+                            content="Copied!"
+                            hideOnClick = {false}
+                            trigger= "click"
+                            onShow={(instance) => {
+                                setTimeout(() => {
+                                    instance.hide();
+                                  }, 1000);
+                            }}
+                        >
+                            <img className="cursor-pointer" src={CopyImg} alt="" style={{width:"18px", marginLeft: "11px"}} onClick={copyWalletAddress} />
+                        </Tippy>
                     </div>
                     <hr style={{ opacity: 0.5 }} />
                     <div className="header-dropdown-menu-wallet-balance">
