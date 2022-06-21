@@ -9,6 +9,7 @@ import WalletConnectedImg from "../../assets/img/wallet-connected.png"
 import ArrowUPImg from "../../assets/img/chevron-down (1).svg"
 import ArrowDownImg from "../../assets/img/chevron-down.svg"
 import ExitImg from "../../assets/img/exit.svg"
+import CopyImg from "../../assets/img/copyicon.png"
 import WrongNetworkImg from "../../assets/img/wrong-network.svg"
 
 import formatDecimal from "../../utils/formatDecimal"
@@ -32,6 +33,11 @@ function Header({
         "en-US",
         { maximumFractionDigits: 2 }
     )
+
+    function copyWalletAddress(portfolioName) {
+        console.log(currentAccount)
+        navigator.clipboard.writeText(currentAccount)
+    }
 
     return (
         <div className="header">
@@ -111,9 +117,15 @@ function Header({
 
             {showHeaderDropdownMenu && (
                 <div className="header-dropdown-menu">
-                    <div>
+                    <div className="header-dropdown-menu-wallet-address">
+                        <p className="fn-vsm">Wallet Address</p>
+                        <span className="c-purple font-semibold">{currentAccount.slice(0, 6) + "..." + currentAccount.slice(-4)}</span>
+                        <img className="cursor-pointer" src={CopyImg} alt="" style={{width:"18px", marginLeft: "11px"}} onClick={copyWalletAddress} />
+                    </div>
+                    <hr style={{ opacity: 0.5 }} />
+                    <div className="header-dropdown-menu-wallet-balance">
                         <p className="fn-vsm">Wallet balance</p>
-                        <span>{formatDecimal(bnbBalance) + " BNB"}</span>
+                        <span className="c-purple font-semibold">${(bnbBalance * currentBnbPrice).toLocaleString('en-US', {maximumFractionDigits: 1})}</span>
                     </div>
                     <hr style={{ opacity: 0.5 }} />
                     <div>

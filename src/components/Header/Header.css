@@ -144,10 +144,15 @@
     align-items: center;
 }
 
-.header-dropdown-menu div:first-child {
+.header-dropdown-menu-wallet-address {
+    display: block;
+    padding: 20px;
+}
+
+.header-dropdown-menu-wallet-balance{
     flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
+    justify-content: center !important;
+    align-items: flex-start !important;
     gap: 5px;
 }
 
@@ -156,10 +161,8 @@
     color: #b3b3b3;
 }
 
-.header-dropdown-menu div:first-child span {
+.header-dropdown-menu-wallet-balance span,  header-dropdown-menu-wallet-address span{
     font-size: 16px;
-    font-weight: 600;
-    color: #564dd0;
 }
 
 .header-dropdown-menu-btn {

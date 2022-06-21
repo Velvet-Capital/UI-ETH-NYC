@@ -35,11 +35,6 @@ function SuccessOrErrorMsgModal(props) {
         }
     }
 
-    function copyTokenAddress(portfolioName) {
-        console.log(portfolioName)
-        navigator.clipboard.writeText(tokensAddress[portfolioName])
-    }
-
     if (!props.show) return null
 
     return (
