@@ -89,6 +89,7 @@ function SuccessOrErrorMsgModal(props) {
                                 <img src={indexTokensImg[props.portfolioName]} alt="" style={{width: "50px"}} />
                             </div>
                         </div>
+                        
                         <h2
                             className="success-or-error-msg-modal-title c-purple text-center"
                             style={{ fontSize: "30px" }}

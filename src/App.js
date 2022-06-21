@@ -10,10 +10,11 @@ import Top10Venus from "./utils/abi/Top10Venus.json"
 import PriceOracle from "./utils/abi/PriceOracle.json"
 
 import Header from "./components/Header/Header.jsx"
+import PortfolioBox from "./components/PortfolioBox/PortfolioBox.jsx"
 import ConnectModal from "./components/ConnectModal/ConnectModal.jsx"
 import CreateModal from "./components/CreateModal/CreateModal.jsx"
-import PortfolioBox from "./components/PortfolioBox/PortfolioBox.jsx"
 import SuccessOrErrorMsgModal from "./components/SuccessOrErrorMsgModal/SuccessOrErrorMsgModal.jsx"
+import ProgressModal from "./components/ProgressModal/ProgressModal"
 
 import VelvetCapitalLogo from "./assets/img/newvelvetcapitallogo.svg"
 import VelvetCapitalLogo2 from "./assets/img/velvetcapitallogo2.svg"
@@ -60,6 +61,13 @@ function App() {
         amount: "",
         txHash: "",
         status: 0,
+    })
+    const [progressModalInf, setProgressModalInf] = useState({
+        show: false,
+        asset1Name: "",
+        asset1Amount: "",
+        asset2Name: "",
+        asset2Amount: ""
     })
     const [metaIndexVaultBalance, setMetaIndexVaultBalance] = useState("")
     const [bluechipIndexVaultBalance, setBluechipIndexVaultBalance] = useState("")
@@ -151,6 +159,12 @@ function App() {
         if (successOrErrorModalInf.show)
             setSuccessOrErrorModalInf((prevState) => ({ ...prevState, show: false }))
         else setSuccessOrErrorModalInf((prevState) => ({ ...prevState, show: true }))
+    }
+
+    function toggleProgressModal() {
+        if (progressModalInf.show)
+            setProgressModalInf((prevState) => ({ ...prevState, show: false }))
+        else setProgressModalInf((prevState) => ({ ...prevState, show: true }))
     }
 
     function portfolioBoxesflipHandler(portfolioName) {
@@ -1068,6 +1082,16 @@ function App() {
                     </>
                 )}
             </div>
+
+            <ProgressModal
+                show={progressModalInf.show}
+                asset1Name={progressModalInf.asset1Name}
+                asset1Amount={progressModalInf.asset1Amount}
+                asset2Name={progressModalInf.asset2Name}
+                asset2Amount={progressModalInf.asset2Amount}
+                currentBnbPrice={currentBnbPrice}
+                toggleProgessModal={toggleProgressModal}
+            />
 
             <SuccessOrErrorMsgModal
                 show={successOrErrorModalInf.show}
