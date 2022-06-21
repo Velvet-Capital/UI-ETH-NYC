@@ -6,6 +6,9 @@ import SuccessImg from "../../assets/img/success-mark.svg"
 import ErrorImg from "../../assets/img/error-mark.svg"
 import BnbImg from "../../assets/img/bnb.png"
 import VelvetCapitalLogo from "../../assets/img/newvelvetcapitallogo.svg"
+import VelvetCapitalLogo2 from "../../assets/img/velvetcapitallogo2.svg"
+import MetaverseLogo from "../../assets/img/metaverse.svg"
+import VenusLogo from "../../assets/img/venuslogo.png"
 import StraightLine from "../../assets/img/straightline.svg"
 import Circle from "../../assets/img/circle.svg"
 
@@ -19,6 +22,14 @@ function SuccessOrErrorMsgModal(props) {
         TOP10: constants.top10IndexContractAddressMainnet,
         VTOP10: constants.top10VenusContractAddressMainnet,
         TOP7: constants.top7IndexContractAddressTestnet,
+    }
+
+    const indexTokensImg = {
+        META: MetaverseLogo,
+        BLUECHIP: VelvetCapitalLogo,
+        TOP10: VelvetCapitalLogo2,
+        TOP7: VelvetCapitalLogo,
+        VTOP10: VenusLogo,
     }
 
     async function addTokenToWallet(tokenAddress, tokenSymbol) {
@@ -56,10 +67,10 @@ function SuccessOrErrorMsgModal(props) {
                 {props.status == 0 ? (
                     <>
                         <div className="success-or-error-msg-modal-invested-amount">
-                            <p className="c-purple" >0.31 BNB</p>
-                            <p className="text-center fn-sm c-grey">~100</p>
+                            <p className="c-purple" >{props.amount} BNB</p>
+                            <p className="text-center fn-sm c-grey">~{(props.amount * props.currentBnbPrice).toLocaleString("en-US", {maximumFractionDigits: 1})}</p>
                         </div>
-                        <p className="success-or-error-msg-modal-received-amount c-purple">0.05 IDX</p>
+                        <p className="success-or-error-msg-modal-received-amount c-purple">~{props.amount} {props.portfolioName}</p>
                         <div className="success-or-error-msg-modal-details flex">
                             <img src={StraightLine} alt="" style={{position:"absolute", zIndex: -1}} />
                             <div>
@@ -75,7 +86,7 @@ function SuccessOrErrorMsgModal(props) {
                             </div>
                             <div>
                                 <img src={Circle} alt="" style={{position: "absolute", left: "-20%", top: "-18%"}}/>
-                                <img src={VelvetCapitalLogo} alt="" style={{width: "50px"}} />
+                                <img src={indexTokensImg[props.portfolioName]} alt="" style={{width: "50px"}} />
                             </div>
                         </div>
                         <h2
@@ -122,10 +133,10 @@ function SuccessOrErrorMsgModal(props) {
                 ) : (
                     <>
                         <div className="success-or-error-msg-modal-invested-amount">
-                            <p className="c-purple" >0.31 BNB</p>
-                            <p className="text-center fn-sm c-grey">~100</p>
+                            <p className="c-purple" >{props.amount} BNB</p>
+                            <p className="text-center fn-sm c-grey">~{(props.amount * props.currentBnbPrice).toLocaleString("en-US", {maximumFractionDigits: 2})}</p>
                         </div>
-                        <p className="success-or-error-msg-modal-received-amount c-purple">0.05 IDX</p>
+                        <p className="success-or-error-msg-modal-received-amount c-purple">~{props.amount} {props.portfolioName}</p>
                         <div className="success-or-error-msg-modal-details flex">
                             <img src={StraightLine} alt="" style={{position:"absolute", zIndex: -1}} />
                             <div>
@@ -141,7 +152,7 @@ function SuccessOrErrorMsgModal(props) {
                             </div>
                             <div>
                                 <img src={Circle} alt="" style={{position: "absolute", left: "-20%", top: "-18%"}}/>
-                                <img src={VelvetCapitalLogo} alt="" style={{width: "50px"}} />
+                                <img src={indexTokensImg[props.portfolioName]} alt="" style={{width: "50px"}} />
                             </div>
                         </div>
                         <h2
