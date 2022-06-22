@@ -248,16 +248,20 @@ function CreateModal(props) {
                     style={hasEnoughFunds ? { opacity: 1 } : { opacity: 0.5 }}
                     onClick={
                         props.createModalTab === "create"
-                            ? () =>
-                                  props.invest(
-                                      props.portfolioName,
-                                      utils.parseEther(amount.toString())
-                                  )
-                            : () =>
-                                  props.withdraw(
-                                      props.portfolioName,
-                                      utils.parseEther(amount.toString())
-                                  )
+                            ? () => {
+                                setAmount(BigNumber.from(0))
+                                props.invest(
+                                    props.portfolioName,
+                                    utils.parseEther(amount.toString())
+                                )
+                            }
+                            : () => {
+                                setAmount(BigNumber.from(0))
+                                props.withdraw(
+                                    props.portfolioName,
+                                    utils.parseEther(amount.toString())
+                                )
+                            }
                     }
                 >
                     {props.isLoading && props.createModalTab === "create"

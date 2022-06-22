@@ -683,6 +683,7 @@ function App() {
     }
 
     async function invest(portfolioName, amountToInvest) {
+        toggleCreateModal()
         setIsLoading(true)
         try {
             await checkNetwork()
@@ -700,6 +701,16 @@ function App() {
             } else if (portfolioName === "TOP7") {
                 contract = new Contract(top7IndexContractAddressTestnet, indexSwapAbi, signer)
             }
+
+            //showing progress Modal till transaction is not mined
+            setProgressModalInf({
+                show: true,
+                asset1Name: "BNB",
+                asset1Amount: utils.formatEther(amountToInvest),
+                asset2Name: portfolioName,
+                asset2Amount: utils.formatEther(amountToInvest),
+            })
+
             let txHash
             let tx
             if (portfolioName === "VTOP10")
@@ -711,30 +722,10 @@ function App() {
             txHash = tx.hash
             const receipt = tx.wait()
 
-            toast.promise(
-                receipt,
-                {
-                    pending: `Investing ${utils.formatEther(
-                        amountToInvest
-                    )} BNB into ${portfolioName} Index`,
-                    success: {
-                        render: `Successfully invested ${utils.formatEther(
-                            amountToInvest
-                        )} BNB into ${portfolioName} Index`,
-                        icon: { GreenTickImg },
-                    },
-                    error: { render: "Transaction failed! Please try again", icon: { ErrorImg } },
-                },
-                {
-                    position: "top-center",
-                    draggable: true,
-                }
-            )
-
             receipt
                 .then(async () => {
+                    setProgressModalInf(prevState => ({...prevState, show: false}))
                     setIsLoading(false)
-                    toggleCreateModal()
                     setSuccessOrErrorModalInf({
                         show: true,
                         portfolioName: portfolioName,
@@ -747,6 +738,7 @@ function App() {
                     else await getBalancesMainnet(currentAccount)
                 })
                 .catch((err) => {
+                    setProgressModalInf(prevState => ({...prevState, show: false}))
                     setIsLoading(false)
                     setSuccessOrErrorModalInf({
                         show: true,
@@ -757,9 +749,9 @@ function App() {
                         status: 1,
                     })
                     console.log(err)
-                    toggleCreateModal()
                 })
         } catch (err) {
+            setProgressModalInf(prevState => ({...prevState, show: false}))
             setIsLoading(false)
             console.log(err)
             if (err.code === -32603) {
@@ -772,7 +764,18 @@ function App() {
                     draggable: true,
                     progress: undefined,
                 })
-            } else {
+            } 
+            else if(err.code === 4001) {
+                toast.error("User Denied Transaction Signature", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    progress: undefined,
+                })
+            } 
+            else {
                 toast.error("Some Error Occured", {
                     position: "top-right",
                     autoClose: 5000,
@@ -786,6 +789,7 @@ function App() {
     }
 
     async function withdraw(portfolioName, amountToWithdraw) {
+        toggleCreateModal()
         setIsLoading(true)
         try {
             await checkNetwork()
@@ -803,6 +807,16 @@ function App() {
             } else if (portfolioName === "TOP7") {
                 contract = new Contract(top7IndexContractAddressTestnet, indexSwapAbi, signer)
             }
+
+            //showing progress Modal till transaction is not mined
+            setProgressModalInf({
+                show: true,
+                asset1Name: portfolioName,
+                asset1Amount: utils.formatEther(amountToWithdraw),
+                asset2Name: "BNB",
+                asset2Amount: utils.formatEther(amountToWithdraw),
+            })
+
             let txHash
             let tx
             if (portfolioName === "VTOP10")
@@ -813,30 +827,10 @@ function App() {
             txHash = tx.hash
             const receipt = tx.wait()
 
-            toast.promise(
-                receipt,
-                {
-                    pending: `Withdrawing ${utils.formatEther(
-                        amountToWithdraw
-                    )} ${portfolioName} Index`,
-                    success: {
-                        render: `Successfully withdrew ${utils.formatEther(
-                            amountToWithdraw
-                        )} ${portfolioName}`,
-                        icon: { GreenTickImg },
-                    },
-                    error: { render: "Transaction failed! Please try again", icon: { ErrorImg } },
-                },
-                {
-                    position: "top-center",
-                    draggable: true,
-                }
-            )
-
             receipt
                 .then(async () => {
+                    setProgressModalInf(prevState => ({...prevState, show: false}))
                     setIsLoading(false)
-                    toggleCreateModal()
                     setSuccessOrErrorModalInf({
                         show: true,
                         portfolioName: portfolioName,
@@ -849,6 +843,7 @@ function App() {
                     else await getBalancesMainnet(currentAccount)
                 })
                 .catch((err) => {
+                    setProgressModalInf(prevState => ({...prevState, show: false}))
                     setIsLoading(false)
                     setSuccessOrErrorModalInf({
                         show: true,
@@ -858,13 +853,13 @@ function App() {
                         txHash: txHash,
                         status: 1,
                     })
-                    toggleCreateModal()
                     console.log(err)
                 })
         } catch (err) {
+            setProgressModalInf(prevState => ({...prevState, show: false}))
             setIsLoading(false)
             console.log(err)
-            if (err.error.code === -32603) {
+            if (err.code === -32603) {
                 toast.error(`Insufficient ${portfolioName} Balance`, {
                     position: "top-right",
                     autoClose: 5000,
@@ -873,10 +868,21 @@ function App() {
                     pauseOnHover: true,
                     progress: undefined,
                 })
-            } else {
-                toast.error("Some Error Occured", {
+            } 
+            else if (err.code === 4001) {
+                toast.error("User Denied Transaction Signature", {
                     position: "top-right",
                     autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    progress: undefined,
+                })
+            }
+            else {
+                toast.error("Some Error Occured", {
+                    position: "top-right",
+                    autoClose: 4000,
                     hideProgressBar: false,
                     closeOnClick: true,
                     pauseOnHover: true,

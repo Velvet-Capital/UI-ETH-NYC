@@ -32,7 +32,7 @@ function ProgressModal(props) {
                         {props.asset1Amount} {props.asset1Name}
                     </p>
                     <p className="text-center fn-sm c-grey">
-                        ~
+                        ~${" "}
                         {(props.asset1Amount * props.currentBnbPrice).toLocaleString("en-US", {
                             maximumFractionDigits: 1,
                         })}
