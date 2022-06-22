@@ -258,7 +258,7 @@ function CreateModal(props) {
                 <button
                     className="create-modal-action-btn btn fn-md flex"
                     data-portfolio-name={props.portfolioName}
-                    disabled={!hasEnoughFunds || props.isLoading || amount.toString() === "0"}
+                    disabled={!hasEnoughFunds || props.isLoading || parseFloat(amount.toString()) === 0}
                     style={hasEnoughFunds && parseFloat(amount.toString()) > 0 && amount.toString() !== "" ? { opacity: 1 } : { opacity: 0.5 }}
                     onClick={
                         props.createModalTab === "create"
