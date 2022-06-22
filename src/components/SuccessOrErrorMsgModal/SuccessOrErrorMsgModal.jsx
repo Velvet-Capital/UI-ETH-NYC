@@ -1,5 +1,7 @@
-import React from "react"
+import React, { useContext } from "react"
 import "./SuccessOrErrorMsgModal.css"
+
+import CreateModalContext from "../../context/CreateModal/CreateModalContext"
 
 import CrossImg from "../../assets/img/cross.svg"
 import SuccessImg from "../../assets/img/success-mark.svg"
@@ -12,10 +14,12 @@ import VenusLogo from "../../assets/img/venuslogo.png"
 import StraightLine from "../../assets/img/straightline.svg"
 import Circle from "../../assets/img/circle.svg"
 
-
 import * as constants from "../../utils/constants.js"
 
 function SuccessOrErrorMsgModal(props) {
+    const { rateOfIndexToken } = useContext(CreateModalContext)
+    console.log(rateOfIndexToken)
+
     const tokensAddress = {
         BLUECHIP: constants.bluechipIndexContractAddressMainnet,
         META: constants.metaIndexContractAddressMainnet,
@@ -66,30 +70,86 @@ function SuccessOrErrorMsgModal(props) {
                 />
                 {props.status == 0 ? (
                     <>
-                        <div className="success-or-error-msg-modal-invested-amount">
-                            <p className="c-purple" >{props.amount} BNB</p>
-                            <p className="text-center fn-sm c-grey">~{(props.amount * props.currentBnbPrice).toLocaleString("en-US", {maximumFractionDigits: 1})}</p>
-                        </div>
-                        <p className="success-or-error-msg-modal-received-amount c-purple">~{props.amount} {props.portfolioName}</p>
+                        {props.transactionType === "invest" ? (
+                            <>
+                                <div className="success-or-error-msg-modal-invested-or-redeemed-amount">
+                                    <p className="c-purple">{props.amount} BNB</p>
+                                    <p className="text-center fn-sm c-grey">
+                                        ~${" "}
+                                        {(props.amount * props.currentBnbPrice).toLocaleString(
+                                            "en-US",
+                                            { maximumFractionDigits: 1 }
+                                        )}
+                                    </p>
+                                </div>
+                                <p className="success-or-error-msg-modal-received-amount c-purple">
+                                    ~{props.amount} {props.portfolioName}
+                                </p>
+                            </>
+                        ) : (
+                            <>
+                                <div className="success-or-error-msg-modal-invested-or-redeemed-amount">
+                                    <p className="c-purple">
+                                        {props.amount} {props.portfolioName}
+                                    </p>
+                                    <p className="text-center fn-sm c-grey">
+                                        ~${" "}
+                                        {(
+                                            props.amount *
+                                            rateOfIndexToken *
+                                            props.currentBnbPrice
+                                        ).toLocaleString("en-US", { maximumFractionDigits: 1 })}
+                                    </p>
+                                </div>
+                                <p className="success-or-error-msg-modal-received-amount c-purple">
+                                    ~{(props.amount * rateOfIndexToken).toFixed(4)} BNB
+                                </p>
+                            </>
+                        )}
+
                         <div className="success-or-error-msg-modal-details flex">
-                            <img src={StraightLine} alt="" style={{position:"absolute", zIndex: -1}} />
+                            <img
+                                src={StraightLine}
+                                alt=""
+                                style={{ position: "absolute", zIndex: -1 }}
+                            />
                             <div>
-                                <img src={Circle} alt="" style={{position: "absolute", right: "-20%", top: "-18%"}}/>
-                                <img src={BnbImg} alt="" style={{width: "50px"}}/>
+                                <img
+                                    src={Circle}
+                                    alt=""
+                                    style={{ position: "absolute", right: "-20%", top: "-18%" }}
+                                />
+                                {props.transactionType === "invest" ? (
+                                    <img src={BnbImg} alt="" style={{ width: "50px" }} />
+                                ) : (
+                                    <img
+                                        src={indexTokensImg[props.portfolioName]}
+                                        alt=""
+                                        style={{ width: "50px" }}
+                                    />
+                                )}
+                            </div>
+                            <div>
+                                <img src={SuccessImg} alt="" style={{ width: "64px" }} />
                             </div>
                             <div>
                                 <img
-                                    src={SuccessImg}
+                                    src={Circle}
                                     alt=""
-                                    style={{width: '64px'}}
+                                    style={{ position: "absolute", left: "-20%", top: "-18%" }}
                                 />
-                            </div>
-                            <div>
-                                <img src={Circle} alt="" style={{position: "absolute", left: "-20%", top: "-18%"}}/>
-                                <img src={indexTokensImg[props.portfolioName]} alt="" style={{width: "50px"}} />
+                                {props.transactionType !== "invest" ? (
+                                    <img src={BnbImg} alt="" style={{ width: "50px" }} />
+                                ) : (
+                                    <img
+                                        src={indexTokensImg[props.portfolioName]}
+                                        alt=""
+                                        style={{ width: "50px" }}
+                                    />
+                                )}
                             </div>
                         </div>
-                        
+
                         <h2
                             className="success-or-error-msg-modal-title c-purple text-center"
                             style={{ fontSize: "30px" }}
@@ -121,7 +181,7 @@ function SuccessOrErrorMsgModal(props) {
                         ) : (
                             <p className="success-or-error-msg-modal-message c-purple text-center fn-md">
                                 You have successfully redeemed {props.amount} {props.portfolioName}{" "}
-                                from basket
+                                from portfolio
                             </p>
                         )}
                         <button
@@ -133,27 +193,83 @@ function SuccessOrErrorMsgModal(props) {
                     </>
                 ) : (
                     <>
-                        <div className="success-or-error-msg-modal-invested-amount">
-                            <p className="c-purple" >{props.amount} BNB</p>
-                            <p className="text-center fn-sm c-grey">~{(props.amount * props.currentBnbPrice).toLocaleString("en-US", {maximumFractionDigits: 2})}</p>
-                        </div>
-                        <p className="success-or-error-msg-modal-received-amount c-purple">~{props.amount} {props.portfolioName}</p>
+                        {props.transactionType === "invest" ? (
+                            <>
+                                <div className="success-or-error-msg-modal-invested-or-redeemed-amount">
+                                    <p className="c-purple">{props.amount} BNB</p>
+                                    <p className="text-center fn-sm c-grey">
+                                        ~${" "}
+                                        {(props.amount * props.currentBnbPrice).toLocaleString(
+                                            "en-US",
+                                            { maximumFractionDigits: 1 }
+                                        )}
+                                    </p>
+                                </div>
+                                <p className="success-or-error-msg-modal-received-amount c-purple">
+                                    ~{props.amount} {props.portfolioName}
+                                </p>
+                            </>
+                        ) : (
+                            <>
+                                <div className="success-or-error-msg-modal-invested-or-redeemed-amount">
+                                    <p className="c-purple">
+                                        {props.amount} {props.portfolioName}
+                                    </p>
+                                    <p className="text-center fn-sm c-grey">
+                                        ~${" "}
+                                        {(
+                                            props.amount *
+                                            rateOfIndexToken *
+                                            props.currentBnbPrice
+                                        ).toLocaleString("en-US", { maximumFractionDigits: 1 })}
+                                    </p>
+                                </div>
+                                <p className="success-or-error-msg-modal-received-amount c-purple">
+                                    ~{(props.amount * rateOfIndexToken).toFixed(4)} BNB
+                                </p>
+                            </>
+                        )}
+
                         <div className="success-or-error-msg-modal-details flex">
-                            <img src={StraightLine} alt="" style={{position:"absolute", zIndex: -1}} />
+                            <img
+                                src={StraightLine}
+                                alt=""
+                                style={{ position: "absolute", zIndex: -1 }}
+                            />
                             <div>
-                                <img src={Circle} alt="" style={{position: "absolute", right: "-20%", top: "-18%"}}/>
-                                <img src={BnbImg} alt="" style={{width: "50px"}}/>
+                                <img
+                                    src={Circle}
+                                    alt=""
+                                    style={{ position: "absolute", right: "-20%", top: "-18%" }}
+                                />
+                                {props.transactionType === "invest" ? (
+                                    <img src={BnbImg} alt="" style={{ width: "50px" }} />
+                                ) : (
+                                    <img
+                                        src={indexTokensImg[props.portfolioName]}
+                                        alt=""
+                                        style={{ width: "50px" }}
+                                    />
+                                )}
+                            </div>
+                            <div>
+                                <img src={ErrorImg} alt="" style={{ width: "64px" }} />
                             </div>
                             <div>
                                 <img
-                                    src={ErrorImg}
+                                    src={Circle}
                                     alt=""
-                                    style={{width: '64px'}}
+                                    style={{ position: "absolute", left: "-20%", top: "-18%" }}
                                 />
-                            </div>
-                            <div>
-                                <img src={Circle} alt="" style={{position: "absolute", left: "-20%", top: "-18%"}}/>
-                                <img src={indexTokensImg[props.portfolioName]} alt="" style={{width: "50px"}} />
+                                {props.transactionType !== "invest" ? (
+                                    <img src={BnbImg} alt="" style={{ width: "50px" }} />
+                                ) : (
+                                    <img
+                                        src={indexTokensImg[props.portfolioName]}
+                                        alt=""
+                                        style={{ width: "50px" }}
+                                    />
+                                )}
                             </div>
                         </div>
                         <h2

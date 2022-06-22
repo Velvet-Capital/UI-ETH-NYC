@@ -1,7 +1,9 @@
-import React from "react"
+import React, { useContext } from "react"
 import "./ProgressModal.css"
 
 import Spinner from "../Spinner/Spinner"
+
+import CreateModalContext from "../../context/CreateModal/CreateModalContext"
 
 import BnbImg from "../../assets/img/bnb.png"
 import VelvetCapitalLogo from "../../assets/img/newvelvetcapitallogo.svg"
@@ -12,6 +14,9 @@ import StraightLine from "../../assets/img/straightline.svg"
 import Circle from "../../assets/img/circle.svg"
 
 function ProgressModal(props) {
+
+    const {rateOfIndexToken, } = useContext(CreateModalContext)
+    console.log(rateOfIndexToken)
     const tokensImg = {
         BNB: BnbImg,
         META: MetaverseLogo,
@@ -33,14 +38,20 @@ function ProgressModal(props) {
                     </p>
                     <p className="text-center fn-sm c-grey">
                         ~${" "}
-                        {(props.asset1Amount * props.currentBnbPrice).toLocaleString("en-US", {
-                            maximumFractionDigits: 1,
-                        })}
+                        {props.transactionType === "invest" ? (
+                            (props.asset1Amount * props.currentBnbPrice).toLocaleString("en-US", {
+                                maximumFractionDigits: 1,
+                            })
+                        ) : (
+                            (props.asset1Amount * rateOfIndexToken * props.currentBnbPrice).toLocaleString("en-US", {
+                                maximumFractionDigits: 1
+                            })
+                        )}
                     </p>
                 </div>
 
                 <p className="progress-modal-asset2 c-purple">
-                    ~{props.asset2Amount} {props.asset2Name}
+                    ~{props.transactionType === "invest" ? (props.asset2Amount+ " " + props.asset2Name) : ((props.asset1Amount*rateOfIndexToken).toFixed(4) + " " + props.asset2Name)}
                 </p>
 
                 <div className="progress-modal-details flex">

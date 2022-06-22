@@ -16,6 +16,8 @@ import CreateModal from "./components/CreateModal/CreateModal.jsx"
 import SuccessOrErrorMsgModal from "./components/SuccessOrErrorMsgModal/SuccessOrErrorMsgModal.jsx"
 import ProgressModal from "./components/ProgressModal/ProgressModal"
 
+import CreateModalState from "./context/CreateModal/CreateModalState"
+
 import VelvetCapitalLogo from "./assets/img/newvelvetcapitallogo.svg"
 import VelvetCapitalLogo2 from "./assets/img/velvetcapitallogo2.svg"
 import MetaverseLogo from "./assets/img/metaverse.svg"
@@ -24,8 +26,6 @@ import VenusAssestsImg from "./assets/img/venusassests.png"
 import Top10AssestsImg from "./assets/img/top10assests.png"
 import BluechipAssetsImg from "./assets/img/bluechipassets.png"
 import MetaverseAssetsImg from "./assets/img/metaverseassets.png"
-import GreenTickImg from "./assets/img/green-tick.png"
-import ErrorImg from "./assets/img/error.png"
 
 import * as constants from "./utils/constants.js"
 
@@ -64,6 +64,7 @@ function App() {
     })
     const [progressModalInf, setProgressModalInf] = useState({
         show: false,
+        transactionType: "",
         asset1Name: "",
         asset1Amount: "",
         asset2Name: "",
@@ -705,6 +706,7 @@ function App() {
             //showing progress Modal till transaction is not mined
             setProgressModalInf({
                 show: true,
+                transactionType: "invest",
                 asset1Name: "BNB",
                 asset1Amount: utils.formatEther(amountToInvest),
                 asset2Name: portfolioName,
@@ -811,6 +813,7 @@ function App() {
             //showing progress Modal till transaction is not mined
             setProgressModalInf({
                 show: true,
+                transactionType: "withdraw",
                 asset1Name: portfolioName,
                 asset1Amount: utils.formatEther(amountToWithdraw),
                 asset2Name: "BNB",
@@ -936,34 +939,59 @@ function App() {
                 email={email}
                 handleSignin={handleSignin}
             />
+            <CreateModalState>
 
-            <CreateModal
-                show={showCreateModal}
-                toggleModal={toggleCreateModal}
-                createModalTab={createModalTab}
-                toggleCreateModalTab={toggleCreateModalTab}
-                invest={invest}
-                withdraw={withdraw}
-                bnbBalance={bnbBalance}
-                metaBalance={metaBalance}
-                bluechipBalance={bluechipBalance}
-                top10Balance={top10Balance}
-                top7Balance={top7IndexBalance}
-                vtop10Balance={vtop10Balance}
-                metaIndexVaultBalance={metaIndexVaultBalance}
-                bluechipIndexVaultBalance={bluechipIndexVaultBalance}
-                top10IndexVaultBalance={top10IndexVaultBalance}
-                vtop10IndexVaultBalance={vtop10IndexVaultBalance}
-                top7IndexVaultBalance={top7IndexVaultBalance}
-                metaTokenTotalSupply={metaTokenTotalSupply}
-                bluechipTokenTotalSupply={bluechipTokenTotalSupply}
-                top10TokenTotalSupply={top10TokenTotalSupply}
-                vtop10TokenTotalSupply={vtop10TokenTotalSupply}
-                currentBnbPrice={currentBnbPrice}
-                currentSafeGasPrice={currentSafeGasPrice}
-                portfolioName={createModalPortfolioName}
-                isLoading={isLoading}
-            />
+                <CreateModal
+                    show={showCreateModal}
+                    toggleModal={toggleCreateModal}
+                    createModalTab={createModalTab}
+                    toggleCreateModalTab={toggleCreateModalTab}
+                    invest={invest}
+                    withdraw={withdraw}
+                    bnbBalance={bnbBalance}
+                    metaBalance={metaBalance}
+                    bluechipBalance={bluechipBalance}
+                    top10Balance={top10Balance}
+                    top7Balance={top7IndexBalance}
+                    vtop10Balance={vtop10Balance}
+                    metaIndexVaultBalance={metaIndexVaultBalance}
+                    bluechipIndexVaultBalance={bluechipIndexVaultBalance}
+                    top10IndexVaultBalance={top10IndexVaultBalance}
+                    vtop10IndexVaultBalance={vtop10IndexVaultBalance}
+                    top7IndexVaultBalance={top7IndexVaultBalance}
+                    metaTokenTotalSupply={metaTokenTotalSupply}
+                    bluechipTokenTotalSupply={bluechipTokenTotalSupply}
+                    top10TokenTotalSupply={top10TokenTotalSupply}
+                    vtop10TokenTotalSupply={vtop10TokenTotalSupply}
+                    currentBnbPrice={currentBnbPrice}
+                    currentSafeGasPrice={currentSafeGasPrice}
+                    portfolioName={createModalPortfolioName}
+                    isLoading={isLoading}
+                />
+
+                <ProgressModal
+                    show={progressModalInf.show}
+                    asset1Name={progressModalInf.asset1Name}
+                    asset1Amount={progressModalInf.asset1Amount}
+                    asset2Name={progressModalInf.asset2Name}
+                    asset2Amount={progressModalInf.asset2Amount}
+                    currentBnbPrice={currentBnbPrice}
+                    toggleProgessModal={toggleProgressModal}
+                />
+
+                <SuccessOrErrorMsgModal
+                    show={successOrErrorModalInf.show}
+                    portfolioName={successOrErrorModalInf.portfolioName}
+                    transactionType={successOrErrorModalInf.transactionType}
+                    amount={successOrErrorModalInf.amount}
+                    txHash={successOrErrorModalInf.txHash}
+                    status={successOrErrorModalInf.status}
+                    currentBnbPrice={currentBnbPrice}
+                    toggleSuccessOrErrorMsgModal={toggleSuccessOrErrorMsgModal}
+                />
+
+            </CreateModalState>
+
 
             <Header
                 toggleConnectWalletModal={toggleConnectWalletModal}
@@ -1088,27 +1116,6 @@ function App() {
                     </>
                 )}
             </div>
-
-            <ProgressModal
-                show={progressModalInf.show}
-                asset1Name={progressModalInf.asset1Name}
-                asset1Amount={progressModalInf.asset1Amount}
-                asset2Name={progressModalInf.asset2Name}
-                asset2Amount={progressModalInf.asset2Amount}
-                currentBnbPrice={currentBnbPrice}
-                toggleProgessModal={toggleProgressModal}
-            />
-
-            <SuccessOrErrorMsgModal
-                show={successOrErrorModalInf.show}
-                portfolioName={successOrErrorModalInf.portfolioName}
-                transactionType={successOrErrorModalInf.transactionType}
-                amount={successOrErrorModalInf.amount}
-                txHash={successOrErrorModalInf.txHash}
-                status={successOrErrorModalInf.status}
-                currentBnbPrice={currentBnbPrice}
-                toggleSuccessOrErrorMsgModal={toggleSuccessOrErrorMsgModal}
-            />
 
             <ToastContainer />
         </div>

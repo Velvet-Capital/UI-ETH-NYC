@@ -1,7 +1,9 @@
-import React, { useState } from "react"
+import React, { useState, useContext} from "react"
 import { BigNumber, utils } from "ethers"
 import { BeatLoader } from "react-spinners"
 import "./CreateModal.css"
+
+import CreateModalContext from "../../context/CreateModal/CreateModalContext"
 
 import CrossImg from "../../assets/img/cross.svg"
 import VelvetCapitalLogo from "../../assets/img/newvelvetcapitallogo.svg"
@@ -15,6 +17,8 @@ import formatDecimal from "../../utils/formatDecimal"
 function CreateModal(props) {
     const [amount, setAmount] = useState(BigNumber.from(0))
     const [hasEnoughFunds, setHasEnoughFunds] = useState(true)
+
+    const {_, updateRateOfIndexToken} = useContext(CreateModalContext)
 
     let indexTokenBalance
     let indexTokenVaultBalance
@@ -41,8 +45,10 @@ function CreateModal(props) {
         indexTokenTotalSupply = props.vtop10TokenTotalSupply
     }
     let rateOfIndexToken = 0
-    if (indexTokenTotalSupply && indexTokenVaultBalance)
+    if (indexTokenTotalSupply && indexTokenVaultBalance) {
         rateOfIndexToken = indexTokenVaultBalance / indexTokenTotalSupply
+        updateRateOfIndexToken(rateOfIndexToken)
+    }
 
     function checkHasEnoughFunds(amount, fund) {
         if (parseFloat(amount) > parseFloat(fund)) setHasEnoughFunds(false)
