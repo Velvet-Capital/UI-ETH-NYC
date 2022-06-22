@@ -227,6 +227,14 @@ function CreateModal(props) {
                     </div>
                 </div>
 
+                <p className="c-grey fn-sm" style={{ textAlign: "right", marginTop: "8px", marginBottom: "25px" }}>
+                    Estimated Gas Fee:{" "}
+                        $
+                        {props.createModalTab === "create"
+                            ? portfolioInvestGasFee
+                            : portofolioWithdrawGasFee}
+                </p>
+
                 {props.createModalTab === "redeem" && hasEnoughFunds && (
                     <span
                         className="create-modal-max-btn cursor-pointer"
@@ -280,15 +288,6 @@ function CreateModal(props) {
                     <BeatLoader loading={props.isLoading} size={16} color="white" />
                 </button>
 
-                <p className="c-purple fn-sm" style={{ textAlign: "right" }}>
-                    Estimated Gas Fee:{" "}
-                    <b>
-                        $
-                        {props.createModalTab === "create"
-                            ? portfolioInvestGasFee
-                            : portofolioWithdrawGasFee}
-                    </b>
-                </p>
             </div>
         </>
     )
