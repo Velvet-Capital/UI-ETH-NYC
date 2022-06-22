@@ -159,8 +159,12 @@ function SuccessOrErrorMsgModal(props) {
                         {props.transactionType === "invest" ? (
                             <>
                                 <p className="success-or-error-msg-modal-message c-purple text-center fn-md">
-                                    You have successfully deposited {props.amount} BNB in{" "}
-                                    {props.portfolioName} portfolio
+                                    You have successfully deposited {props.amount} BNB (~$
+                                    {(props.amount * props.currentBnbPrice).toLocaleString(
+                                        "en-US",
+                                        { maximumFractionDigits: 1 }
+                                    )}
+                                    ) in {props.portfolioName} portfolio
                                 </p>
                                 <p
                                     className="success-or-error-msg-modal-message c-purple text-center fn-md cursor-pointer"
