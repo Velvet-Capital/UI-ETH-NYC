@@ -203,7 +203,7 @@ function CreateModal(props) {
                                 ? (amount * props.currentBnbPrice).toLocaleString("en-US", {
                                       maximumFractionDigits: 2,
                                   })
-                                : (amount * props.currentBnbPrice).toLocaleString("en-US", {
+                                : (amount * rateOfIndexToken * props.currentBnbPrice ).toLocaleString("en-US", {
                                       maximumFractionDigits: 2,
                                   })}
                         </span>
