@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect} from "react"
 import { BigNumber, utils } from "ethers"
-import { BeatLoader } from "react-spinners"
 import "./CreateModal.css"
 
 import CreateModalContext from "../../context/CreateModal/CreateModalContext"
@@ -260,9 +259,9 @@ function CreateModal(props) {
                 )}
 
                 <button
-                    className="create-modal-action-btn btn fn-md flex"
+                    className="create-modal-action-btn btn fn-md"
                     data-portfolio-name={props.portfolioName}
-                    disabled={!hasEnoughFunds || props.isLoading || parseFloat(amount.toString()) === 0}
+                    disabled={!hasEnoughFunds || parseFloat(amount.toString()) === 0}
                     style={hasEnoughFunds && parseFloat(amount.toString()) > 0 && amount.toString() !== "" ? { opacity: 1 } : { opacity: 0.5 }}
                     onClick={
                         props.createModalTab === "create"
@@ -282,14 +281,9 @@ function CreateModal(props) {
                             }
                     }
                 >
-                    {props.isLoading && props.createModalTab === "create"
-                        ? "Investing"
-                        : props.isLoading && props.createModalTab === "redeem"
-                        ? "Withdrawing"
-                        : props.createModalTab === "create"
+                    {props.createModalTab === "create"
                         ? "Deposit"
                         : "Withdraw"}
-                    <BeatLoader loading={props.isLoading} size={16} color="white" />
                 </button>
 
             </div>

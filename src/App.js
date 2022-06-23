@@ -52,7 +52,7 @@ function App() {
     const [currentSafeGasPrice, setCurrentSafeGasPrice] = useState(null)
     const [isTestnet, setIsTestnet] = useState(false)
     const [isWrongNetwork, setIsWrongNetwork] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
+    // const [isLoading, setIsLoading] = useState(false)
     const [createModalPortfolioName, setCreateModalPortfolioName] = useState(null)
     const [successOrErrorModalInf, setSuccessOrErrorModalInf] = useState({
         show: false,
@@ -685,7 +685,6 @@ function App() {
 
     async function invest(portfolioName, amountToInvest) {
         toggleCreateModal()
-        setIsLoading(true)
         try {
             await checkNetwork()
             const signer = getProviderOrSigner(true)
@@ -726,8 +725,8 @@ function App() {
 
             receipt
                 .then(async () => {
+                    //hiding progress Modal - transaction is completed
                     setProgressModalInf(prevState => ({...prevState, show: false}))
-                    setIsLoading(false)
                     setSuccessOrErrorModalInf({
                         show: true,
                         portfolioName: portfolioName,
@@ -740,8 +739,8 @@ function App() {
                     else await getBalancesMainnet(currentAccount)
                 })
                 .catch((err) => {
+                    //hiding progress Modal - transaction is completed
                     setProgressModalInf(prevState => ({...prevState, show: false}))
-                    setIsLoading(false)
                     setSuccessOrErrorModalInf({
                         show: true,
                         portfolioName: portfolioName,
@@ -754,7 +753,6 @@ function App() {
                 })
         } catch (err) {
             setProgressModalInf(prevState => ({...prevState, show: false}))
-            setIsLoading(false)
             console.log(err)
             if (err.code === -32603) {
                 toast.error("Insufficient BNB Balance", {
@@ -792,7 +790,6 @@ function App() {
 
     async function withdraw(portfolioName, amountToWithdraw) {
         toggleCreateModal()
-        setIsLoading(true)
         try {
             await checkNetwork()
             const signer = getProviderOrSigner(true)
@@ -832,8 +829,8 @@ function App() {
 
             receipt
                 .then(async () => {
+                    //hiding progress Modal - transaction is completed
                     setProgressModalInf(prevState => ({...prevState, show: false}))
-                    setIsLoading(false)
                     setSuccessOrErrorModalInf({
                         show: true,
                         portfolioName: portfolioName,
@@ -846,8 +843,8 @@ function App() {
                     else await getBalancesMainnet(currentAccount)
                 })
                 .catch((err) => {
+                    //hiding progress Modal - transaction is completed
                     setProgressModalInf(prevState => ({...prevState, show: false}))
-                    setIsLoading(false)
                     setSuccessOrErrorModalInf({
                         show: true,
                         portfolioName: portfolioName,
@@ -859,8 +856,8 @@ function App() {
                     console.log(err)
                 })
         } catch (err) {
+            //hiding progress Modal - transaction is completed
             setProgressModalInf(prevState => ({...prevState, show: false}))
-            setIsLoading(false)
             console.log(err)
             if (err.code === -32603) {
                 toast.error(`Insufficient ${portfolioName} Balance`, {
@@ -966,7 +963,6 @@ function App() {
                     currentBnbPrice={currentBnbPrice}
                     currentSafeGasPrice={currentSafeGasPrice}
                     portfolioName={createModalPortfolioName}
-                    isLoading={isLoading}
                 />
 
                 <ProgressModal

@@ -130,7 +130,4 @@
 .create-modal-action-btn {
     margin: 21px 0;
     background-color: var(--green);
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
 }
