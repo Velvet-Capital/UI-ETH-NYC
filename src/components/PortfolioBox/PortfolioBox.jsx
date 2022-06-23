@@ -44,7 +44,6 @@ function PortfolioBox({
                         <Tippy
                             placement="top"
                             animation="scale"
-                            animateFill={true}
                             content={tippyContent}
                         >
                             <img

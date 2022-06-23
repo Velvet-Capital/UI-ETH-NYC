@@ -16,7 +16,7 @@ import Circle from "../../assets/img/circle.svg"
 function ProgressModal(props) {
 
     const {rateOfIndexToken, } = useContext(CreateModalContext)
-    console.log(rateOfIndexToken)
+
     const tokensImg = {
         BNB: BnbImg,
         META: MetaverseLogo,

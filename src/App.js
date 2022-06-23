@@ -975,6 +975,7 @@ function App() {
                     asset1Amount={progressModalInf.asset1Amount}
                     asset2Name={progressModalInf.asset2Name}
                     asset2Amount={progressModalInf.asset2Amount}
+                    transactionType={progressModalInf.transactionType}
                     currentBnbPrice={currentBnbPrice}
                     toggleProgessModal={toggleProgressModal}
                 />

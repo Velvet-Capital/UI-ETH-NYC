@@ -18,7 +18,6 @@ import * as constants from "../../utils/constants.js"
 
 function SuccessOrErrorMsgModal(props) {
     const { rateOfIndexToken } = useContext(CreateModalContext)
-    console.log(rateOfIndexToken)
 
     const tokensAddress = {
         BLUECHIP: constants.bluechipIndexContractAddressMainnet,
