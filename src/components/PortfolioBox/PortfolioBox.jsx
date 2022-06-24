@@ -104,7 +104,7 @@ function PortfolioBox({
                         data-portfolio-name={portfolioName}
                         onClick={isWalletConnected ? toggleCreateModal : toggleConnectWalletModal}
                     >
-                        {formatDecimal(indexTokenBalance) > 0 ? "Deposit/ Withdraw" : "Deposit"}
+                        {formatDecimal(indexTokenBalance) > 0 ? "Deposit / Withdraw" : "Deposit"}
                     </button>
 
                     <div className="portfolio-data">
