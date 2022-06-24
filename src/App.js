@@ -1024,91 +1024,17 @@ function App() {
 
             <div className="container">
                 {isTestnet ? (
-                    <PortfolioBox
-                        flipHandler={portfolioBoxesflipHandler}
-                        portfolioBoxSide={portfolioBox1FlipHandler}
-                        logo={VelvetCapitalLogo}
-                        title="TOP 7"
-                        portfolioName="TOP7"
-                        creator="Test"
-                        tippyContent="Top 7 Cryptocurrencies by Total Market Capitalization, Equally weighted (excluding stablecoins)"
-                        assetsImg={BluechipAssetsImg}
-                        indexTokenBalance={top7IndexBalance}
-                        currentBnbPrice={currentBnbPrice}
-                        numberOfInvestors="7,534"
-                        indexVaultBalance={top7IndexVaultBalance}
-                        tokens={top7Tokens}
-                        isWalletConnected={isWalletConnected}
-                        toggleConnectWalletModal={toggleConnectWalletModal}
-                        toggleCreateModal={toggleCreateModal}
-                    />
+                    null
                 ) : (
                     <>
                         <PortfolioBox
                             flipHandler={portfolioBoxesflipHandler}
-                            portfolioBoxSide={portfolioBox1FlipHandler}
-                            logo={VelvetCapitalLogo}
-                            title="Blue Chip"
-                            portfolioName="BLUECHIP"
-                            creator="Test"
-                            tippyContent="Top 5 Cryptocurrencies by Total Market Capitalization, Equally weighted (excluding stablecoins)"
-                            assetsImg={BluechipAssetsImg}
-                            indexTokenBalance={bluechipBalance}
-                            currentBnbPrice={currentBnbPrice}
-                            numberOfInvestors="10,534"
-                            indexVaultBalance={bluechipIndexVaultBalance}
-                            tokens={bluechipTokens}
-                            isWalletConnected={isWalletConnected}
-                            toggleConnectWalletModal={toggleConnectWalletModal}
-                            toggleCreateModal={toggleCreateModal}
-                        />
-
-                        <PortfolioBox
-                            flipHandler={portfolioBoxesflipHandler}
-                            portfolioBoxSide={portfolioBox2FlipHandler}
-                            logo={MetaverseLogo}
-                            title="Metaverse"
-                            portfolioName="META"
-                            creator="Test"
-                            tippyContent="Top 4 Tokens from the Metaverse sector on BNB chain by Total Market Capitalization, Equally weighted"
-                            assetsImg={MetaverseAssetsImg}
-                            indexTokenBalance={metaBalance}
-                            currentBnbPrice={currentBnbPrice}
-                            numberOfInvestors="8,471"
-                            indexVaultBalance={metaIndexVaultBalance}
-                            tokens={metaTokens}
-                            isWalletConnected={isWalletConnected}
-                            toggleConnectWalletModal={toggleConnectWalletModal}
-                            toggleCreateModal={toggleCreateModal}
-                        />
-
-                        <PortfolioBox
-                            flipHandler={portfolioBoxesflipHandler}
-                            portfolioBoxSide={portfolioBox4FlipHandler}
-                            logo={VenusLogo}
-                            title="Yield By Venus"
-                            portfolioName="VTOP10"
-                            creator="Test"
-                            tippyContent="Yield generating portfolio powered by Venus"
-                            assetsImg={VenusAssestsImg}
-                            indexTokenBalance={vtop10Balance}
-                            currentBnbPrice={currentBnbPrice}
-                            numberOfInvestors="5,237"
-                            indexVaultBalance={vtop10IndexVaultBalance}
-                            tokens={vtop10Tokens}
-                            isWalletConnected={isWalletConnected}
-                            toggleConnectWalletModal={toggleConnectWalletModal}
-                            toggleCreateModal={toggleCreateModal}
-                        />
-
-                        <PortfolioBox
-                            flipHandler={portfolioBoxesflipHandler}
                             portfolioBoxSide={portfolioBox3FlipHandler}
                             logo={VelvetCapitalLogo2}
-                            title="Top10"
+                            title="Top5"
                             portfolioName="TOP10"
                             creator="Test"
-                            tippyContent="Top 10 Cryptocurrencies by Total Market Capitalization, Equally weighted (excluding stablecoins)"
+                            tippyContent="Top 5 Cryptocurrencies by Total Market Capitalization, Equally weighted (excluding stablecoins)"
                             assetsImg={Top10AssestsImg}
                             indexTokenBalance={top10Balance}
                             currentBnbPrice={currentBnbPrice}
