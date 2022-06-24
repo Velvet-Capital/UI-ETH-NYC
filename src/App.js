@@ -168,6 +168,7 @@ function App() {
         else setProgressModalInf((prevState) => ({ ...prevState, show: true }))
     }
 
+    //Alert **** changes required in this function for polygon 
     function portfolioBoxesflipHandler(portfolioName) {
         if (portfolioName === "BLUECHIP" || portfolioName === "TOP7") {
             if (portfolioBox1FlipHandler === "front") setPortfolioBox1FlipHandler("back")
@@ -225,20 +226,20 @@ function App() {
                 return
             }
 
-            //switch network to bsc-testnet
+            //switch network to polygon-testnet
             await ethereum.request({
                 method: "wallet_addEthereumChain",
                 params: [
                     {
-                        chainId: "0x61",
-                        rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
-                        chainName: "BSC Testnet",
+                        chainId: "0x13881",
+                        rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
+                        chainName: "Mumbai Testnet",
                         nativeCurrency: {
-                            name: "Binance",
-                            symbol: "BNB",
+                            name: "Matic",
+                            symbol: "MATIC",
                             decimals: 18,
                         },
-                        blockExplorerUrls: ["https://testnet.bscscan.com"],
+                        blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
                     },
                 ],
             })
@@ -246,7 +247,7 @@ function App() {
             toggleHeaderDropdownMenu()
             const provider = getProviderOrSigner()
             const { chainId } = await provider.getNetwork()
-            if (chainId === 97) {
+            if (chainId === 80001) {
                 setIsTestnet(true)
                 await getBalancesTestnet(currentAccount)
             }
@@ -264,34 +265,33 @@ function App() {
                     autoClose: 5000,
                     hideProgressBar: false,
                     closeOnClick: true,
-                    pauseOnHover: true,
                     draggable: true,
                     progress: undefined,
                 })
                 return
             }
 
-            //switch network to bsc-mainnet
+            //switch network to polygon-mainnet
             await ethereum.request({
                 method: "wallet_addEthereumChain",
                 params: [
                     {
-                        chainId: "0x38",
-                        rpcUrls: ["https://bsc-dataseed.binance.org/"],
-                        chainName: "BSC Main",
+                        chainId: "0x89",
+                        rpcUrls: ["https://polygon-rpc.com"],
+                        chainName: "Polygon",
                         nativeCurrency: {
-                            name: "Binance",
-                            symbol: "BNB",
+                            name: "Matic",
+                            symbol: "MATIC",
                             decimals: 18,
                         },
-                        blockExplorerUrls: ["https://bscscan.com"],
+                        blockExplorerUrls: ["https://polygonscan.com/"],
                     },
                 ],
             })
             if (showHeaderDropdownMenu) toggleHeaderDropdownMenu()
             const provider = getProviderOrSigner()
             const { chainId } = await provider.getNetwork()
-            if (chainId === 56) {
+            if (chainId === 137) {
                 setIsTestnet(false)
                 setIsWrongNetwork(false)
                 await getBalancesMainnet(currentAccount)
@@ -325,7 +325,7 @@ function App() {
                 const provider = getProviderOrSigner()
                 if (provider) {
                     const { chainId } = await provider.getNetwork()
-                    if (chainId === 56) {
+                    if (chainId === 137) {
                         await getBalancesMainnet(accounts[0])
                         getTokensTotalSupply()
                         setIsWrongNetwork(false)
@@ -341,6 +341,8 @@ function App() {
         setIsWalletConnected(false)
         toggleHeaderDropdownMenu()
     }
+
+    //Alert **** changes required in this function for polygon 
 
     async function checkIfWalletConnected() {
         try {
@@ -389,6 +391,7 @@ function App() {
         }
     }
 
+    //Alert **** changes required in this function for polygon 
     async function checkNetwork() {
         try {
             const { ethereum } = window
@@ -452,6 +455,7 @@ function App() {
         }
     }
 
+    //Alert **** changes required in this function for polygon 
     async function getBalancesTestnet(accountAddress) {
         try {
             //Getting BNB Balance
@@ -490,6 +494,7 @@ function App() {
         }
     }
 
+    //Alert **** changes required in this function for polygon 
     async function getBalancesMainnet(accountAddress) {
         try {
             //Getting BNB Balance
@@ -663,6 +668,7 @@ function App() {
         }
     }
 
+    //Alert **** changes required in this function for polygon 
     async function getTokensTotalSupply() {
         const provider = getProviderOrSigner()
         let contract
@@ -683,6 +689,7 @@ function App() {
         setVtop10TokenTotalSupply(utils.formatEther(await contract.totalSupply()))
     }
 
+    //Alert **** changes required in this function for polygon 
     async function invest(portfolioName, amountToInvest) {
         toggleCreateModal()
         try {
@@ -788,6 +795,7 @@ function App() {
         }
     }
 
+    //Alert **** changes required in this function for polygon 
     async function withdraw(portfolioName, amountToWithdraw) {
         toggleCreateModal()
         try {
@@ -892,6 +900,7 @@ function App() {
         }
     }
 
+    //Alert **** changes required in this function for polygon 
     useEffect(() => {
         checkIfWalletConnected()
 
@@ -919,8 +928,8 @@ function App() {
         const provider = getProviderOrSigner()
         if (provider) {
             provider.getNetwork().then(({ chainId }) => {
-                if (chainId === 56) setIsWrongNetwork(false)
-                else if (chainId === 97) setIsTestnet(true)
+                if (chainId === 137) setIsWrongNetwork(false)
+                else if (chainId === 80001) setIsTestnet(true)
                 else setIsWrongNetwork(true)
             })
         }
