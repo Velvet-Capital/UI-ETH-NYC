@@ -74,13 +74,13 @@ function Header({
                             Wrong Network
                         </h2>
                         <p style={{ fontSize: "10px", fontWeight: 500 }}>
-                            Please connect to a supported network (BNB Chain)
+                            Please connect to a supported network (Polygon)
                         </p>
                         <button
                             className="btn header-wrong-network-modal-btn"
                             onClick={switchToMainnet}
                         >
-                            Switch to BNB chain
+                            Switch to Polygon
                         </button>
                     </div>
                 </>
