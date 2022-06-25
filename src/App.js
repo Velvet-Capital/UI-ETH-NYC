@@ -787,7 +787,8 @@ function App() {
                 currentAccount={currentAccount}
                 maticBalance={maticBalance}
                 totalUserValue={
-                    parseFloat(top10Balance) + 0
+                    parseFloat(metaBalance) + 
+                    parseFloat(top5DefiBalance)
                 }
                 currentMaticPrice={currentMaticPrice}
                 isTestnet={isTestnet}

@@ -3,6 +3,7 @@ import "./ConnectModal.css"
 
 import VelvetImg from "../../assets/img/velvet.svg"
 import MetamaskImg from "../../assets/img/metamask.webp"
+import WalletConnectImg from "../../assets/img/walletconnect.png"
 
 function Modal(props) {
     if (!props.show) return null
@@ -43,6 +44,11 @@ function Modal(props) {
                 <button className="connect-modal-metamask-btn fn-md" onClick={props.connectWallet}>
                     <span> Connect with Metamask</span>
                     <img src={MetamaskImg} alt="" />
+                </button>
+
+                <button className="connect-modal-metamask-btn fn-md" onClick={() => console.log("wallet Connect")}>
+                    <span> Connect with Wallet Connect</span>
+                    <img src={WalletConnectImg} alt="" />
                 </button>
 
                 <p className="text-center fn-vsm">
