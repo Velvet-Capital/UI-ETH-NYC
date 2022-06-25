@@ -4,8 +4,8 @@ import { providers, Contract, utils, BigNumber, ethers } from "ethers"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import "./styles/App.css"
-import {abi as indexSwapAbi} from "./utils/abi/IndexSwap.json"
-import {abi as indexSwapLibraryAbi} from "./utils/abi/IndexSwapLibrary.json"
+import indexSwap from "./utils/abi/IndexSwap.json"
+import indexSwapLibraryAbi from "./utils/abi/IndexSwapLibrary.json"
 
 import Header from "./components/Header/Header.jsx"
 import PortfolioBox from "./components/PortfolioBox/PortfolioBox.jsx"
@@ -33,18 +33,18 @@ function App() {
     const [showCreateModal, setShowCreateModal] = useState(false)
     const [showHeaderDropdownMenu, setShowHeaderDropdownMenu] = useState(false)
     const [magicProvider, setMagicProvider] = useState(null)
-    const [portfolioBox1FlipHandler, setPortfolioBox1FlipHandler] = useState("front")
-    const [portfolioBox2FlipHandler, setPortfolioBox2FlipHandler] = useState("front")
     const [portfolioBox3FlipHandler, setPortfolioBox3FlipHandler] = useState("front")
-    const [portfolioBox4FlipHandler, setPortfolioBox4FlipHandler] = useState("front")
+    const [top5DefiPortfolioBoxFlipHandler, setTop5DefiPortfolioBoxFlipHandler] = useState("front")
+    const [metaPortfolioBoxFlipHandler, setMetaPortfolioBoxFlipHandler] = useState("front")
     const [createModalTab, setCreateModalTab] = useState("create")
     const [maticBalance, setMaticBalance] = useState("0")
     const [top10Balance, setTop10Balance] = useState("0")
+    const [top5DefiBalance, setTop5DefiBalance] = useState("0")
+    const [metaBalance, setMetaBalance] = useState("0")
     const [currentMaticPrice, setCurrentMaticPrice] = useState(null)
     const [currentSafeGasPrice, setCurrentSafeGasPrice] = useState(null)
     const [isTestnet, setIsTestnet] = useState(false)
     const [isWrongNetwork, setIsWrongNetwork] = useState(false)
-    // const [isLoading, setIsLoading] = useState(false)
     const [createModalPortfolioName, setCreateModalPortfolioName] = useState(null)
     const [successOrErrorModalInf, setSuccessOrErrorModalInf] = useState({
         show: false,
@@ -64,20 +64,25 @@ function App() {
     })
     const [top10IndexVaultBalance, setTop10IndexVaultBalance] = useState("")
     const [top10TokenTotalSupply, setTop10TokenTotalSupply] = useState()
+    const [top5DefiIndexVaultBalance, setTop5DefiIndexVaultBalance] = useState("")
+    const [metaIndexVaultBalance, setMetaIndexVaultBalance] = useState("")
 
     const top10IndexContractAddressMainnet = constants.top10IndexContractAddressMainnet
+    const top5DefiIndexContractAddressMainnet = constants.top5DefiIndexContractAddressMainnet
+    const metaIndexContractAddressMainnet = constants.metaIndexContractAddressMainnet
 
-    const [top10Tokens, setTop10Tokens] = useState([
-        ["Bitcoin", "BTC", "0"],
-        ["Ethereum", "ETH", "0"],
-        ["XRP", "XRP", "0"],
-        ["Cardano", "ADA", "0"],
-        ["Avalanche", "AVAX", "0"],
-        ["Polkadot", "DOT", "0"],
-        ["TRON", "TRX", "0"],
-        ["Dogecoin", "DOGE", "0"],
-        ["Solana", "SOL", "0"],
-        ["BNB", "BNB", "0"],
+    const [top5DefiTokens, setTop5DefiTokens] = useState([
+        ["Maker", "MKR", "0"],
+        ["Uniswap", "UNI", "0"],
+        ["ChainLink", "LINK", "0"],
+        ["Aave", "AAVE", "0"],
+        ["COMPOUND", "COMP", "0"]
+    ])
+
+    const [metaTokens, setMetaTokens] = useState([
+        ["SandBox", "SAND", "0"],
+        ["Decentraland", "MANA", "0"],
+        ["Aavegotchi", "GHST", "0"]
     ])
 
     function checkMetamask() {
@@ -132,20 +137,18 @@ function App() {
         else setProgressModalInf((prevState) => ({ ...prevState, show: true }))
     }
 
-    //Alert **** changes required in this function for polygon 
     function portfolioBoxesflipHandler(portfolioName) {
-        if (portfolioName === "BLUECHIP" || portfolioName === "TOP7") {
-            if (portfolioBox1FlipHandler === "front") setPortfolioBox1FlipHandler("back")
-            else setPortfolioBox1FlipHandler("front")
-        } else if (portfolioName === "META") {
-            if (portfolioBox2FlipHandler === "front") setPortfolioBox2FlipHandler("back")
-            else setPortfolioBox2FlipHandler("front")
-        } else if (portfolioName === "VTOP10") {
-            if (portfolioBox4FlipHandler === "front") setPortfolioBox4FlipHandler("back")
-            else setPortfolioBox4FlipHandler("front")
-        } else if (portfolioName === "TOP10") {
+        if (portfolioName === "TOP10") {
             if (portfolioBox3FlipHandler === "front") setPortfolioBox3FlipHandler("back")
             else setPortfolioBox3FlipHandler("front")
+        }
+        else if(portfolioName === "TOP5D") {
+            if (top5DefiPortfolioBoxFlipHandler === "front") setTop5DefiPortfolioBoxFlipHandler("back")
+            else setTop5DefiPortfolioBoxFlipHandler("front")
+        }
+        else if(portfolioName === "META") {
+            if (metaPortfolioBoxFlipHandler === "front") setMetaPortfolioBoxFlipHandler("back")
+            else setMetaPortfolioBoxFlipHandler("front")
         }
     }
 
@@ -306,34 +309,20 @@ function App() {
         toggleHeaderDropdownMenu()
     }
 
-    //Alert **** changes required in this function for polygon 
-
     async function checkIfWalletConnected() {
         try {
-            const { ethereum } = window
-            if (!ethereum) {
-                toast.error("Get MetaMask -> https://metamask.io/", {
-                    position: "top-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                })
-                window.open("https://metamask.io/download/", "_blank")
-                return
-            }
+            const ethereum = checkMetamask()
+            
             const accounts = await ethereum.request({ method: "eth_accounts" })
             if (accounts.length > 0) {
                 setCurrentAccount(accounts[0])
                 setIsWalletConnected(true)
                 const provider = getProviderOrSigner()
                 provider.getNetwork().then(({ chainId }) => {
-                    if (chainId === 56) {
+                    if (chainId === 137) {
                         getTokensTotalSupply()
                         getBalancesMainnet(accounts[0])
-                    } else if (chainId === 97) getBalancesTestnet(accounts[0])
+                    } else if (chainId === 80001) getBalancesTestnet(accounts[0])
                 })
             }
         } catch (err) {
@@ -355,7 +344,6 @@ function App() {
         }
     }
 
-    //Alert **** changes required in this function for polygon 
     async function checkNetwork() {
         try {
             const ethereum = checkMetamask()
@@ -407,7 +395,6 @@ function App() {
         }
     }
 
-    //Alert **** changes required in this function for polygon 
     async function getBalancesTestnet(accountAddress) {
         try {
             //Getting matic Balance
@@ -419,70 +406,82 @@ function App() {
         }
     }
 
-    //Alert **** changes required in this function for polygon 
     async function getBalancesMainnet(accountAddress) {
         try {
             //Getting Matic Balance
             const provider = new ethers.providers.JsonRpcProvider(
-                "https://bsc-dataseed.binance.org/"
+                "https://rpc-mainnet.maticvigil.com"
             )
             if (accountAddress !== "0x0000000000000000000000000000000000000000") {
                 const maticBalance = utils.formatEther(await provider.getBalance(accountAddress))
                 setMaticBalance(maticBalance)
             }
-
-            //Getting BLUECHIP Balance
-            const bluechipContract = new Contract(
-                bluechipIndexContractAddressMainnet,
-                indexSwapAbi,
+            
+            //Getting TOP-5-DEFI Balance
+            const top5DefiContract = new Contract(
+                top5DefiIndexContractAddressMainnet,
+                indexSwap.abi,
                 provider
             )
-            const bluechipBalance = utils.formatEther(
-                await bluechipContract.balanceOf(accountAddress)
-            )
-            setBluechipBalance(bluechipBalance)
-            //Getting BLUECHIP Vault Balance
-            const [bluechipTokensBalance, bluechipIndexVaultBalance] =
-                await bluechipContract.getTokenAndVaultBalance()
-            setBluechipIndexVaultBalance(utils.formatEther(bluechipIndexVaultBalance))
-            //Getting BLUECHIP Tokens Weight
-            let bluechipTokensInformation = bluechipTokens
-            bluechipTokensBalance.forEach((tokenBalance, index) => {
-                bluechipTokensInformation[index][2] = (
-                    (utils.formatEther(tokenBalance) /
-                        utils.formatEther(bluechipIndexVaultBalance)) *
-                    100
-                ).toFixed(1)
-            })
-            bluechipTokensInformation.sort(function (a, b) {
-                return b[2] - a[2]
-            })
-            setBluechipTokens(bluechipTokensInformation)
+            const top5DefiBalance = utils.formatEther(await top5DefiContract.balanceOf(accountAddress))
+            setTop5DefiBalance(top5DefiBalance)
 
-            //Getting TOP10 Balance
-            const top10Contract = new Contract(
-                top10IndexContractAddressMainnet,
-                indexSwapAbi,
+            //Getting TOP-5-DEFI Vault Balance
+            const top5DefiLibraryContract = new Contract(
+                "0xe0406D86aEb9B3b5dbE94d4C9d394A164E67a6ac",
+                indexSwapLibraryAbi.abi,
                 provider
             )
-            const top10Balance = utils.formatEther(await top10Contract.balanceOf(accountAddress))
-            setTop10Balance(top10Balance)
-            //Getting TOP10 Vault Balance
-            const [top10TokensBalance, top10IndexVaultBalance] =
-                await top10Contract.getTokenAndVaultBalance()
-            setTop10IndexVaultBalance(utils.formatEther(top10IndexVaultBalance))
-            //Getting TOP10 Tokens Weight
-            let top10TokensInformation = top10Tokens
-            top10TokensBalance.forEach((tokenBalance, index) => {
-                top10TokensInformation[index][2] = (
-                    (utils.formatEther(tokenBalance) / utils.formatEther(top10IndexVaultBalance)) *
-                    100
+            const [top5DefiTokensBalance, top5DefiIndexVaultBalance] =
+                await top5DefiLibraryContract.getTokenAndVaultBalance(top5DefiIndexContractAddressMainnet)
+            setTop5DefiIndexVaultBalance(utils.formatEther(top5DefiIndexVaultBalance))
+
+            //Getting TOP-5-DEFI Tokens Weight
+            let top5DefiTokensInformation = top5DefiTokens
+            top5DefiTokensBalance.forEach((tokenBalance, index) => {
+                top5DefiTokensInformation[index][2] = (
+                    (tokenBalance / top5DefiIndexVaultBalance) * 100
                 ).toFixed(1)
             })
-            top10TokensInformation.sort(function (a, b) {
+            top5DefiTokensInformation.sort(function (a, b) {
                 return b[2] - a[2]
             })
-            setTop10Tokens(top10TokensInformation)     
+            setTop5DefiTokens(top5DefiTokensInformation)
+            // console.log(top5DefiTokensBalance.map(ele => ele.toString()))
+            // console.log(top5DefiIndexVaultBalance.toString())
+
+            //Getting META Balance
+            const metaContract = new Contract(
+                metaIndexContractAddressMainnet,
+                indexSwap.abi,
+                provider
+            )
+            const metaBalance = utils.formatEther(await metaContract.balanceOf(accountAddress))
+            setMetaBalance(metaBalance)
+
+            //Getting META Vault Balance
+            const metaLibraryContract = new Contract(
+                "0x13b1b380FeC7737C435bCDd59c02F7D0EC1076C3",
+                indexSwapLibraryAbi.abi,
+                provider
+            )
+            const [metaTokensBalance, metaIndexVaultBalance] =
+                await metaLibraryContract.getTokenAndVaultBalance(metaIndexContractAddressMainnet)
+            setMetaIndexVaultBalance(utils.formatEther(metaIndexVaultBalance))
+
+            //Getting META Tokens Weight
+            let metaTokensInformation = metaTokens
+            metaTokensBalance.forEach((tokenBalance, index) => {
+                metaTokensInformation[index][2] = (
+                    (tokenBalance / metaIndexVaultBalance) * 100
+                ).toFixed(1)
+            })
+            metaTokensInformation.sort(function (a, b) {
+                return b[2] - a[2]
+            })
+            setMetaTokens(metaTokensInformation)
+    
+
         } catch (err) {
             console.log(err)
         }
@@ -492,24 +491,11 @@ function App() {
     async function getTokensTotalSupply() {
         const provider = getProviderOrSigner()
         let contract
-        //Getting META Token Total Supply
-        contract = new Contract(metaIndexContractAddressMainnet, indexSwapAbi, provider)
-        setMetaTokenTotalSupply(utils.formatEther(await contract.totalSupply()))
-
-        //Getting BLUECHIP Token Total Supply
-        contract = new Contract(bluechipIndexContractAddressMainnet, indexSwapAbi, provider)
-        setBluechipTokenTotalSupply(utils.formatEther(await contract.totalSupply()))
-
         //Getting TOP10 Token Total Supply
-        contract = new Contract(top10IndexContractAddressMainnet, indexSwapAbi, provider)
+        contract = new Contract(top10IndexContractAddressMainnet, indexSwap.abi, provider)
         setTop10TokenTotalSupply(utils.formatEther(await contract.totalSupply()))
-
-        //Getting VTOP10 Token Total Supply
-        contract = new Contract(top10VenusContractAddressMainnet, indexSwapAbi, provider)
-        setVtop10TokenTotalSupply(utils.formatEther(await contract.totalSupply()))
     }
 
-    //Alert **** changes required in this function for polygon 
     async function invest(portfolioName, amountToInvest) {
         toggleCreateModal()
         try {
@@ -517,23 +503,18 @@ function App() {
             const signer = getProviderOrSigner(true)
             let contract
             console.log(portfolioName)
-            if (portfolioName === "META") {
-                contract = new Contract(metaIndexContractAddressMainnet, indexSwapAbi, signer)
-            } else if (portfolioName === "BLUECHIP") {
-                contract = new Contract(bluechipIndexContractAddressMainnet, indexSwapAbi, signer)
-            } else if (portfolioName === "TOP10") {
-                contract = new Contract(top10IndexContractAddressMainnet, indexSwapAbi, signer)
-            } else if (portfolioName === "VTOP10") {
-                contract = new Contract(top10VenusContractAddressMainnet, Top10Venus.abi, signer)
-            } else if (portfolioName === "TOP7") {
-                contract = new Contract(top7IndexContractAddressTestnet, indexSwapAbi, signer)
-            }
+            if (portfolioName === "TOP10") 
+                contract = new Contract(top10IndexContractAddressMainnet, indexSwap.abi, signer)
+            else if(portfolioName === "TOP5D")
+                contract = new Contract(top5DefiIndexContractAddressMainnet, indexSwap.abi, signer)
+            else if(portfolioName === "META")
+                contract = new Contract(metaIndexContractAddressMainnet, indexSwap.abi, signer)
 
             //showing progress Modal till transaction is not mined
             setProgressModalInf({
                 show: true,
                 transactionType: "invest",
-                asset1Name: "BNB",
+                asset1Name: "MATIC",
                 asset1Amount: utils.formatEther(amountToInvest),
                 asset2Name: portfolioName,
                 asset2Amount: utils.formatEther(amountToInvest),
@@ -541,12 +522,7 @@ function App() {
 
             let txHash
             let tx
-            if (portfolioName === "VTOP10")
-                tx = await contract.investInFund({
-                    value: amountToInvest.toString(),
-                    gasLimit: 6500000,
-                })
-            else tx = await contract.investInFund({ value: amountToInvest, gasLimit: 2220806 })
+            tx = await contract.investInFund({ value: amountToInvest, gasLimit: 2000000 })
             txHash = tx.hash
             const receipt = tx.wait()
 
@@ -615,7 +591,6 @@ function App() {
         }
     }
 
-    //Alert **** changes required in this function for polygon 
     async function withdraw(portfolioName, amountToWithdraw) {
         toggleCreateModal()
         try {
@@ -623,17 +598,14 @@ function App() {
             const signer = getProviderOrSigner(true)
             let contract
             console.log(portfolioName)
-            if (portfolioName === "META") {
-                contract = new Contract(metaIndexContractAddressMainnet, indexSwapAbi, signer)
-            } else if (portfolioName === "BLUECHIP") {
-                contract = new Contract(bluechipIndexContractAddressMainnet, indexSwapAbi, signer)
-            } else if (portfolioName === "TOP10") {
-                contract = new Contract(top10IndexContractAddressMainnet, indexSwapAbi, signer)
-            } else if (portfolioName === "VTOP10") {
-                contract = new Contract(top10VenusContractAddressMainnet, Top10Venus.abi, signer)
-            } else if (portfolioName === "TOP7") {
-                contract = new Contract(top7IndexContractAddressTestnet, indexSwapAbi, signer)
-            }
+
+            if(portfolioName === "TOP10")
+                contract = new Contract(top10IndexContractAddressMainnet, indexSwap.abi, signer)
+            else if(portfolioName === "TOP5D")
+                contract = new Contract(top5DefiIndexContractAddressMainnet, indexSwap.abi, signer)
+            else if(portfolioName === "META")
+                contract = new Contract(metaIndexContractAddressMainnet, indexSwap.abi, signer)
+            
 
             //showing progress Modal till transaction is not mined
             setProgressModalInf({
@@ -641,17 +613,13 @@ function App() {
                 transactionType: "withdraw",
                 asset1Name: portfolioName,
                 asset1Amount: utils.formatEther(amountToWithdraw),
-                asset2Name: "BNB",
+                asset2Name: "MATIC",
                 asset2Amount: utils.formatEther(amountToWithdraw),
             })
 
             let txHash
             let tx
-            if (portfolioName === "VTOP10")
-                tx = await contract.withdrawFromFundNew(amountToWithdraw.toString(), {
-                    gasLimit: 7440729,
-                })
-            else tx = await contract.withdrawFromFundNew(amountToWithdraw.toString())
+            await contract.withdrawFund(amountToWithdraw.toString())
             txHash = tx.hash
             const receipt = tx.wait()
 
@@ -720,7 +688,6 @@ function App() {
         }
     }
 
-    //Alert **** changes required in this function for polygon 
     useEffect(() => {
         checkIfWalletConnected()
 
@@ -735,7 +702,7 @@ function App() {
 
                 //fetching current safe gas price
                 fetch(
-                    "https://api.bscscan.com/api?module=gastracker&action=gasoracle&apikey=AJ4KP2CIWV6DWF2SSPQ5SX16C9YZ78B2B4"
+                    "https://api.polygonscan.com/api?module=gastracker&action=gasoracle&apikey=HDQTYF73Q2JJZBE6YNMZ1Q3HXIZYF9VI97"
                 )
                     .then((res) => res.json())
                     .then((data) => {
@@ -776,7 +743,11 @@ function App() {
                     withdraw={withdraw}
                     maticBalance={maticBalance}
                     top10Balance={top10Balance}
+                    top5DefiBalance={top5DefiBalance}
+                    metaBalance={metaBalance}
                     top10IndexVaultBalance={top10IndexVaultBalance}
+                    top5DefiIndexVaultBalance={top5DefiIndexVaultBalance}
+                    metaIndexVaultBalance={metaIndexVaultBalance}
                     top10TokenTotalSupply={top10TokenTotalSupply}
                     currentMaticPrice={currentMaticPrice}
                     currentSafeGasPrice={currentSafeGasPrice}
@@ -835,18 +806,37 @@ function App() {
                     <>
                         <PortfolioBox
                             flipHandler={portfolioBoxesflipHandler}
-                            portfolioBoxSide={portfolioBox3FlipHandler}
-                            logo={VelvetCapitalLogo2}
-                            title="Top5"
-                            portfolioName="TOP10"
+                            portfolioBoxSide={top5DefiPortfolioBoxFlipHandler}
+                            logo={VelvetCapitalLogo}
+                            title="Top 5 DEFI"
+                            portfolioName="TOP5D"
                             creator="Test"
-                            tippyContent="Top 5 Cryptocurrencies by Total Market Capitalization, Equally weighted (excluding stablecoins)"
+                            tippyContent="Top 5 DEFI Tokens by Total Market Capitalization, Equally weighted"
                             assetsImg={Top10AssestsImg}
-                            indexTokenBalance={top10Balance}
+                            indexTokenBalance={top5DefiBalance}
+                            currentMaticPrice={currentMaticPrice}
+                            indexVaultBalance={top5DefiIndexVaultBalance}
+                            tokens={top5DefiTokens}
+                            numberOfInvestors="4,519"
+                            isWalletConnected={isWalletConnected}
+                            toggleConnectWalletModal={toggleConnectWalletModal}
+                            toggleCreateModal={toggleCreateModal}
+                        />
+
+                        <PortfolioBox
+                            flipHandler={portfolioBoxesflipHandler}
+                            portfolioBoxSide={metaPortfolioBoxFlipHandler}
+                            logo={MetaverseLogo}
+                            title="Metaverse"
+                            portfolioName="META"
+                            creator="Test"
+                            tippyContent="Top 3 Metaverse Tokens by Total Market Capitalization, Equally weighted"
+                            assetsImg={MetaverseAssetsImg}
+                            indexTokenBalance={metaBalance}
+                            indexVaultBalance={metaIndexVaultBalance}
+                            tokens={metaTokens}
                             currentMaticPrice={currentMaticPrice}
                             numberOfInvestors="4,519"
-                            indexVaultBalance={top10IndexVaultBalance}
-                            tokens={top10Tokens}
                             isWalletConnected={isWalletConnected}
                             toggleConnectWalletModal={toggleConnectWalletModal}
                             toggleCreateModal={toggleCreateModal}

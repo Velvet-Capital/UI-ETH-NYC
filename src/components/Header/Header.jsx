@@ -19,24 +19,26 @@ function Header({
     showHeaderDropdownMenu,
     isWalletConnected,
     currentAccount,
-    bnbBalance,
+    maticBalance,
     totalUserValue,
-    currentBnbPrice,
+    currentMaticPrice,
     isTestnet,
     isWrongNetwork,
     switchToMainnet,
     switchToTestnet,
     disconnectWallet,
 }) {
-    const totalUserValueInDollar = parseFloat(totalUserValue * currentBnbPrice).toLocaleString(
+    const totalUserValueInDollar = parseFloat(totalUserValue * currentMaticPrice).toLocaleString(
         "en-US",
         { maximumFractionDigits: 2 }
     )
 
     function copyWalletAddress(portfolioName) {
-        console.log(currentAccount)
         navigator.clipboard.writeText(currentAccount)
     }
+
+    // console.log(maticBalance)
+    // console.log(currentMaticPrice)
 
     return (
         <div className="header">
@@ -147,7 +149,7 @@ function Header({
                         <p className="fn-vsm">Wallet balance</p>
                         <span className="c-purple font-semibold">
                             $
-                            {(bnbBalance * currentBnbPrice).toLocaleString("en-US", {
+                            {(maticBalance * currentMaticPrice).toLocaleString("en-US", {
                                 maximumFractionDigits: 1,
                             })}
                         </span>

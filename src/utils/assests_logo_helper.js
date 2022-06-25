@@ -14,6 +14,11 @@ import DogeImg from "../assets/img/doge.png"
 import CakeImg from "../assets/img/cake.png"
 import BchImg from "../assets/img/bch.png"
 import FilImg from "../assets/img/fil.png"
+import MkrImg from "../assets/img/mkr.png"
+import UniImg from "../assets/img/uni.png"
+import LinkImg from "../assets/img/link.png"
+import AaveImg from "../assets/img/aave.png"
+import CompImg from "../assets/img/comp.png"
 
 export default {
     BTC: BtcImg,
@@ -32,4 +37,10 @@ export default {
     CAKE: CakeImg,
     BCH: BchImg,
     FIL: FilImg,
+    MKR: MkrImg,
+    LINK: LinkImg,
+    UNI: UniImg,
+    AAVE: AaveImg,
+    GHST: AaveImg,
+    COMP: CompImg
 }

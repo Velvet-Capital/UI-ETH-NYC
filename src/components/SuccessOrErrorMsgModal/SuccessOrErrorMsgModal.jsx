@@ -6,11 +6,10 @@ import CreateModalContext from "../../context/CreateModal/CreateModalContext"
 import CrossImg from "../../assets/img/cross.svg"
 import SuccessImg from "../../assets/img/success-mark.svg"
 import ErrorImg from "../../assets/img/error-mark.svg"
-import BnbImg from "../../assets/img/bnb.png"
+import MaticImg from "../../assets/img/matic.png"
 import VelvetCapitalLogo from "../../assets/img/newvelvetcapitallogo.svg"
 import VelvetCapitalLogo2 from "../../assets/img/velvetcapitallogo2.svg"
 import MetaverseLogo from "../../assets/img/metaverse.svg"
-import VenusLogo from "../../assets/img/venuslogo.png"
 import StraightLine from "../../assets/img/straightline.svg"
 import Circle from "../../assets/img/circle.svg"
 
@@ -20,19 +19,13 @@ function SuccessOrErrorMsgModal(props) {
     const { rateOfIndexToken } = useContext(CreateModalContext)
 
     const tokensAddress = {
-        BLUECHIP: constants.bluechipIndexContractAddressMainnet,
-        META: constants.metaIndexContractAddressMainnet,
-        TOP10: constants.top10IndexContractAddressMainnet,
-        VTOP10: constants.top10VenusContractAddressMainnet,
-        TOP7: constants.top7IndexContractAddressTestnet,
+        TOP5D: constants.top5DefiIndexContractAddressMainnet,
+        META: constants.metaIndexContractAddressMainnet
     }
 
     const indexTokensImg = {
         META: MetaverseLogo,
-        BLUECHIP: VelvetCapitalLogo,
-        TOP10: VelvetCapitalLogo2,
-        TOP7: VelvetCapitalLogo,
-        VTOP10: VenusLogo,
+        TOP5D: VelvetCapitalLogo,
     }
 
     async function addTokenToWallet(tokenAddress, tokenSymbol) {
@@ -72,10 +65,10 @@ function SuccessOrErrorMsgModal(props) {
                         {props.transactionType === "invest" ? (
                             <>
                                 <div className="success-or-error-msg-modal-invested-or-redeemed-amount">
-                                    <p className="c-purple">{props.amount} BNB</p>
+                                    <p className="c-purple">{props.amount} MATIC</p>
                                     <p className="text-center fn-sm c-grey">
                                         ~${" "}
-                                        {(props.amount * props.currentBnbPrice).toLocaleString(
+                                        {(props.amount * props.currentMaticPrice).toLocaleString(
                                             "en-US",
                                             { maximumFractionDigits: 1 }
                                         )}
@@ -96,12 +89,12 @@ function SuccessOrErrorMsgModal(props) {
                                         {(
                                             props.amount *
                                             rateOfIndexToken *
-                                            props.currentBnbPrice
+                                            props.currentMaticPrice
                                         ).toLocaleString("en-US", { maximumFractionDigits: 1 })}
                                     </p>
                                 </div>
                                 <p className="success-or-error-msg-modal-received-amount c-purple">
-                                    ~{(props.amount * rateOfIndexToken).toFixed(4)} BNB
+                                    ~{(props.amount * rateOfIndexToken).toFixed(4)} MATIC
                                 </p>
                             </>
                         )}
@@ -119,7 +112,7 @@ function SuccessOrErrorMsgModal(props) {
                                     style={{ position: "absolute", right: "-20%", top: "-18%" }}
                                 />
                                 {props.transactionType === "invest" ? (
-                                    <img src={BnbImg} alt="" style={{ width: "50px" }} />
+                                    <img src={MaticImg} alt="" style={{ width: "50px" }} />
                                 ) : (
                                     <img
                                         src={indexTokensImg[props.portfolioName]}
@@ -138,7 +131,7 @@ function SuccessOrErrorMsgModal(props) {
                                     style={{ position: "absolute", left: "-20%", top: "-18%" }}
                                 />
                                 {props.transactionType !== "invest" ? (
-                                    <img src={BnbImg} alt="" style={{ width: "50px" }} />
+                                    <img src={MaticImg} alt="" style={{ width: "50px" }} />
                                 ) : (
                                     <img
                                         src={indexTokensImg[props.portfolioName]}
@@ -158,8 +151,8 @@ function SuccessOrErrorMsgModal(props) {
                         {props.transactionType === "invest" ? (
                             <>
                                 <p className="success-or-error-msg-modal-message c-purple text-center fn-md">
-                                    You have successfully deposited {props.amount} BNB (~$
-                                    {(props.amount * props.currentBnbPrice).toLocaleString(
+                                    You have successfully deposited {props.amount} MATIC (~$
+                                    {(props.amount * props.currentMaticPrice).toLocaleString(
                                         "en-US",
                                         { maximumFractionDigits: 1 }
                                     )}
@@ -202,7 +195,7 @@ function SuccessOrErrorMsgModal(props) {
                                     <p className="c-purple">{props.amount} BNB</p>
                                     <p className="text-center fn-sm c-grey">
                                         ~${" "}
-                                        {(props.amount * props.currentBnbPrice).toLocaleString(
+                                        {(props.amount * props.currentMaticPrice).toLocaleString(
                                             "en-US",
                                             { maximumFractionDigits: 1 }
                                         )}
@@ -228,7 +221,7 @@ function SuccessOrErrorMsgModal(props) {
                                     </p>
                                 </div>
                                 <p className="success-or-error-msg-modal-received-amount c-purple">
-                                    ~{(props.amount * rateOfIndexToken).toFixed(4)} BNB
+                                    ~{(props.amount * rateOfIndexToken).toFixed(4)} MATIC
                                 </p>
                             </>
                         )}
@@ -246,7 +239,7 @@ function SuccessOrErrorMsgModal(props) {
                                     style={{ position: "absolute", right: "-20%", top: "-18%" }}
                                 />
                                 {props.transactionType === "invest" ? (
-                                    <img src={BnbImg} alt="" style={{ width: "50px" }} />
+                                    <img src={MaticImg} alt="" style={{ width: "50px" }} />
                                 ) : (
                                     <img
                                         src={indexTokensImg[props.portfolioName]}
@@ -265,7 +258,7 @@ function SuccessOrErrorMsgModal(props) {
                                     style={{ position: "absolute", left: "-20%", top: "-18%" }}
                                 />
                                 {props.transactionType !== "invest" ? (
-                                    <img src={BnbImg} alt="" style={{ width: "50px" }} />
+                                    <img src={MaticImg} alt="" style={{ width: "50px" }} />
                                 ) : (
                                     <img
                                         src={indexTokensImg[props.portfolioName]}
@@ -296,13 +289,14 @@ function SuccessOrErrorMsgModal(props) {
                         </button>
                     </>
                 )}
+
                 <a
                     className="success-or-error-msg-modal-blockexplorer-link"
-                    href={`https://bscscan.com/tx/${props.txHash}`}
+                    href={`https://polygonscan.com/tx/${props.txHash}`}
                     target="_blank"
                     rel="noreferrer"
                 >
-                    <p className="text-center font-semibold c-purple"> View Txn On Bscscan </p>
+                    <p className="text-center font-semibold c-purple"> View Txn On Polyscan </p>
                 </a>
             </div>
         </>

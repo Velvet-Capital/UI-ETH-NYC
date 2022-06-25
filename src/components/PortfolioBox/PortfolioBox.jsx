@@ -21,7 +21,7 @@ function PortfolioBox({
     tippyContent,
     assetsImg,
     indexTokenBalance,
-    currentBnbPrice,
+    currentMaticPrice,
     numberOfInvestors,
     indexVaultBalance,
     tokens,
@@ -88,7 +88,7 @@ function PortfolioBox({
                             }
                         >
                             ${" "}
-                            {(indexTokenBalance * currentBnbPrice).toLocaleString("en-US", {
+                            {(indexTokenBalance * currentMaticPrice).toLocaleString("en-US", {
                                 maximumFractionDigits: 1,
                             })}
                         </span>
@@ -129,7 +129,7 @@ function PortfolioBox({
                             <div className="right">
                                 <img src={DollarImg} alt="" />
                                 <span className="marketcap fn-sm">
-                                    {(indexVaultBalance * currentBnbPrice).toLocaleString("en-US", {
+                                    {(indexVaultBalance * currentMaticPrice).toLocaleString("en-US", {
                                         maximumFractionDigits: 1,
                                     })}
                                 </span>

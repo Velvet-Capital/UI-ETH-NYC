@@ -8,8 +8,7 @@ import CrossImg from "../../assets/img/cross.svg"
 import VelvetCapitalLogo from "../../assets/img/newvelvetcapitallogo.svg"
 import VelvetCapitalLogo2 from "../../assets/img/velvetcapitallogo2.svg"
 import MetaverseLogo from "../../assets/img/metaverse.svg"
-import VenusLogo from "../../assets/img/venuslogo.png"
-import BnbImg from "../../assets/img/bnb.png"
+import MaticImg from "../../assets/img/matic.png"
 
 import formatDecimal from "../../utils/formatDecimal"
 
@@ -24,25 +23,18 @@ function CreateModal(props) {
     let indexTokenVaultBalance
     let indexTokenTotalSupply
 
-    if (props.portfolioName === "META") {
-        indexTokenBalance = props.metaBalance
-        indexTokenVaultBalance = props.metaIndexVaultBalance
-        indexTokenTotalSupply = props.metaTokenTotalSupply
-    } else if (props.portfolioName === "BLUECHIP") {
-        indexTokenBalance = props.bluechipBalance
-        indexTokenVaultBalance = props.bluechipIndexVaultBalance
-        indexTokenTotalSupply = props.bluechipTokenTotalSupply
-    } else if (props.portfolioName === "TOP10") {
+    if (props.portfolioName === "TOP10") {
         indexTokenBalance = props.top10Balance
         indexTokenVaultBalance = props.top10IndexVaultBalance
         indexTokenTotalSupply = props.top10TokenTotalSupply
-    } else if (props.portfolioName === "TOP7") {
-        indexTokenBalance = props.top7Balance
-        indexTokenVaultBalance = props.top7IndexVaultBalance
-    } else if (props.portfolioName === "VTOP10") {
-        indexTokenBalance = props.vtop10Balance
-        indexTokenVaultBalance = props.vtop10IndexVaultBalance
-        indexTokenTotalSupply = props.vtop10TokenTotalSupply
+    }
+    else if(props.portfolioName === "TOP5D") {
+        indexTokenBalance = props.top5DefiBalance 
+        indexTokenVaultBalance = props.top5DefiIndexVaultBalance
+    }
+    else if(props.portfolioName === "META") {
+        indexTokenBalance = props.metaBalance 
+        indexTokenVaultBalance = props.metaIndexVaultBalance
     }
 
     useEffect(() => {
@@ -59,35 +51,27 @@ function CreateModal(props) {
     }
 
     const createModalTitle = {
-        META: "Metaverse",
-        BLUECHIP: "Bluechip",
         TOP10: "TOP10",
-        TOP7: "TOP7",
-        VTOP10: "Yield By Venus",
+        TOP5D: "Top 5 DEFI",
+        META: "Metaverse"
     }
 
     const createModalImg = {
-        META: MetaverseLogo,
-        BLUECHIP: VelvetCapitalLogo,
         TOP10: VelvetCapitalLogo2,
-        TOP7: VelvetCapitalLogo,
-        VTOP10: VenusLogo,
+        TOP5D: VelvetCapitalLogo,
+        META: MetaverseLogo
     }
 
     const gasRequiredForInvest = {
-        META: 650000,
-        BLUECHIP: 900000,
         TOP10: 1660000,
-        VTOP10: 4595971,
-        TOP7: 900000,
+        TOP5D: 1000000,
+        META: 1000000
     }
 
     const gasRequiredForWithdraw = {
-        META: 600000,
-        BLUECHIP: 800000,
         TOP10: 1600000,
-        VTOP10: 4200000,
-        TOP7: 800000,
+        TOP5D: 900000,
+        META: 900000
     }
 
     let portfolioInvestGasFee, portofolioWithdrawGasFee
@@ -95,12 +79,12 @@ function CreateModal(props) {
         portfolioInvestGasFee = parseFloat(
             utils.formatEther(utils.parseUnits(props.currentSafeGasPrice, "gwei")) *
                 gasRequiredForInvest[props.portfolioName] *
-                props.currentBnbPrice
+                props.currentMaticPrice
         ).toFixed(2)
         portofolioWithdrawGasFee = parseFloat(
             utils.formatEther(utils.parseUnits(props.currentSafeGasPrice, "gwei")) *
                 gasRequiredForWithdraw[props.portfolioName] *
-                props.currentBnbPrice
+                props.currentMaticPrice
         ).toFixed(2)
     }
 
@@ -138,7 +122,7 @@ function CreateModal(props) {
                         className="cursor-pointer"
                         onClick={() => {
                             props.toggleCreateModalTab()
-                            checkHasEnoughFunds(amount.toString(), props.bnbBalance)
+                            checkHasEnoughFunds(amount.toString(), props.maticBalance)
                         }}
                     >
                         <span className={props.createModalTab === "redeem" && "unactive"}>
@@ -170,7 +154,7 @@ function CreateModal(props) {
                         <div className="create-modal-asset-dropdown flex">
                             {props.createModalTab === "create" ? (
                                 <>
-                                    <img src={BnbImg} alt="" />
+                                    <img src={MaticImg} alt="" />
                                     <span
                                         style={{
                                             fontSize: "16px",
@@ -178,7 +162,7 @@ function CreateModal(props) {
                                             color: "#262626",
                                         }}
                                     >
-                                        BNB
+                                        MATIC
                                     </span>
                                 </>
                             ) : (
@@ -199,10 +183,10 @@ function CreateModal(props) {
                         <span className="fn-sm create-modal-amount-input-balance">
                             ~ $
                             {props.createModalTab === "create"
-                                ? (amount * props.currentBnbPrice).toLocaleString("en-US", {
+                                ? (amount * props.currentMaticPrice).toLocaleString("en-US", {
                                       maximumFractionDigits: 2,
                                   })
-                                : (amount * rateOfIndexToken * props.currentBnbPrice ).toLocaleString("en-US", {
+                                : (amount * rateOfIndexToken * props.currentMaticPrice ).toLocaleString("en-US", {
                                       maximumFractionDigits: 2,
                                   })}
                         </span>
@@ -211,7 +195,7 @@ function CreateModal(props) {
                             className={hasEnoughFunds ? "block" : "block border-red"}
                             placeholder={
                                 props.createModalTab === "create"
-                                    ? "max " + formatDecimal(props.bnbBalance) + " BNB"
+                                    ? "max " + formatDecimal(props.maticBalance) + " MATIC"
                                     : "max " +
                                       formatDecimal(indexTokenBalance) +
                                       " " +
@@ -254,7 +238,7 @@ function CreateModal(props) {
                     </p>
                 ) : (
                     <p className="create-modal-inf font-normal fn-sm text-center c-purple">
-                        You will get ~ {(amount.toString() * rateOfIndexToken).toFixed(5)} BNB
+                        You will get ~ {(amount.toString() * rateOfIndexToken).toFixed(5)} MATIC
                     </p>
                 )}
 

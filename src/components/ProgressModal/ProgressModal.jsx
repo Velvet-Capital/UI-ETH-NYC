@@ -5,11 +5,10 @@ import Spinner from "../Spinner/Spinner"
 
 import CreateModalContext from "../../context/CreateModal/CreateModalContext"
 
-import BnbImg from "../../assets/img/bnb.png"
+import MaticImg from "../../assets/img/matic.png"
 import VelvetCapitalLogo from "../../assets/img/newvelvetcapitallogo.svg"
 import VelvetCapitalLogo2 from "../../assets/img/velvetcapitallogo2.svg"
 import MetaverseLogo from "../../assets/img/metaverse.svg"
-import VenusLogo from "../../assets/img/venuslogo.png"
 import StraightLine from "../../assets/img/straightline.svg"
 import Circle from "../../assets/img/circle.svg"
 
@@ -18,12 +17,9 @@ function ProgressModal(props) {
     const {rateOfIndexToken, } = useContext(CreateModalContext)
 
     const tokensImg = {
-        BNB: BnbImg,
+        MATIC: MaticImg,
         META: MetaverseLogo,
-        BLUECHIP: VelvetCapitalLogo,
-        TOP10: VelvetCapitalLogo2,
-        TOP7: VelvetCapitalLogo,
-        VTOP10: VenusLogo,
+        TOP5D: VelvetCapitalLogo,
     }
 
     if (!props.show) return null
@@ -39,11 +35,11 @@ function ProgressModal(props) {
                     <p className="text-center fn-sm c-grey">
                         ~${" "}
                         {props.transactionType === "invest" ? (
-                            (props.asset1Amount * props.currentBnbPrice).toLocaleString("en-US", {
+                            (props.asset1Amount * props.currentMaticPrice).toLocaleString("en-US", {
                                 maximumFractionDigits: 1,
                             })
                         ) : (
-                            (props.asset1Amount * rateOfIndexToken * props.currentBnbPrice).toLocaleString("en-US", {
+                            (props.asset1Amount * rateOfIndexToken * props.currentMaticPrice).toLocaleString("en-US", {
                                 maximumFractionDigits: 1
                             })
                         )}
