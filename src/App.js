@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Magic } from "magic-sdk"
+// import WalletConnectProvider from "@walletconnect/web3-provider";
 import { providers, Contract, utils, BigNumber, ethers } from "ethers"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
@@ -33,12 +34,11 @@ function App() {
     const [showCreateModal, setShowCreateModal] = useState(false)
     const [showHeaderDropdownMenu, setShowHeaderDropdownMenu] = useState(false)
     const [magicProvider, setMagicProvider] = useState(null)
-    const [portfolioBox3FlipHandler, setPortfolioBox3FlipHandler] = useState("front")
+    const [provider, setProvider] = useState(null)
     const [top5DefiPortfolioBoxFlipHandler, setTop5DefiPortfolioBoxFlipHandler] = useState("front")
     const [metaPortfolioBoxFlipHandler, setMetaPortfolioBoxFlipHandler] = useState("front")
     const [createModalTab, setCreateModalTab] = useState("create")
     const [maticBalance, setMaticBalance] = useState("0")
-    const [top10Balance, setTop10Balance] = useState("0")
     const [top5DefiBalance, setTop5DefiBalance] = useState("0")
     const [metaBalance, setMetaBalance] = useState("0")
     const [currentMaticPrice, setCurrentMaticPrice] = useState(null)
@@ -62,12 +62,9 @@ function App() {
         asset2Name: "",
         asset2Amount: ""
     })
-    const [top10IndexVaultBalance, setTop10IndexVaultBalance] = useState("")
-    const [top10TokenTotalSupply, setTop10TokenTotalSupply] = useState()
     const [top5DefiIndexVaultBalance, setTop5DefiIndexVaultBalance] = useState("")
     const [metaIndexVaultBalance, setMetaIndexVaultBalance] = useState("")
 
-    const top10IndexContractAddressMainnet = constants.top10IndexContractAddressMainnet
     const top5DefiIndexContractAddressMainnet = constants.top5DefiIndexContractAddressMainnet
     const metaIndexContractAddressMainnet = constants.metaIndexContractAddressMainnet
 
@@ -138,11 +135,7 @@ function App() {
     }
 
     function portfolioBoxesflipHandler(portfolioName) {
-        if (portfolioName === "TOP10") {
-            if (portfolioBox3FlipHandler === "front") setPortfolioBox3FlipHandler("back")
-            else setPortfolioBox3FlipHandler("front")
-        }
-        else if(portfolioName === "TOP5D") {
+        if(portfolioName === "TOP5D") {
             if (top5DefiPortfolioBoxFlipHandler === "front") setTop5DefiPortfolioBoxFlipHandler("back")
             else setTop5DefiPortfolioBoxFlipHandler("front")
         }
@@ -267,6 +260,22 @@ function App() {
             console.log(err)
         }
     }
+
+    async function connectWalletWithWalletConnect() {
+        try {
+            // const provider = new WalletConnectProvider({
+            //     infuraId: "0256b551e86c73001408616c2984b098",
+            // });
+            // await provider.enable();
+            // const web3Provider = new providers.Web3Provider(provider)
+            // setProvider(web3Provider);
+            // setCurrentAccount(await web3Provider.getAddress())
+            // toggleConnectWalletModal()
+            // setIsWalletConnected(true)
+        } catch(err) {
+            console.log(err)
+        }
+    } 
 
     async function connectWallet() {
         try {
@@ -491,9 +500,9 @@ function App() {
     async function getTokensTotalSupply() {
         const provider = getProviderOrSigner()
         let contract
-        //Getting TOP10 Token Total Supply
-        contract = new Contract(top10IndexContractAddressMainnet, indexSwap.abi, provider)
-        setTop10TokenTotalSupply(utils.formatEther(await contract.totalSupply()))
+        //Getting META Token Total Supply
+        contract = new Contract(metaIndexContractAddressMainnet, indexSwap.abi, provider)
+        // setTop10TokenTotalSupply(utils.formatEther(await contract.totalSupply()))
     }
 
     async function invest(portfolioName, amountToInvest) {
@@ -503,9 +512,7 @@ function App() {
             const signer = getProviderOrSigner(true)
             let contract
             console.log(portfolioName)
-            if (portfolioName === "TOP10") 
-                contract = new Contract(top10IndexContractAddressMainnet, indexSwap.abi, signer)
-            else if(portfolioName === "TOP5D")
+            if(portfolioName === "TOP5D")
                 contract = new Contract(top5DefiIndexContractAddressMainnet, indexSwap.abi, signer)
             else if(portfolioName === "META")
                 contract = new Contract(metaIndexContractAddressMainnet, indexSwap.abi, signer)
@@ -599,9 +606,7 @@ function App() {
             let contract
             console.log(portfolioName)
 
-            if(portfolioName === "TOP10")
-                contract = new Contract(top10IndexContractAddressMainnet, indexSwap.abi, signer)
-            else if(portfolioName === "TOP5D")
+            if(portfolioName === "TOP5D")
                 contract = new Contract(top5DefiIndexContractAddressMainnet, indexSwap.abi, signer)
             else if(portfolioName === "META")
                 contract = new Contract(metaIndexContractAddressMainnet, indexSwap.abi, signer)
@@ -728,6 +733,7 @@ function App() {
                 show={showConnectWalletModal}
                 toggleModal={toggleConnectWalletModal}
                 connectWallet={connectWallet}
+                connectWalletWithWalletConnect={connectWalletWithWalletConnect}
                 handleEmailInputChange={handleEmailInputChange}
                 email={email}
                 handleSignin={handleSignin}
@@ -742,13 +748,10 @@ function App() {
                     invest={invest}
                     withdraw={withdraw}
                     maticBalance={maticBalance}
-                    top10Balance={top10Balance}
                     top5DefiBalance={top5DefiBalance}
                     metaBalance={metaBalance}
-                    top10IndexVaultBalance={top10IndexVaultBalance}
                     top5DefiIndexVaultBalance={top5DefiIndexVaultBalance}
                     metaIndexVaultBalance={metaIndexVaultBalance}
-                    top10TokenTotalSupply={top10TokenTotalSupply}
                     currentMaticPrice={currentMaticPrice}
                     currentSafeGasPrice={currentSafeGasPrice}
                     portfolioName={createModalPortfolioName}

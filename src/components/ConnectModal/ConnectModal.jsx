@@ -41,12 +41,12 @@ function Modal(props) {
                     <hr style={{ width: "20%", opacity: 0.4 }} />
                 </div>
 
-                <button className="connect-modal-metamask-btn fn-md" onClick={props.connectWallet}>
+                <button className="connect-modal-metamask-btn fn-md" onClick={() => props.connectWallet()}>
                     <span> Connect with Metamask</span>
                     <img src={MetamaskImg} alt="" />
                 </button>
 
-                <button className="connect-modal-metamask-btn fn-md" onClick={() => console.log("wallet Connect")}>
+                <button className="connect-modal-metamask-btn fn-md" onClick={() => props.connectWalletWithWalletConnect()}>
                     <span> Connect with Wallet Connect</span>
                     <img src={WalletConnectImg} alt="" />
                 </button>
