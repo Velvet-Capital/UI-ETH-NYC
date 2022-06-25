@@ -4,10 +4,8 @@ import { providers, Contract, utils, BigNumber, ethers } from "ethers"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import "./styles/App.css"
-import indexSwap from "./utils/abi/IndexSwap.json"
-import VBep20Interface from "./utils/abi/VBep20Interface.json"
-import Top10Venus from "./utils/abi/Top10Venus.json"
-import PriceOracle from "./utils/abi/PriceOracle.json"
+import {abi as indexSwapAbi} from "./utils/abi/IndexSwap.json"
+import {abi as indexSwapLibraryAbi} from "./utils/abi/IndexSwapLibrary.json"
 
 import Header from "./components/Header/Header.jsx"
 import PortfolioBox from "./components/PortfolioBox/PortfolioBox.jsx"
@@ -21,8 +19,6 @@ import CreateModalState from "./context/CreateModal/CreateModalState"
 import VelvetCapitalLogo from "./assets/img/newvelvetcapitallogo.svg"
 import VelvetCapitalLogo2 from "./assets/img/velvetcapitallogo2.svg"
 import MetaverseLogo from "./assets/img/metaverse.svg"
-import VenusLogo from "./assets/img/venuslogo.png"
-import VenusAssestsImg from "./assets/img/venusassests.png"
 import Top10AssestsImg from "./assets/img/top10assests.png"
 import BluechipAssetsImg from "./assets/img/bluechipassets.png"
 import MetaverseAssetsImg from "./assets/img/metaverseassets.png"
@@ -42,13 +38,9 @@ function App() {
     const [portfolioBox3FlipHandler, setPortfolioBox3FlipHandler] = useState("front")
     const [portfolioBox4FlipHandler, setPortfolioBox4FlipHandler] = useState("front")
     const [createModalTab, setCreateModalTab] = useState("create")
-    const [bnbBalance, setBnbBalance] = useState("0")
-    const [metaBalance, setMetaBalance] = useState("0")
-    const [bluechipBalance, setBluechipBalance] = useState("0")
+    const [maticBalance, setMaticBalance] = useState("0")
     const [top10Balance, setTop10Balance] = useState("0")
-    const [vtop10Balance, setVtop10Balance] = useState("0")
-    const [top7IndexBalance, setTop7IndexBalance] = useState("0")
-    const [currentBnbPrice, setCurrentBnbPrice] = useState(null)
+    const [currentMaticPrice, setCurrentMaticPrice] = useState(null)
     const [currentSafeGasPrice, setCurrentSafeGasPrice] = useState(null)
     const [isTestnet, setIsTestnet] = useState(false)
     const [isWrongNetwork, setIsWrongNetwork] = useState(false)
@@ -70,35 +62,11 @@ function App() {
         asset2Name: "",
         asset2Amount: ""
     })
-    const [metaIndexVaultBalance, setMetaIndexVaultBalance] = useState("")
-    const [bluechipIndexVaultBalance, setBluechipIndexVaultBalance] = useState("")
     const [top10IndexVaultBalance, setTop10IndexVaultBalance] = useState("")
-    const [vtop10IndexVaultBalance, setVtop10IndexVaultBalance] = useState("")
-    const [top7IndexVaultBalance, setTop7IndexVaultBalance] = useState("")
-    const [metaTokenTotalSupply, setMetaTokenTotalSupply] = useState()
-    const [bluechipTokenTotalSupply, setBluechipTokenTotalSupply] = useState()
     const [top10TokenTotalSupply, setTop10TokenTotalSupply] = useState()
-    const [vtop10TokenTotalSupply, setVtop10TokenTotalSupply] = useState()
 
-    const bluechipIndexContractAddressMainnet = constants.bluechipIndexContractAddressMainnet
-    const metaIndexContractAddressMainnet = constants.metaIndexContractAddressMainnet
     const top10IndexContractAddressMainnet = constants.top10IndexContractAddressMainnet
-    const top10VenusContractAddressMainnet = constants.top10VenusContractAddressMainnet
-    const top7IndexContractAddressTestnet = constants.top7IndexContractAddressTestnet
-    const indexSwapAbi = indexSwap.abi
 
-    const [metaTokens, setMetaTokens] = useState([
-        ["Decentraland", "MANA", "0"],
-        ["The Sandbox", "SAND", "0"],
-        ["Axie Infinity", "AXS", "0"],
-    ])
-    const [bluechipTokens, setBluechipTokens] = useState([
-        ["Bitcoin", "BTC", "0"],
-        ["Ethereum", "ETH", "0"],
-        ["XRP", "XRP", "0"],
-        ["Cardano", "ADA", "0"],
-        ["BNB", "BNB", "0"],
-    ])
     const [top10Tokens, setTop10Tokens] = useState([
         ["Bitcoin", "BTC", "0"],
         ["Ethereum", "ETH", "0"],
@@ -111,27 +79,23 @@ function App() {
         ["Solana", "SOL", "0"],
         ["BNB", "BNB", "0"],
     ])
-    const [vtop10Tokens, setVtop10Tokens] = useState([
-        ["Bitcoin", "BTC", "0"],
-        ["Ethereum", "ETH", "0"],
-        ["BNB", "BNB", "0"],
-        ["XRP", "XRP", "0"],
-        ["Cardano", "ADA", "0"],
-        ["Polkadot", "DOT", "0"],
-        ["TRON", "TRX", "0"],
-        ["PancakeSwap", "CAKE", "0"],
-        ["Bitcoin Cash", "BCH", "0"],
-        ["Filecoin", "FIL", "0"],
-    ])
-    const [top7Tokens, setTop7Tokens] = useState([
-        ["Bitcoin", "BTC", "0"],
-        ["Ethereum", "ETH", "0"],
-        ["XRP", "XRP", "0"],
-        ["Cardano", "ADA", "0"],
-        ["Avalanche", "AVAX", "0"],
-        ["Polkadot", "DOT", "0"],
-        ["TRON", "TRX", "0"],
-    ])
+
+    function checkMetamask() {
+        const { ethereum } = window
+        if (!ethereum) {
+            toast.error("Get MetaMask -> https://metamask.io/", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            })
+            throw new Error("Metamask Not Installed")
+        }
+        return ethereum;
+    }
 
     function toggleConnectWalletModal() {
         if (showConnectWalletModal) setShowConnectWalletModal(false)
@@ -394,57 +358,45 @@ function App() {
     //Alert **** changes required in this function for polygon 
     async function checkNetwork() {
         try {
-            const { ethereum } = window
-            if (!ethereum) {
-                toast.error("Get MetaMask -> https://metamask.io/", {
-                    position: "top-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                })
-                return
-            }
+            const ethereum = checkMetamask()
             const provider = getProviderOrSigner()
             const { chainId } = await provider.getNetwork()
             if (isTestnet) {
-                if (chainId !== 97) {
-                    //switch network to bsctest
+                if (chainId !== 80001) {
+                    //switch network to polygon-testnet
                     await ethereum.request({
                         method: "wallet_addEthereumChain",
                         params: [
                             {
-                                chainId: "0x61",
-                                rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
-                                chainName: "BSC Testnet",
+                                chainId: "0x13881",
+                                rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
+                                chainName: "Mumbai Testnet",
                                 nativeCurrency: {
-                                    name: "Binance",
-                                    symbol: "BNB",
+                                    name: "Matic",
+                                    symbol: "MATIC",
                                     decimals: 18,
                                 },
-                                blockExplorerUrls: ["https://testnet.bscscan.com"],
+                                blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
                             },
                         ],
                     })
                 }
             } else {
-                if (chainId !== 56) {
-                    //switch network to bscmain
+                if (chainId !== 137) {
+                    //switch network to polygon-mainnet
                     await ethereum.request({
                         method: "wallet_addEthereumChain",
                         params: [
                             {
-                                chainId: "0x38",
-                                rpcUrls: ["https://bsc-dataseed.binance.org/"],
-                                chainName: "BSC Main",
+                                chainId: "0x89",
+                                rpcUrls: ["https://polygon-rpc.com"],
+                                chainName: "Polygon",
                                 nativeCurrency: {
-                                    name: "Binance",
-                                    symbol: "BNB",
+                                    name: "Matic",
+                                    symbol: "MATIC",
                                     decimals: 18,
                                 },
-                                blockExplorerUrls: ["https://bscscan.com"],
+                                blockExplorerUrls: ["https://polygonscan.com/"],
                             },
                         ],
                     })
@@ -458,37 +410,10 @@ function App() {
     //Alert **** changes required in this function for polygon 
     async function getBalancesTestnet(accountAddress) {
         try {
-            //Getting BNB Balance
+            //Getting matic Balance
             const provider = getProviderOrSigner()
-            const bnbBalance = utils.formatEther(await provider.getBalance(accountAddress))
-            setBnbBalance(bnbBalance)
-
-            //Getting Top7 Balance
-            const contract = new Contract(top7IndexContractAddressTestnet, indexSwapAbi, provider)
-            const top7Balance = utils.formatEther(await contract.balanceOf(accountAddress))
-            setTop7IndexBalance(top7Balance)
-            //Getting Top7 Vault Balance
-            let top7IndexVaultBalance = utils.formatEther(
-                (await contract.getTokenAndVaultBalance())[1]
-            )
-            //-!-!-!- there is some issue in contract side so we need to formatEther twice
-            setTop7IndexVaultBalance(
-                utils.formatEther(BigNumber.from(parseInt(top7IndexVaultBalance).toString()))
-            )
-            console.log("Top7 Vault Balance: ", top7IndexVaultBalance)
-            //Getting Top7 Tokens Weight
-            const tokensBalance = (await contract.getTokenAndVaultBalance())[0]
-            let top7TokensInformation = top7Tokens
-            tokensBalance.forEach((tokenBalance, index) => {
-                top7TokensInformation[index][2] = (
-                    (utils.formatEther(tokenBalance) / top7IndexVaultBalance) *
-                    100
-                ).toFixed(1)
-            })
-            top7TokensInformation.sort(function (a, b) {
-                return b[2] - a[2]
-            })
-            setTop7Tokens(top7TokensInformation)
+            const maticBalance = utils.formatEther(await provider.getBalance(accountAddress))
+            setMaticBalance(maticBalance)
         } catch (err) {
             console.log(err)
         }
@@ -497,39 +422,14 @@ function App() {
     //Alert **** changes required in this function for polygon 
     async function getBalancesMainnet(accountAddress) {
         try {
-            //Getting BNB Balance
+            //Getting Matic Balance
             const provider = new ethers.providers.JsonRpcProvider(
                 "https://bsc-dataseed.binance.org/"
             )
             if (accountAddress !== "0x0000000000000000000000000000000000000000") {
-                const bnbBalance = utils.formatEther(await provider.getBalance(accountAddress))
-                setBnbBalance(bnbBalance)
+                const maticBalance = utils.formatEther(await provider.getBalance(accountAddress))
+                setMaticBalance(maticBalance)
             }
-
-            //Getting META Balance
-            const metaContract = new Contract(
-                metaIndexContractAddressMainnet,
-                indexSwapAbi,
-                provider
-            )
-            const metaBalance = utils.formatEther(await metaContract.balanceOf(accountAddress))
-            setMetaBalance(metaBalance)
-            //Getting META Vault Balance
-            const [metaTokensBalance, metaIndexVaultBalance] =
-                await metaContract.getTokenAndVaultBalance()
-            setMetaIndexVaultBalance(utils.formatEther(metaIndexVaultBalance))
-            //Getting META Tokens Weight
-            let metaTokensInformation = metaTokens
-            metaTokensBalance.forEach((tokenBalance, index) => {
-                metaTokensInformation[index][2] = (
-                    (utils.formatEther(tokenBalance) / utils.formatEther(metaIndexVaultBalance)) *
-                    100
-                ).toFixed(1)
-            })
-            metaTokensInformation.sort(function (a, b) {
-                return b[2] - a[2]
-            })
-            setMetaTokens(metaTokensInformation)
 
             //Getting BLUECHIP Balance
             const bluechipContract = new Contract(
@@ -582,87 +482,7 @@ function App() {
             top10TokensInformation.sort(function (a, b) {
                 return b[2] - a[2]
             })
-            setTop10Tokens(top10TokensInformation)
-
-            //Getting VTOP10 Balance
-            const vtop10Contract = new Contract(
-                top10VenusContractAddressMainnet,
-                indexSwapAbi,
-                provider
-            )
-            const vtop10Balance = utils.formatEther(await vtop10Contract.balanceOf(accountAddress))
-            setVtop10Balance(vtop10Balance)
-            // Getting VTOP10 Vault Balance and Tokens Weights
-            const venusTokenUnderlyingTokenAddresses = [
-                "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c", // BTC
-                "0x2170Ed0880ac9A755fd29B2688956BD959F933F8", // ETH
-                "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c", // WBNB
-                "0x1D2F0da169ceB9fC7B3144628dB156f3F6c60dBE", // XRP
-                "0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47", // ADA
-                "0x7083609fCE4d1d8Dc0C979AAb8c869Ea2C873402", // DOT
-                "0x85EAC5Ac2F758618dFa09bDbe0cf174e7d574D5B", // TRX
-                "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82", // CAKE
-                "0x8fF795a6F4D97E7887C79beA79aba5cc76444aDf", // BCH
-                "0x0D8Ce2A99Bb6e3B7Db580eD848240e4a0F9aE153", // FIL
-            ]
-            const venusTokenAddresses = [
-                "0x882C173bC7Ff3b7786CA16dfeD3DFFfb9Ee7847B", // BTC
-                "0xf508fCD89b8bd15579dc79A6827cB4686A3592c8", //ETH
-                "0xA07c5b74C9B40447a954e1466938b865b6BBea36", //WBNB
-                "0xB248a295732e0225acd3337607cc01068e3b9c10", // XRP
-                "0x9A0AF7FDb2065Ce470D72664DE73cAE409dA28Ec", // ADA
-                "0x1610bc33319e9398de5f57B33a5b184c806aD217", // DOT
-                "0x61eDcFe8Dd6bA3c891CB9bEc2dc7657B3B422E93", // TRX
-                "0x86aC3974e2BD0d60825230fa6F355fF11409df5c", // CAKE
-                "0x5F0388EBc2B94FA8E123F404b79cCF5f40b29176", // BCH
-                "0xf91d58b5aE142DAcC749f58A49FCBac340Cb0343", // FIL
-            ]
-
-            const balanceOfEachTokenInBNB = []
-            let vtop10VaultBalanceInBNB = 0
-            const top10VenusVaultAddress = "0x175D8654f8453626824412F0FB16F84B133BB443"
-            const oracle = new Contract(
-                "0x9c6Daa2CCc08CeD096fa01Bc87F80a057d839862",
-                PriceOracle.abi,
-                provider
-            )
-            let tokenContract
-            for (let i = 0; i < 10; i++) {
-                //Initialize contract for every token
-                tokenContract = new Contract(venusTokenAddresses[i], VBep20Interface.abi, provider)
-                //Getting underlying balance
-                let tokenBalance = utils.formatEther(
-                    await tokenContract.balanceOfUnderlying(top10VenusVaultAddress)
-                )
-                let priceToken
-                if (venusTokenAddresses[i] === "0xA07c5b74C9B40447a954e1466938b865b6BBea36") {
-                    vtop10VaultBalanceInBNB += parseFloat(tokenBalance)
-                    balanceOfEachTokenInBNB.push(parseFloat(tokenBalance))
-                } else {
-                    priceToken =
-                        (await oracle.getTokenPrice(
-                            venusTokenUnderlyingTokenAddresses[i],
-                            "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
-                        )) / 1e18
-                    //converting underlyling Asset Balance to BNB
-                    let tokenBalanceBNB = priceToken * tokenBalance
-                    balanceOfEachTokenInBNB.push(tokenBalanceBNB)
-                    vtop10VaultBalanceInBNB += tokenBalanceBNB
-                }
-            }
-            setVtop10IndexVaultBalance(vtop10VaultBalanceInBNB)
-            //calculating VTOP10 Tokens Weight
-            let vtop10TokensInformation = vtop10Tokens
-            balanceOfEachTokenInBNB.forEach((tokenBalance, index) => {
-                vtop10TokensInformation[index][2] = (
-                    (tokenBalance / vtop10VaultBalanceInBNB) *
-                    100
-                ).toFixed(1)
-            })
-            vtop10TokensInformation.sort(function (a, b) {
-                return b[2] - a[2]
-            })
-            setVtop10Tokens(vtop10TokensInformation)
+            setTop10Tokens(top10TokensInformation)     
         } catch (err) {
             console.log(err)
         }
@@ -907,11 +727,11 @@ function App() {
         if (!isWalletConnected) getBalancesMainnet("0x0000000000000000000000000000000000000000")
 
         //fetching bnb price in USDT
-        fetch("https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT")
+        fetch("https://api.binance.com/api/v3/ticker/price?symbol=MATICUSDT")
             .then((res) => res.json())
             .then((data) => {
                 const price = parseFloat(data.price)
-                setCurrentBnbPrice(price)
+                setCurrentMaticPrice(price)
 
                 //fetching current safe gas price
                 fetch(
@@ -954,22 +774,11 @@ function App() {
                     toggleCreateModalTab={toggleCreateModalTab}
                     invest={invest}
                     withdraw={withdraw}
-                    bnbBalance={bnbBalance}
-                    metaBalance={metaBalance}
-                    bluechipBalance={bluechipBalance}
+                    maticBalance={maticBalance}
                     top10Balance={top10Balance}
-                    top7Balance={top7IndexBalance}
-                    vtop10Balance={vtop10Balance}
-                    metaIndexVaultBalance={metaIndexVaultBalance}
-                    bluechipIndexVaultBalance={bluechipIndexVaultBalance}
                     top10IndexVaultBalance={top10IndexVaultBalance}
-                    vtop10IndexVaultBalance={vtop10IndexVaultBalance}
-                    top7IndexVaultBalance={top7IndexVaultBalance}
-                    metaTokenTotalSupply={metaTokenTotalSupply}
-                    bluechipTokenTotalSupply={bluechipTokenTotalSupply}
                     top10TokenTotalSupply={top10TokenTotalSupply}
-                    vtop10TokenTotalSupply={vtop10TokenTotalSupply}
-                    currentBnbPrice={currentBnbPrice}
+                    currentMaticPrice={currentMaticPrice}
                     currentSafeGasPrice={currentSafeGasPrice}
                     portfolioName={createModalPortfolioName}
                 />
@@ -981,7 +790,7 @@ function App() {
                     asset2Name={progressModalInf.asset2Name}
                     asset2Amount={progressModalInf.asset2Amount}
                     transactionType={progressModalInf.transactionType}
-                    currentBnbPrice={currentBnbPrice}
+                    currentMaticPrice={currentMaticPrice}
                     toggleProgessModal={toggleProgressModal}
                 />
 
@@ -992,7 +801,7 @@ function App() {
                     amount={successOrErrorModalInf.amount}
                     txHash={successOrErrorModalInf.txHash}
                     status={successOrErrorModalInf.status}
-                    currentBnbPrice={currentBnbPrice}
+                    currentMaticPrice={currentMaticPrice}
                     toggleSuccessOrErrorMsgModal={toggleSuccessOrErrorMsgModal}
                 />
 
@@ -1005,14 +814,11 @@ function App() {
                 showHeaderDropdownMenu={showHeaderDropdownMenu}
                 isWalletConnected={isWalletConnected}
                 currentAccount={currentAccount}
-                bnbBalance={bnbBalance}
+                maticBalance={maticBalance}
                 totalUserValue={
-                    parseFloat(bluechipBalance) +
-                    parseFloat(metaBalance) +
-                    parseFloat(top10Balance) +
-                    parseFloat(vtop10Balance)
+                    parseFloat(top10Balance) + 0
                 }
-                currentBnbPrice={currentBnbPrice}
+                currentMaticPrice={currentMaticPrice}
                 isTestnet={isTestnet}
                 isWrongNetwork={isWrongNetwork}
                 switchToMainnet={switchToMainnet}
@@ -1037,7 +843,7 @@ function App() {
                             tippyContent="Top 5 Cryptocurrencies by Total Market Capitalization, Equally weighted (excluding stablecoins)"
                             assetsImg={Top10AssestsImg}
                             indexTokenBalance={top10Balance}
-                            currentBnbPrice={currentBnbPrice}
+                            currentMaticPrice={currentMaticPrice}
                             numberOfInvestors="4,519"
                             indexVaultBalance={top10IndexVaultBalance}
                             tokens={top10Tokens}
