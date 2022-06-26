@@ -41,6 +41,7 @@ function SwapModal(props) {
         .then(function (response) {
             allowance = response.data.allowance
         })
+        console.log(allowance)
         return allowance;
     }
 
@@ -71,7 +72,9 @@ function SwapModal(props) {
     async function swap() {
         try {
             const swapApi = 'https://api.1inch.io/v4.0/137/swap';
-            const MATIC_ADDRESS = "0x0000000000000000000000000000000000001010";
+            const MATIC_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+            const signer = getProviderOrSigner(true)
+            const accountAddress = await signer.getAddress()
             let fromTokenAddress;
     
             if(selectedAsset === "USDT")
@@ -82,6 +85,25 @@ function SwapModal(props) {
             if(await checkAllowanceToken(fromTokenAddress) === "0") {
                 await giveAllowance(fromTokenAddress)
             }
+            let amountToSwap = (inputRef.current.value * 1000000).toString()
+            const swapParams = {
+                fromTokenAddress: fromTokenAddress, 
+                toTokenAddress: MATIC_ADDRESS,
+                amount: amountToSwap,
+                fromAddress: accountAddress,
+                slippage: 1,
+                disableEstimate: false,
+                allowPartialFill: false,
+            };
+
+            let swapData;
+            await axios.get(swapApi, { params: swapParams }).then(function (response) {
+                swapData = response.data.tx;
+            });
+        
+            console.log(swapData)
+            await signer.sendTransaction(swapData)
+            alert(`Swaped ${inputRef.current.value} ${selectedAsset} To MATIC`)
             
             console.log(`Swapping ${inputRef.current.value} ${selectedAsset} To MATIC`)
         }
