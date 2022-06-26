@@ -1,0 +1,72 @@
+.overlay {
+    width: 100vw;
+    height: 150%;
+    position: absolute;
+    opacity: 0.9;
+    background-image: linear-gradient(to bottom, #4368cd, #7455f6);
+    animation: overlay-show 0.4s ease-in-out forwards;
+    z-index: 1;
+}
+
+@keyframes overlay-show {
+    to {
+        opacity: 0.9;
+    }
+}
+
+.modal {
+    width: 532px;
+    height: 605px;
+    position: absolute;
+    left: 50vw;
+    transform: translate(-50%);
+    margin-top: 68px;
+    padding: 55px 65px;
+    border-radius: 40px;
+    box-shadow: 1px 1px 4px 0 #b3b3b3;
+    background-color: #fff;
+    opacity: 0;
+    animation: modal-show 0.4s ease-in-out forwards;
+    z-index: 2;
+}
+
+@keyframes modal-show {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.connect-modal-title {
+    font-size: 21px;
+    font-weight: 600;
+    text-align: center;
+    margin: 17px 0;
+}
+
+.connect-modal-metamask-btn {
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    height: 70px;
+    margin: 0 0 20px 0;
+    padding: 11px 48px 10px 50px;
+    border-radius: 15px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.connect-modal-metamask-btn span {
+    font-weight: 600;
+    text-align: center;
+}
+
+.connect-modal-metamask-btn img {
+    width: 49px;
+    height: 49px;
+    margin: 0 0 0 25px;
+    object-fit: contain;
+}

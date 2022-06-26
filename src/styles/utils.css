@@ -1,0 +1,91 @@
+:root {
+    --green: #55d27c;
+    --purple: #564dd0;
+    --grey: #b3b3b3;
+}
+
+.fn-vsm {
+    font-size: 11px !important;
+}
+
+.fn-sm {
+    font-size: 14px !important;
+}
+
+.fn-md {
+    font-size: 18px !important;
+}
+
+.fn-lg {
+    font-size: 24px !important;
+}
+
+.font-normal {
+    font-weight: normal !important;
+}
+
+.font-semibold {
+    font-weight: 600 !important;
+}
+
+.font-bold {
+    font-weight: bold !important;
+}
+
+.c-red {
+    color: red !important;
+}
+
+.c-green {
+    color: var(--green) !important;
+}
+
+.c-purple {
+    color: var(--purple) !important;
+}
+
+.c-grey {
+    color: var(--grey)!important;
+}
+
+.horizontally-centred {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.my-30 {
+    margin: 30px 0;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.flex {
+    display: flex;
+}
+
+.block {
+    display: block;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.border-red {
+    border-color: red !important;
+}
+
+@media (min-width: 699px) {
+    .hide-for-desktop {
+        display: none;
+    }
+}
+
+@media (max-width: 699px ) {
+    .hide-for-mobile {
+        display: none;
+    }
+}

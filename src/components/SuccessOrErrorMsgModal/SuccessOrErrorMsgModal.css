@@ -1,0 +1,60 @@
+.overlay {
+    top: 0;
+}
+
+.success-or-error-msg-modal {
+    width: 640px;
+    height: 490px;
+    padding: 0 60px;
+    margin-top: 0;
+    top: 50vh;
+    transform: translate(-50%, -50%);
+}
+
+#success-or-error-msg-modal-cancle {
+    width: 20px;
+    position: absolute;
+    top: 5%;
+    right: 5%;
+}
+
+.success-or-error-msg-modal-details {
+    margin-top: 80px;
+    margin-bottom: 35px;
+    justify-content: center;
+    align-items: center;
+    gap: 103px;
+}
+
+.success-or-error-msg-modal-details div {
+    position: relative;
+}
+
+.success-or-error-msg-modal-invested-or-redeemed-amount {
+    position: absolute;
+    top: 31.5%;
+    left: 20%;
+}
+
+.success-or-error-msg-modal-received-amount {
+    position: absolute;
+    top: 31.5%;
+    right: 20%;
+}
+
+
+.success-or-error-msg-modal-message {
+    font-weight: 500;
+    margin: 30px 0;
+}
+
+.success-or-error-msg-modal-btn {
+    color: #fff;
+    background-color: black;
+    margin: 0;
+}
+
+.success-or-error-msg-modal-blockexplorer-link p {
+    margin: 20px 0;
+    
+}

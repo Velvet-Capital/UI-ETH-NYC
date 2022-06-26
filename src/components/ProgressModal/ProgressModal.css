@@ -1,0 +1,32 @@
+.progress-modal {
+    width: 640px;
+    height: 525px;
+    padding: 0 60px;
+    margin-top: 0;
+    top: 50vh;
+    transform: translate(-50%, -50%);
+}
+
+.progress-modal-asset1 {
+    position: absolute;
+    top: 38.5%;
+    left: 16%;
+}
+
+.progress-modal-asset2 {
+    position: absolute;
+    top: 38.5%;
+    right: 16%;
+}
+
+.progress-modal-details {
+    margin-top: 110px;
+    margin-bottom: 60px;
+    justify-content: center;
+    align-items: center;
+    gap: 103px;
+}
+
+.progress-modal-details div {
+    position: relative;
+}
