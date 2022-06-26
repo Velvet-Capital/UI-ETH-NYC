@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/UI-ETH-NYC/static/css/main.3d009ec8.css",
-    "main.js": "/UI-ETH-NYC/static/js/main.bfab5a53.js",
+    "main.css": "/UI-ETH-NYC/static/css/main.1bb6746f.css",
+    "main.js": "/UI-ETH-NYC/static/js/main.f4b589b3.js",
     "static/js/787.cda612ba.chunk.js": "/UI-ETH-NYC/static/js/787.cda612ba.chunk.js",
     "static/media/doge.png": "/UI-ETH-NYC/static/media/doge.a9424efadeaad7cd97e7.png",
     "static/media/aave.png": "/UI-ETH-NYC/static/media/aave.e148933d7b972825cb5d.png",
@@ -19,6 +19,7 @@
     "static/media/matic.png": "/UI-ETH-NYC/static/media/matic.1140771b39c8269a6d1b.png",
     "static/media/fil.png": "/UI-ETH-NYC/static/media/fil.22616bb03be9b634c8e7.png",
     "static/media/mkr.png": "/UI-ETH-NYC/static/media/mkr.b3e25ef92f0ef1e7bbd5.png",
+    "static/media/walletconnect.png": "/UI-ETH-NYC/static/media/walletconnect.0aecac1dbb99f6fb4f84.png",
     "static/media/metaverseassets.png": "/UI-ETH-NYC/static/media/metaverseassets.3aba1b75e047c52cb7a6.png",
     "static/media/top10assests.png": "/UI-ETH-NYC/static/media/top10assests.54fd544b97b8ee4f821a.png",
     "static/media/people.svg": "/UI-ETH-NYC/static/media/people.a627fbd328329d5ad82b9a9a3a448b1f.svg",
@@ -41,12 +42,12 @@
     "static/media/circle.svg": "/UI-ETH-NYC/static/media/circle.81837b3b590bc91b300ce83528fb7e95.svg",
     "static/media/chevron-down (1).svg": "/UI-ETH-NYC/static/media/chevron-down (1).65e1eaff7c350d03d7bfc96bce3bb32f.svg",
     "static/media/chevron-down.svg": "/UI-ETH-NYC/static/media/chevron-down.454d2167ac4f9702525d837f0ee597b8.svg",
-    "main.3d009ec8.css.map": "/UI-ETH-NYC/static/css/main.3d009ec8.css.map",
-    "main.bfab5a53.js.map": "/UI-ETH-NYC/static/js/main.bfab5a53.js.map",
+    "main.1bb6746f.css.map": "/UI-ETH-NYC/static/css/main.1bb6746f.css.map",
+    "main.f4b589b3.js.map": "/UI-ETH-NYC/static/js/main.f4b589b3.js.map",
     "787.cda612ba.chunk.js.map": "/UI-ETH-NYC/static/js/787.cda612ba.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.3d009ec8.css",
-    "static/js/main.bfab5a53.js"
+    "static/css/main.1bb6746f.css",
+    "static/js/main.f4b589b3.js"
   ]
 }
