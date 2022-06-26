@@ -6,7 +6,6 @@ import CreateModalContext from "../../context/CreateModal/CreateModalContext"
 
 import CrossImg from "../../assets/img/cross.svg"
 import VelvetCapitalLogo from "../../assets/img/newvelvetcapitallogo.svg"
-import VelvetCapitalLogo2 from "../../assets/img/velvetcapitallogo2.svg"
 import MetaverseLogo from "../../assets/img/metaverse.svg"
 import MaticImg from "../../assets/img/matic.png"
 
@@ -23,23 +22,23 @@ function CreateModal(props) {
     let indexTokenVaultBalance
     let indexTokenTotalSupply
 
-    if (props.portfolioName === "TOP10") {
-        indexTokenBalance = props.top10Balance
-        indexTokenVaultBalance = props.top10IndexVaultBalance
-        indexTokenTotalSupply = props.top10TokenTotalSupply
-    }
-    else if(props.portfolioName === "TOP5D") {
+
+    if(props.portfolioName === "TOP5D") {
         indexTokenBalance = props.top5DefiBalance 
         indexTokenVaultBalance = props.top5DefiIndexVaultBalance
+        indexTokenTotalSupply = props.top5DefiTokenTotalSupply
     }
     else if(props.portfolioName === "META") {
         indexTokenBalance = props.metaBalance 
         indexTokenVaultBalance = props.metaIndexVaultBalance
+        indexTokenTotalSupply = props.metaTokenTotalSupply
+
     }
 
     useEffect(() => {
         if (indexTokenTotalSupply && indexTokenVaultBalance) {
             let rate = indexTokenVaultBalance / indexTokenTotalSupply
+            console.log(rate)
             setRateOfIndexToken(rate)
             updateRateOfIndexToken(rate)
         }
@@ -51,25 +50,21 @@ function CreateModal(props) {
     }
 
     const createModalTitle = {
-        TOP10: "TOP10",
         TOP5D: "Top 5 DEFI",
         META: "Metaverse"
     }
 
     const createModalImg = {
-        TOP10: VelvetCapitalLogo2,
         TOP5D: VelvetCapitalLogo,
         META: MetaverseLogo
     }
 
     const gasRequiredForInvest = {
-        TOP10: 1660000,
         TOP5D: 1000000,
         META: 1000000
     }
 
     const gasRequiredForWithdraw = {
-        TOP10: 1600000,
         TOP5D: 900000,
         META: 900000
     }
@@ -233,7 +228,7 @@ function CreateModal(props) {
 
                 {props.createModalTab === "create" ? (
                     <p className="create-modal-inf font-normal fn-sm text-center c-purple">
-                        You will get ~ {amount.toString()} {props.portfolioName} tokens representing
+                        You will get ~ {(amount.toString() / rateOfIndexToken).toFixed(5)} {props.portfolioName} tokens representing
                         your basket
                     </p>
                 ) : (

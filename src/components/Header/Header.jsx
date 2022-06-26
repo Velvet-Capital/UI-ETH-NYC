@@ -16,6 +16,7 @@ import WrongNetworkImg from "../../assets/img/wrong-network.svg"
 function Header({
     toggleConnectWalletModal,
     toggleHeaderDropdownMenu,
+    toggleSwapModal,
     showHeaderDropdownMenu,
     isWalletConnected,
     currentAccount,
@@ -37,13 +38,16 @@ function Header({
         navigator.clipboard.writeText(currentAccount)
     }
 
-    // console.log(maticBalance)
-    // console.log(currentMaticPrice)
-
     return (
         <div className="header">
             <img src={GhostLogo} alt="" id="ghost-logo" draggable="false" />
             <img src={Logo} alt="" id="header-logo" draggable="false" />
+
+            {isWalletConnected && (
+                <button className="btn get-matic-btn" onClick={() => toggleSwapModal()}>
+                    Get Matic
+                </button>
+            )}
 
             {isWalletConnected && (
                 <div className="header-investor-data hide-for-mobile">
@@ -52,11 +56,6 @@ function Header({
                         <span className="header-investor-data-balance fn-lg">
                             $ {totalUserValueInDollar}
                         </span>
-                    </div>
-
-                    <div>
-                        <span className="header-investor-data-title fn-sm">Return</span>
-                        <span className="header-investor-data-return fn-lg c-green">-</span>
                     </div>
                 </div>
             )}

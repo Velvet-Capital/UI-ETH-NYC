@@ -75,7 +75,7 @@ function SuccessOrErrorMsgModal(props) {
                                     </p>
                                 </div>
                                 <p className="success-or-error-msg-modal-received-amount c-purple">
-                                    ~{props.amount} {props.portfolioName}
+                                    ~{(props.amount / rateOfIndexToken).toFixed(4)} {props.portfolioName}
                                 </p>
                             </>
                         ) : (
@@ -192,7 +192,7 @@ function SuccessOrErrorMsgModal(props) {
                         {props.transactionType === "invest" ? (
                             <>
                                 <div className="success-or-error-msg-modal-invested-or-redeemed-amount">
-                                    <p className="c-purple">{props.amount} BNB</p>
+                                    <p className="c-purple">{props.amount} MATIC</p>
                                     <p className="text-center fn-sm c-grey">
                                         ~${" "}
                                         {(props.amount * props.currentMaticPrice).toLocaleString(
@@ -202,7 +202,7 @@ function SuccessOrErrorMsgModal(props) {
                                     </p>
                                 </div>
                                 <p className="success-or-error-msg-modal-received-amount c-purple">
-                                    ~{props.amount} {props.portfolioName}
+                                    ~{(props.amount / rateOfIndexToken).toFixed(4)} {props.portfolioName}
                                 </p>
                             </>
                         ) : (
@@ -216,7 +216,7 @@ function SuccessOrErrorMsgModal(props) {
                                         {(
                                             props.amount *
                                             rateOfIndexToken *
-                                            props.currentBnbPrice
+                                            props.currentMaticPrice
                                         ).toLocaleString("en-US", { maximumFractionDigits: 1 })}
                                     </p>
                                 </div>

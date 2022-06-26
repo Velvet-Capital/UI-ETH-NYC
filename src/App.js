@@ -14,6 +14,7 @@ import ConnectModal from "./components/ConnectModal/ConnectModal.jsx"
 import CreateModal from "./components/CreateModal/CreateModal.jsx"
 import SuccessOrErrorMsgModal from "./components/SuccessOrErrorMsgModal/SuccessOrErrorMsgModal.jsx"
 import ProgressModal from "./components/ProgressModal/ProgressModal"
+import SwapModal from "./components/SwapModal/SwapModal"
 
 import CreateModalState from "./context/CreateModal/CreateModalState"
 
@@ -33,6 +34,7 @@ function App() {
     const [showConnectWalletModal, setShowConnectWalletModal] = useState(false)
     const [showCreateModal, setShowCreateModal] = useState(false)
     const [showHeaderDropdownMenu, setShowHeaderDropdownMenu] = useState(false)
+    const [showSwapModal, setShowSwapModal] = useState(false)
     const [magicProvider, setMagicProvider] = useState(null)
     const [provider, setProvider] = useState(null)
     const [top5DefiPortfolioBoxFlipHandler, setTop5DefiPortfolioBoxFlipHandler] = useState("front")
@@ -64,6 +66,11 @@ function App() {
     })
     const [top5DefiIndexVaultBalance, setTop5DefiIndexVaultBalance] = useState("")
     const [metaIndexVaultBalance, setMetaIndexVaultBalance] = useState("")
+    const [top5DefiTokenTotalSupply, setTop5DefiTokenTotalSupply] = useState("")
+    const [metaTokenTotalSupply, setMetaTokenTotalSupply] = useState("")
+    const [top5DefiTokenHoldersCount, setTop5DefiTokenHoldersCount] = useState("0")
+    const [metaTokenHoldersCount, setMetaTokenHoldersCount] = useState("0")
+
 
     const top5DefiIndexContractAddressMainnet = constants.top5DefiIndexContractAddressMainnet
     const metaIndexContractAddressMainnet = constants.metaIndexContractAddressMainnet
@@ -102,6 +109,10 @@ function App() {
     function toggleConnectWalletModal() {
         if (showConnectWalletModal) setShowConnectWalletModal(false)
         else setShowConnectWalletModal(true)
+    }
+
+    function toggleSwapModal() {
+        setShowSwapModal(prevState => !prevState);
     }
 
     async function toggleCreateModal(e) {
@@ -496,13 +507,17 @@ function App() {
         }
     }
 
-    //Alert **** changes required in this function for polygon 
     async function getTokensTotalSupply() {
         const provider = getProviderOrSigner()
         let contract
+
         //Getting META Token Total Supply
         contract = new Contract(metaIndexContractAddressMainnet, indexSwap.abi, provider)
-        // setTop10TokenTotalSupply(utils.formatEther(await contract.totalSupply()))
+        setMetaTokenTotalSupply(utils.formatEther(await contract.totalSupply()))
+
+        //Getting Top5 Defi Token Total Supply
+        contract = new Contract(top5DefiIndexContractAddressMainnet, indexSwap.abi, provider)
+        setTop5DefiTokenTotalSupply(utils.formatEther(await contract.totalSupply()))
     }
 
     async function invest(portfolioName, amountToInvest) {
@@ -738,6 +753,13 @@ function App() {
                 email={email}
                 handleSignin={handleSignin}
             />
+
+            <SwapModal 
+                show={showSwapModal}
+                toggleSwapModal={toggleSwapModal}
+
+            />
+
             <CreateModalState>
 
                 <CreateModal
@@ -752,6 +774,8 @@ function App() {
                     metaBalance={metaBalance}
                     top5DefiIndexVaultBalance={top5DefiIndexVaultBalance}
                     metaIndexVaultBalance={metaIndexVaultBalance}
+                    top5DefiTokenTotalSupply={top5DefiTokenTotalSupply}
+                    metaTokenTotalSupply={metaTokenTotalSupply}
                     currentMaticPrice={currentMaticPrice}
                     currentSafeGasPrice={currentSafeGasPrice}
                     portfolioName={createModalPortfolioName}
@@ -785,6 +809,7 @@ function App() {
             <Header
                 toggleConnectWalletModal={toggleConnectWalletModal}
                 toggleHeaderDropdownMenu={toggleHeaderDropdownMenu}
+                toggleSwapModal={toggleSwapModal}
                 showHeaderDropdownMenu={showHeaderDropdownMenu}
                 isWalletConnected={isWalletConnected}
                 currentAccount={currentAccount}
@@ -821,7 +846,7 @@ function App() {
                             currentMaticPrice={currentMaticPrice}
                             indexVaultBalance={top5DefiIndexVaultBalance}
                             tokens={top5DefiTokens}
-                            numberOfInvestors="4,519"
+                            numberOfInvestors={top5DefiTokenHoldersCount}
                             isWalletConnected={isWalletConnected}
                             toggleConnectWalletModal={toggleConnectWalletModal}
                             toggleCreateModal={toggleCreateModal}
@@ -840,7 +865,7 @@ function App() {
                             indexVaultBalance={metaIndexVaultBalance}
                             tokens={metaTokens}
                             currentMaticPrice={currentMaticPrice}
-                            numberOfInvestors="4,519"
+                            numberOfInvestors={metaTokenHoldersCount}
                             isWalletConnected={isWalletConnected}
                             toggleConnectWalletModal={toggleConnectWalletModal}
                             toggleCreateModal={toggleCreateModal}

@@ -30,7 +30,7 @@ function ProgressModal(props) {
             <div className="modal progress-modal">
                 <div className="progress-modal-asset1">
                     <p className="c-purple">
-                        {props.asset1Amount} {props.asset1Name}
+                        {parseFloat(props.asset1Amount).toFixed(4)} {props.asset1Name}
                     </p>
                     <p className="text-center fn-sm c-grey">
                         ~${" "}
@@ -47,7 +47,7 @@ function ProgressModal(props) {
                 </div>
 
                 <p className="progress-modal-asset2 c-purple">
-                    ~{props.transactionType === "invest" ? (props.asset2Amount+ " " + props.asset2Name) : ((props.asset1Amount*rateOfIndexToken).toFixed(4) + " " + props.asset2Name)}
+                    ~{props.transactionType === "invest" ? ((props.asset1Amount / rateOfIndexToken).toFixed(4) + " " + props.asset2Name) : ((props.asset1Amount*rateOfIndexToken).toFixed(4) + " " + props.asset2Name)}
                 </p>
 
                 <div className="progress-modal-details flex">

@@ -33,6 +33,15 @@
     color: #fcfcfc;
 }
 
+.get-matic-btn {
+    width: 10%;
+    margin: 0 0;
+    position: absolute;
+    right: 40%;
+    top: 18%;
+    font-size: 18px;
+}
+
 .connect-btn{
     position: relative;
     float: right;
