@@ -658,7 +658,8 @@ function App() {
 
             let txHash
             let tx
-            await contract.withdrawFund(amountToWithdraw.toString())
+
+            tx = await contract.withdrawFund(amountToWithdraw.toString(), {gasLimit: 1000000})
             txHash = tx.hash
             const receipt = tx.wait()
 

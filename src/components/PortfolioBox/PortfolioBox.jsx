@@ -51,6 +51,7 @@ function PortfolioBox({
 
                     <button
                         className="btn fn-md"
+                        style={{color: "green"}}
                         data-portfolio-name={portfolioName}
                         onClick={isWalletConnected ? toggleCreateModal : toggleConnectWalletModal}
                     >
@@ -59,23 +60,21 @@ function PortfolioBox({
 
                     <div className="portfolio-data">
 
-                        {/* <div className="left">
-                            <img src={PeopleImg} alt="" />
-                            <span className="num-of-investors fn-sm">{numberOfInvestors}</span>
+                        <div className="left">
+                            <span className="num-of-investors fn-sm">Investors: {numberOfInvestors}</span>
                         </div>
              
                         <div className="right">
-                            <img src={DollarImg} alt="" />
                             <span className="marketcap fn-sm">
-                                {(indexVaultBalance * currentMaticPrice).toLocaleString("en-US", {
+                                Invested Amount: ${(indexVaultBalance * currentMaticPrice).toLocaleString("en-US", {
                                     maximumFractionDigits: 1,
                                 })}
                             </span>
-                        </div> */}
+                        </div>
 
                     </div>
 
-                    <p className="text-center fn-lg">Asset Allocation</p>
+                    <p className="text-center fn-lg" style={{margin: "10px 0px"}}>Asset Allocation</p>
                     <div className="portfolio-box-back-assets">
                         {tokens.map(([tokenName, tokenSymbol, tokenWeight], index) => {
                             return (
