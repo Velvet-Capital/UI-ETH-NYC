@@ -96,8 +96,8 @@ function SwapModal(props) {
         <>
             <div className="overlay" onClick={() => props.toggleSwapModal()}></div>
             <div className="modal swap-modal">
-                <p className="c-purple fn-lg" style={{margin: "25px 0px"}}>Swap Tokens To MATIC</p>
-                <label htmlFor="assets" className="c-purple fn-md" style={{marginRight: "20px"}}>Choose asset:</label>
+                <p className="text-center fn-lg" style={{margin: "25px 0px"}}>Swap Tokens To MATIC</p>
+                <label htmlFor="assets" className="fn-md" style={{marginRight: "20px"}}>Choose asset:</label>
                 <select className="swap-modal-asset-dropdown" name="assets" id="assets" onChange={(e) => handleAssetChange(e)}>
                     <option value="USDT">USDT</option>
                     <option value="USDC">USDC</option>

@@ -71,7 +71,6 @@ function App() {
     const [top5DefiTokenHoldersCount, setTop5DefiTokenHoldersCount] = useState("0")
     const [metaTokenHoldersCount, setMetaTokenHoldersCount] = useState("0")
 
-
     const top5DefiIndexContractAddressMainnet = constants.top5DefiIndexContractAddressMainnet
     const metaIndexContractAddressMainnet = constants.metaIndexContractAddressMainnet
 
@@ -826,6 +825,10 @@ function App() {
 
             </CreateModalState>
 
+            <div style={{width: "100vw" , height: "5vh", backgroundColor: "red", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <p className="text-center">This project is at alpha stage proceed at your own risk.</p>
+            </div>
+
 
             <Header
                 toggleConnectWalletModal={toggleConnectWalletModal}
@@ -847,7 +850,7 @@ function App() {
                 disconnectWallet={disconnectWallet}
             />
 
-            <h2 className="title fn-lg">Community Portfolios</h2>
+            <h2 className="title text-center">Portfolios</h2>
 
             <div className="container">
                 {isTestnet ? (

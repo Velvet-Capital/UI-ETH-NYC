@@ -28,7 +28,7 @@ function ProgressModal(props) {
         <div>
             <div className="overlay" onClick={() => props.toggleProgessModal()}></div>
             <div className="modal progress-modal">
-                <div className="progress-modal-asset1">
+                {/* <div className="progress-modal-asset1">
                     <p className="c-purple">
                         {parseFloat(props.asset1Amount).toFixed(4)} {props.asset1Name}
                     </p>
@@ -48,10 +48,10 @@ function ProgressModal(props) {
 
                 <p className="progress-modal-asset2 c-purple">
                     ~{props.transactionType === "invest" ? ((props.asset1Amount / rateOfIndexToken).toFixed(4) + " " + props.asset2Name) : ((props.asset1Amount*rateOfIndexToken).toFixed(4) + " " + props.asset2Name)}
-                </p>
+                </p> */}
 
                 <div className="progress-modal-details flex">
-                    <img
+                    {/* <img
                         src={StraightLine}
                         alt=""
                         style={{ position: "absolute", zIndex: -1, width: "46%" }}
@@ -63,27 +63,27 @@ function ProgressModal(props) {
                             style={{ position: "absolute", right: "-20%", top: "-18%" }}
                         />
                         <img src={tokensImg[props.asset1Name]} alt="" style={{ width: "50px" }} />
-                    </div>
+                    </div> */}
                     <div>
                         <Spinner />
                     </div>
-                    <div>
+                    {/* <div>
                         <img
                             src={Circle}
                             alt=""
                             style={{ position: "absolute", left: "-20%", top: "-18%" }}
                         />
                         <img src={tokensImg[props.asset2Name]} alt="" style={{ width: "50px" }} />
-                    </div>
+                    </div> */}
                 </div>
 
-                <p className="text-center c-purple font-semibold" style={{ fontSize: "30px" }}>
+                <p className="text-center font-semibold" style={{ fontSize: "30px" }}>
                     Transaction in progress...
                 </p>
-
+{/* 
                 <p className="text-center c-purple" style={{ fontSize: "16px", marginTop: "45px" }}>
                     (please press <b>"Confirm"</b> in your Metamask wallet)
-                </p>
+                </p> */}
             </div>
         </div>
     )

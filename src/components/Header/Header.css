@@ -3,12 +3,6 @@
     margin: 0 0 70px;
     position: relative;
     padding: 0 50px 0 55px;
-    box-shadow: 0 2px 25px 0 rgba(0, 0, 0, 0.31);
-    background-image: linear-gradient(to bottom, #4368cd, #7455f6);
-}
-
-#ghost-logo {
-    width: 107px;
 }
 
 #header-logo {
@@ -19,27 +13,20 @@
     margin-top: 30px;
 }
 
-.header-investor-data {
-    height: 100px;
-    display: inline-flex;
-    align-items: center;
-    gap: 75px;
-    position: absolute;
-    right: 30%;
-}
-
 .header-investor-data span {
     display: block;
     color: #fcfcfc;
 }
 
 .get-matic-btn {
-    width: 10%;
+    width: 18%;
     margin: 0 0;
     position: absolute;
-    right: 40%;
+    right: 20%;
     top: 18%;
-    font-size: 18px;
+    font-size: 20px;
+    background-color: white;
+    color: black;
 }
 
 .connect-btn{
@@ -49,10 +36,8 @@
     height: 50px;
     margin-top: 30px;
     padding: 13px 20px 12px 19px;
-    border-radius: 38px;
-    background-color: #fcfcfc;
-    border: solid 1px #7e77dd;
-    box-shadow: 0 2px 25px 0 rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    background-color: white;
     cursor: pointer;
 
     display: flex;
@@ -62,7 +47,6 @@
 
 .connect-btn span {
     font-weight: 600;
-    color: #564dd0;
 }
 
 .connect-btn img {

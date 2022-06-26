@@ -29,7 +29,6 @@
 .create-modal-details span {
     font-size: 30px;
     font-weight: 600;
-    color: var(--purple);
 }
 
 .create-modal-action-tab {
@@ -46,7 +45,6 @@
     font-size: 21px;
     font-weight: 600;
     margin-bottom: 10px;
-    color: var(--purple);
 }
 
 .create-modal-action-tab .unactive {
@@ -60,16 +58,12 @@
 }
 
 .create-modal-action-tab .active {
-    border: 2px solid var(--purple);
+    border: 2px solid gray;
 }
 
 .create-modal-inputs {
     gap: 20px;
     flex-wrap: wrap;
-}
-
-.create-modal-inputs span {
-    color: var(--purple);
 }
 
 .create-modal-asset-dropdown {
@@ -129,5 +123,6 @@
 
 .create-modal-action-btn {
     margin: 21px 0;
-    background-color: var(--green);
+    background-color: black;
+    color: white;
 }

@@ -29,35 +29,16 @@ function Header({
     switchToTestnet,
     disconnectWallet,
 }) {
-    const totalUserValueInDollar = parseFloat(totalUserValue * currentMaticPrice).toLocaleString(
-        "en-US",
-        { maximumFractionDigits: 2 }
-    )
 
-    function copyWalletAddress(portfolioName) {
-        navigator.clipboard.writeText(currentAccount)
-    }
 
     return (
         <div className="header">
-            <img src={GhostLogo} alt="" id="ghost-logo" draggable="false" />
             <img src={Logo} alt="" id="header-logo" draggable="false" />
 
             {isWalletConnected && (
                 <button className="btn get-matic-btn" onClick={() => toggleSwapModal()}>
                     Get Matic
                 </button>
-            )}
-
-            {isWalletConnected && (
-                <div className="header-investor-data hide-for-mobile">
-                    <div>
-                        <span className="header-investor-data-title fn-sm">Value (USDT)</span>
-                        <span className="header-investor-data-balance fn-lg">
-                            $ {totalUserValueInDollar}
-                        </span>
-                    </div>
-                </div>
             )}
 
             {isWrongNetwork && (
@@ -89,10 +70,6 @@ function Header({
 
             {!isWalletConnected ? (
                 <button className="connect-btn" onClick={toggleConnectWalletModal}>
-                    <img
-                        src={isWalletConnected ? WalletConnectedImg : WalletNotConnectedImg}
-                        alt=""
-                    />
                     <span className="fn-sm">Connect a wallet</span>
                 </button>
             ) : (
@@ -100,74 +77,10 @@ function Header({
                     className={isWrongNetwork ? "border-red connect-btn" : "connect-btn"}
                     onClick={toggleHeaderDropdownMenu}
                 >
-                    <img
-                        src={isWalletConnected ? WalletConnectedImg : WalletNotConnectedImg}
-                        alt=""
-                    />
                     <span className="fn-sm">
-                        {currentAccount.slice(0, 4) + "..." + currentAccount.slice(-3)}
+                        Wallet: {currentAccount.slice(0, 8) + "..." + currentAccount.slice(-6)}
                     </span>
-                    <img
-                        src={showHeaderDropdownMenu ? ArrowUPImg : ArrowDownImg}
-                        className="connect-btn-icon"
-                        alt=""
-                    />
                 </button>
-            )}
-
-            {showHeaderDropdownMenu && (
-                <div className="header-dropdown-menu">
-                    <div className="header-dropdown-menu-wallet-address">
-                        <p className="fn-vsm">Wallet Address</p>
-                        <span className="c-purple font-semibold">
-                            {currentAccount.slice(0, 6) + "..." + currentAccount.slice(-4)}
-                        </span>
-                        <Tippy
-                            placement="top"
-                            animation="scale"
-                            content="Copied!"
-                            hideOnClick={false}
-                            trigger="click"
-                            onShow={(instance) => {
-                                setTimeout(() => {
-                                    instance.hide()
-                                }, 1000)
-                            }}
-                        >
-                            <img
-                                className="cursor-pointer"
-                                src={CopyImg}
-                                alt=""
-                                style={{ width: "18px", marginLeft: "11px" }}
-                                onClick={copyWalletAddress}
-                            />
-                        </Tippy>
-                    </div>
-                    <hr style={{ opacity: 0.5 }} />
-                    <div className="header-dropdown-menu-wallet-balance">
-                        <p className="fn-vsm">Wallet balance</p>
-                        <span className="c-purple font-semibold">
-                            $
-                            {(maticBalance * currentMaticPrice).toLocaleString("en-US", {
-                                maximumFractionDigits: 1,
-                            })}
-                        </span>
-                    </div>
-                    <hr style={{ opacity: 0.5 }} />
-                    <div>
-                        <button
-                            className="btn header-dropdown-menu-btn fn-sm"
-                            onClick={isTestnet ? switchToMainnet : switchToTestnet}
-                        >
-                            Switch to {isTestnet ? "Mainnet" : "Testnet"}
-                        </button>
-                    </div>
-                    <hr style={{ opacity: 0.5 }} />
-                    <div className="cursor-pointer" onClick={disconnectWallet}>
-                        <span className="fn-sm">Disconnect</span>
-                        <img src={ExitImg} alt="" />
-                    </div>
-                </div>
             )}
         </div>
     )

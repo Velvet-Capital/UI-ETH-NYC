@@ -5,15 +5,14 @@
 }
 
 .title {
-  margin-left: 55px;
   font-weight: 600;
-  color: #fcfcfc;
+  font-size: 35px;
 }
 
 .container {
   display: flex;
   flex-wrap: wrap;
-  gap: 50px;
+  justify-content: space-evenly;
   margin: 35px 0px 0 55px;
 }
 
@@ -23,21 +22,12 @@
   margin: 20px 0px 20px 0;
   border: none;
   border-radius: 10px;
-  background-color: #55d27c;
+  background-color: white;
   font-weight: 600;
-  color: #fff;
+  color: black;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
 }
 
-.btn:hover {
-  box-shadow: 0 0 16px 0 rgba(27, 183, 97, 0.6), 0 0 16px 0 rgba(27, 183, 97, 0.57);
-}
-
-.btn:active {
-  box-shadow: none;
-  background-color: #44a863;
-}
 
 @media only screen and (min-width: 1585px) {
   .App {

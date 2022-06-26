@@ -8,7 +8,6 @@ import SuccessImg from "../../assets/img/success-mark.svg"
 import ErrorImg from "../../assets/img/error-mark.svg"
 import MaticImg from "../../assets/img/matic.png"
 import VelvetCapitalLogo from "../../assets/img/newvelvetcapitallogo.svg"
-import VelvetCapitalLogo2 from "../../assets/img/velvetcapitallogo2.svg"
 import MetaverseLogo from "../../assets/img/metaverse.svg"
 import StraightLine from "../../assets/img/straightline.svg"
 import Circle from "../../assets/img/circle.svg"
@@ -62,7 +61,7 @@ function SuccessOrErrorMsgModal(props) {
                 />
                 {props.status == 0 ? (
                     <>
-                        {props.transactionType === "invest" ? (
+                        {/* {props.transactionType === "invest" ? (
                             <>
                                 <div className="success-or-error-msg-modal-invested-or-redeemed-amount">
                                     <p className="c-purple">{props.amount} MATIC</p>
@@ -97,20 +96,10 @@ function SuccessOrErrorMsgModal(props) {
                                     ~{(props.amount * rateOfIndexToken).toFixed(4)} MATIC
                                 </p>
                             </>
-                        )}
+                        )} */}
 
                         <div className="success-or-error-msg-modal-details flex">
-                            <img
-                                src={StraightLine}
-                                alt=""
-                                style={{ position: "absolute", zIndex: -1 }}
-                            />
-                            <div>
-                                <img
-                                    src={Circle}
-                                    alt=""
-                                    style={{ position: "absolute", right: "-20%", top: "-18%" }}
-                                />
+                            {/* <div>
                                 {props.transactionType === "invest" ? (
                                     <img src={MaticImg} alt="" style={{ width: "50px" }} />
                                 ) : (
@@ -120,16 +109,12 @@ function SuccessOrErrorMsgModal(props) {
                                         style={{ width: "50px" }}
                                     />
                                 )}
-                            </div>
+                            </div> */}
                             <div>
-                                <img src={SuccessImg} alt="" style={{ width: "64px" }} />
+                                <img src={SuccessImg} alt="" style={{ width: "64px"}} />
                             </div>
-                            <div>
-                                <img
-                                    src={Circle}
-                                    alt=""
-                                    style={{ position: "absolute", left: "-20%", top: "-18%" }}
-                                />
+                            {/* <div>
+        
                                 {props.transactionType !== "invest" ? (
                                     <img src={MaticImg} alt="" style={{ width: "50px" }} />
                                 ) : (
@@ -139,18 +124,18 @@ function SuccessOrErrorMsgModal(props) {
                                         style={{ width: "50px" }}
                                     />
                                 )}
-                            </div>
+                            </div> */}
                         </div>
 
                         <h2
-                            className="success-or-error-msg-modal-title c-purple text-center"
-                            style={{ fontSize: "30px" }}
+                            className="success-or-error-msg-modal-title text-center"
+                            style={{ fontSize: "30px", color: "green"  }}
                         >
                             Success!
                         </h2>
                         {props.transactionType === "invest" ? (
                             <>
-                                <p className="success-or-error-msg-modal-message c-purple text-center fn-md">
+                                <p className="success-or-error-msg-modal-message text-center fn-md">
                                     You have successfully deposited {props.amount} MATIC (~$
                                     {(props.amount * props.currentMaticPrice).toLocaleString(
                                         "en-US",
@@ -159,7 +144,7 @@ function SuccessOrErrorMsgModal(props) {
                                     ) in {props.portfolioName} portfolio
                                 </p>
                                 <p
-                                    className="success-or-error-msg-modal-message c-purple text-center fn-md cursor-pointer"
+                                    className="success-or-error-msg-modal-message text-center fn-md cursor-pointer"
                                     onClick={() =>
                                         addTokenToWallet(
                                             tokensAddress[props.portfolioName],
@@ -175,7 +160,7 @@ function SuccessOrErrorMsgModal(props) {
                                 </p>
                             </>
                         ) : (
-                            <p className="success-or-error-msg-modal-message c-purple text-center fn-md">
+                            <p className="success-or-error-msg-modal-message text-center fn-md">
                                 You have successfully redeemed {props.amount} {props.portfolioName}{" "}
                                 from portfolio
                             </p>
@@ -189,7 +174,7 @@ function SuccessOrErrorMsgModal(props) {
                     </>
                 ) : (
                     <>
-                        {props.transactionType === "invest" ? (
+                        {/* {props.transactionType === "invest" ? (
                             <>
                                 <div className="success-or-error-msg-modal-invested-or-redeemed-amount">
                                     <p className="c-purple">{props.amount} MATIC</p>
@@ -224,20 +209,11 @@ function SuccessOrErrorMsgModal(props) {
                                     ~{(props.amount * rateOfIndexToken).toFixed(4)} MATIC
                                 </p>
                             </>
-                        )}
+                        )} */}
 
                         <div className="success-or-error-msg-modal-details flex">
-                            <img
-                                src={StraightLine}
-                                alt=""
-                                style={{ position: "absolute", zIndex: -1 }}
-                            />
-                            <div>
-                                <img
-                                    src={Circle}
-                                    alt=""
-                                    style={{ position: "absolute", right: "-20%", top: "-18%" }}
-                                />
+                    
+                            {/* <div>
                                 {props.transactionType === "invest" ? (
                                     <img src={MaticImg} alt="" style={{ width: "50px" }} />
                                 ) : (
@@ -247,16 +223,11 @@ function SuccessOrErrorMsgModal(props) {
                                         style={{ width: "50px" }}
                                     />
                                 )}
-                            </div>
+                            </div> */}
                             <div>
                                 <img src={ErrorImg} alt="" style={{ width: "64px" }} />
                             </div>
-                            <div>
-                                <img
-                                    src={Circle}
-                                    alt=""
-                                    style={{ position: "absolute", left: "-20%", top: "-18%" }}
-                                />
+                            {/* <div>
                                 {props.transactionType !== "invest" ? (
                                     <img src={MaticImg} alt="" style={{ width: "50px" }} />
                                 ) : (
@@ -266,16 +237,16 @@ function SuccessOrErrorMsgModal(props) {
                                         style={{ width: "50px" }}
                                     />
                                 )}
-                            </div>
+                            </div> */}
                         </div>
                         <h2
-                            className="success-or-error-msg-modal-title c-purple text-center"
-                            style={{ fontSize: "30px" }}
+                            className="success-or-error-msg-modal-title text-center"
+                            style={{ fontSize: "30px", color: "red"}}
                         >
                             Error!
                         </h2>
                         <p
-                            className="success-or-error-msg-modal-message c-purple text-center fn-md"
+                            className="success-or-error-msg-modal-message text-center fn-md"
                             style={{ margin: "35px 0" }}
                         >
                             Looks like this transaction has failed, it happens sometimes due to
@@ -296,7 +267,7 @@ function SuccessOrErrorMsgModal(props) {
                     target="_blank"
                     rel="noreferrer"
                 >
-                    <p className="text-center font-semibold c-purple"> View Txn On Polyscan </p>
+                    <p className="text-center font-semibold"> View Txn On Polyscan </p>
                 </a>
             </div>
         </>

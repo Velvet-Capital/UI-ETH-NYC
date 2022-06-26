@@ -50,21 +50,8 @@
 
 .success-or-error-msg-modal-btn {
     color: #fff;
-    background-color: #7e77dd;
+    background-color: black;
     margin: 0;
-}
-
-.success-or-error-msg-modal-btn:hover {
-    box-shadow: 0 0 16px 0 #7e77dd, 0 0 16px 0 #7e77dd;
-}
-
-.success-or-error-msg-modal-btn:active {
-    box-shadow: none;
-    background-color: #565298;
-}
-
-.success-or-error-msg-modal-blockexplorer-link {
-    text-decoration: none;
 }
 
 .success-or-error-msg-modal-blockexplorer-link p {

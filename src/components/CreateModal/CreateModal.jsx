@@ -54,11 +54,6 @@ function CreateModal(props) {
         META: "Metaverse"
     }
 
-    const createModalImg = {
-        TOP5D: VelvetCapitalLogo,
-        META: MetaverseLogo
-    }
-
     const gasRequiredForInvest = {
         TOP5D: 1000000,
         META: 1000000
@@ -109,7 +104,6 @@ function CreateModal(props) {
                 />
 
                 <div className="create-modal-details">
-                    <img src={createModalImg[props.portfolioName]} alt="" id="create-modal-logo" />
                     <span>{createModalTitle[props.portfolioName]}</span>
                 </div>
                 <div className="create-modal-action-tab flex">
@@ -149,7 +143,6 @@ function CreateModal(props) {
                         <div className="create-modal-asset-dropdown flex">
                             {props.createModalTab === "create" ? (
                                 <>
-                                    <img src={MaticImg} alt="" />
                                     <span
                                         style={{
                                             fontSize: "16px",
@@ -209,30 +202,13 @@ function CreateModal(props) {
                     </div>
                 </div>
 
-                <p className="c-grey fn-sm" style={{ textAlign: "right", marginTop: "8px", marginBottom: "25px" }}>
-                    Estimated Gas Fee:{" "}
-                        $
-                        {props.createModalTab === "create"
-                            ? portfolioInvestGasFee
-                            : portofolioWithdrawGasFee}
-                </p>
-
-                {props.createModalTab === "redeem" && hasEnoughFunds && (
-                    <span
-                        className="create-modal-max-btn cursor-pointer"
-                        onClick={() => setAmount(indexTokenBalance.slice(0, -7))}
-                    >
-                        max
-                    </span>
-                )}
-
                 {props.createModalTab === "create" ? (
-                    <p className="create-modal-inf font-normal fn-sm text-center c-purple">
+                    <p className="create-modal-inf font-normal fn-sm text-center" style={{marginTop: "20px"}}>
                         You will get ~ {(amount.toString() / rateOfIndexToken).toFixed(5)} {props.portfolioName} tokens representing
                         your basket
                     </p>
                 ) : (
-                    <p className="create-modal-inf font-normal fn-sm text-center c-purple">
+                    <p className="create-modal-inf font-normal fn-sm text-center" style={{marginTop: "20px"}}>
                         You will get ~ {(amount.toString() * rateOfIndexToken).toFixed(5)} MATIC
                     </p>
                 )}

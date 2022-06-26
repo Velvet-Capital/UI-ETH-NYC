@@ -39,37 +39,11 @@
     }
 }
 
-.connect-modal-velvet-logo {
-    width: 62px;
-    height: 58px;
-    object-fit: contain;
-}
-
 .connect-modal-title {
     font-size: 21px;
     font-weight: 600;
     text-align: center;
-    color: #564dd0;
     margin: 17px 0;
-}
-
-#connect-modal-input {
-    width: 100%;
-    height: 70px;
-    border: none;
-    border-bottom: 2px solid #7e77dd;
-    padding: 28.5px 14px 11.5px 14px;
-    font-size: 22px;
-    color: #b3b3b3;
-}
-
-#connect-modal-input:focus, #connect-modal-input:active  {
-    outline: none;
-    background-color: #fff;
-}
-
-.connect-modal-signup-btn {
-    margin: 20px 0 0 0;
 }
 
 .connect-modal-metamask-btn {
@@ -80,16 +54,13 @@
     height: 70px;
     margin: 0 0 20px 0;
     padding: 11px 48px 10px 50px;
-    border: solid 1px #7e77dd;
     border-radius: 15px;
-    box-shadow: 0 2px 15px 0 rgba(126, 119, 221, 0.57);
     background-color: #fff;
     cursor: pointer;
 }
 
 .connect-modal-metamask-btn span {
     font-weight: 600;
-    color: #564dd0;
     text-align: center;
 }
 
