@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/UI-ETH-NYC/static/css/main.1bb6746f.css",
-    "main.js": "/UI-ETH-NYC/static/js/main.f4b589b3.js",
+    "main.js": "/UI-ETH-NYC/static/js/main.e36907d6.js",
     "static/js/787.cda612ba.chunk.js": "/UI-ETH-NYC/static/js/787.cda612ba.chunk.js",
     "static/media/doge.png": "/UI-ETH-NYC/static/media/doge.a9424efadeaad7cd97e7.png",
     "static/media/aave.png": "/UI-ETH-NYC/static/media/aave.e148933d7b972825cb5d.png",
@@ -43,11 +43,11 @@
     "static/media/chevron-down (1).svg": "/UI-ETH-NYC/static/media/chevron-down (1).65e1eaff7c350d03d7bfc96bce3bb32f.svg",
     "static/media/chevron-down.svg": "/UI-ETH-NYC/static/media/chevron-down.454d2167ac4f9702525d837f0ee597b8.svg",
     "main.1bb6746f.css.map": "/UI-ETH-NYC/static/css/main.1bb6746f.css.map",
-    "main.f4b589b3.js.map": "/UI-ETH-NYC/static/js/main.f4b589b3.js.map",
+    "main.e36907d6.js.map": "/UI-ETH-NYC/static/js/main.e36907d6.js.map",
     "787.cda612ba.chunk.js.map": "/UI-ETH-NYC/static/js/787.cda612ba.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.1bb6746f.css",
-    "static/js/main.f4b589b3.js"
+    "static/js/main.e36907d6.js"
   ]
 }
