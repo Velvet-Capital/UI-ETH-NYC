@@ -263,13 +263,11 @@ function SuccessOrErrorMsgModal(props) {
 
                 <a
                     className="success-or-error-msg-modal-blockexplorer-link"
-                    // `https://dashboard.tenderly.co/tx/polygon/${props.txHash}`
-                    href={`https://polygonscan.com/tx/${props.txHash}`}
+                    href={`https://dashboard.tenderly.co/tx/polygon/${props.txHash}`}
                     target="_blank"
                     rel="noreferrer"
                 >
-                    <p className="text-center font-semibold"> View Txn On Polyscan </p>
-                    {/* <p className="text-center font-semibold"> View Txn On Tenderly </p> */}
+                    <p className="text-center font-semibold"> View Txn On Tenderly </p>
                 </a>
             </div>
         </>
