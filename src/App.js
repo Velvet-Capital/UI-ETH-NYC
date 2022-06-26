@@ -520,6 +520,26 @@ function App() {
         setTop5DefiTokenTotalSupply(utils.formatEther(await contract.totalSupply()))
     }
 
+    async function getTokensHoldersCount() {
+    let urlForTop5DefiTokenHoldersCount = "https://api.unmarshal.com/v1/matic/token-address/" + top5DefiIndexContractAddressMainnet + "/holders-count?auth_key=M0hbF8toAf3A8ZGyl4dMU9o4I8mujoFG2H0jc2m7"
+    let urlForMetaTokenHoldersCount = "https://api.unmarshal.com/v1/matic/token-address/" + metaIndexContractAddressMainnet + "/holders-count?auth_key=M0hbF8toAf3A8ZGyl4dMU9o4I8mujoFG2H0jc2m7"
+
+    fetch(urlForTop5DefiTokenHoldersCount)
+        .then((res) => res.json())
+        .then((data) => {
+            setTop5DefiTokenHoldersCount(data.token_holders_count)
+        })
+        .catch(err => console.log(err))
+
+    fetch(urlForMetaTokenHoldersCount)
+        .then((res) => res.json())
+        .then((data) => {
+            setMetaTokenHoldersCount(data.token_holders_count)
+        })
+        .catch(err => console.log(err))
+ 
+    }
+
     async function invest(portfolioName, amountToInvest) {
         toggleCreateModal()
         try {
@@ -710,6 +730,7 @@ function App() {
 
     useEffect(() => {
         checkIfWalletConnected()
+        getTokensHoldersCount()
 
         if (!isWalletConnected) getBalancesMainnet("0x0000000000000000000000000000000000000000")
 

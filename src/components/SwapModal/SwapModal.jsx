@@ -1,7 +1,94 @@
-import React from "react";
+import React, {useState, useRef} from "react";
+import axios from "axios";
+import { providers } from "ethers";
 import "./SwapModal.css"
 
 function SwapModal(props) {
+
+    const [selectedAsset, setSelectedAsset] = useState("USDT")
+    const inputRef = useRef(null)
+
+    function handleAssetChange(e) {
+        setSelectedAsset(e.target.value)
+        console.log(e.target.value)
+    }
+
+    function getProviderOrSigner(needSigner = false) {
+        try {
+            const { ethereum } = window
+            if (ethereum) {
+                const provider = new providers.Web3Provider(ethereum)
+                if (needSigner) return provider.getSigner()
+
+                return provider
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    async function checkAllowanceToken(tokenAddress) {
+        const checkAllowanceApi = 'https://api.1inch.io/v4.0/137/approve/allowance';
+        const signer = getProviderOrSigner(true)
+        const accountAddress = await signer.getAddress()
+        let allowance;
+        await axios.get(checkAllowanceApi, {
+            params: {
+                tokenAddress: tokenAddress,
+                walletAddress: accountAddress
+            }
+        })
+        .then(function (response) {
+            allowance = response.data.allowance
+        })
+        return allowance;
+    }
+
+    async function giveAllowance(tokenAddress) {
+        const giveAllowanceApi = 'https://api.1inch.io/v4.0/137/approve/transaction';
+        const signer = getProviderOrSigner(true)
+        const accountAddress = await signer.getAddress()
+        console.log(accountAddress) 
+        let allowanceData;
+        await axios.get(giveAllowanceApi, {
+            params: {
+                tokenAddress: tokenAddress,
+            }
+        }).then(function (response) {
+            allowanceData = response.data
+            console.log(allowanceData)
+        })
+        console.log(allowanceData)
+        const sign = await signer.sendTransaction({
+            from: accountAddress,
+            data: allowanceData.data,
+            gasPrice: allowanceData.gasPrice,
+            to: allowanceData.to,
+            value: allowanceData.value
+        })
+    }
+
+    async function swap() {
+        try {
+            const swapApi = 'https://api.1inch.io/v4.0/137/swap';
+            const MATIC_ADDRESS = "0x0000000000000000000000000000000000001010";
+            let fromTokenAddress;
+    
+            if(selectedAsset === "USDT")
+                fromTokenAddress = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F"
+            else 
+                fromTokenAddress = "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174"
+    
+            if(await checkAllowanceToken(fromTokenAddress) === "0") {
+                await giveAllowance(fromTokenAddress)
+            }
+            
+            console.log(`Swapping ${inputRef.current.value} ${selectedAsset} To MATIC`)
+        }
+        catch(err) {
+            console.log(err)
+        }
+    }
 
     if (!props.show) return false
 
@@ -9,15 +96,15 @@ function SwapModal(props) {
         <>
             <div className="overlay" onClick={() => props.toggleSwapModal()}></div>
             <div className="modal swap-modal">
-                <p>Swap Token Into MATIC</p>
-                <label for="cars">Choose asset:</label>
-                <select name="assets" id="assets">
-                    <option value="volvo">USDT</option>
-                    <option value="saab">USDC</option>
+                <p className="c-purple fn-lg" style={{margin: "25px 0px"}}>Swap Tokens To MATIC</p>
+                <label htmlFor="assets" className="c-purple fn-md" style={{marginRight: "20px"}}>Choose asset:</label>
+                <select className="swap-modal-asset-dropdown" name="assets" id="assets" onChange={(e) => handleAssetChange(e)}>
+                    <option value="USDT">USDT</option>
+                    <option value="USDC">USDC</option>
                 </select>
                 <br />
-                <input type="number"  />
-                <button className="btn fn-md">Swap</button>
+                <input type="number" ref={inputRef} className="fn-md horizontally-centred swap-modal-input-amount" placeholder="Amount to Swap" />
+                <button className="btn fn-md" onClick={() => swap()}>Swap To MATIC</button>
             </div>
         </>
 
