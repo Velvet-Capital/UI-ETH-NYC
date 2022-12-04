@@ -22,14 +22,14 @@
     width: 18%;
     margin: 0 0;
     position: absolute;
-    right: 20%;
+    right: 35%;
     top: 18%;
     font-size: 20px;
     background-color: white;
     color: black;
 }
 
-.connect-btn{
+.connect-btn {
     position: relative;
     float: right;
     width: 200px;
@@ -142,19 +142,21 @@
     padding: 20px 30px !important;
 }
 
-.header-dropdown-menu-wallet-balance{
+.header-dropdown-menu-wallet-balance {
     flex-direction: column;
     justify-content: center !important;
     align-items: flex-start !important;
     gap: 5px;
 }
 
-.header-dropdown-menu span, .header-dropdown-menu p {
+.header-dropdown-menu span,
+.header-dropdown-menu p {
     font-weight: 500;
     color: #b3b3b3;
 }
 
-.header-dropdown-menu-wallet-balance span,  header-dropdown-menu-wallet-address span{
+.header-dropdown-menu-wallet-balance span,
+header-dropdown-menu-wallet-address span {
     font-size: 16px;
 }
 
@@ -167,12 +169,10 @@
 }
 
 .header-dropdown-menu-btn:hover {
-    box-shadow: 0 0 16px 0 #FF7F7F , 0 0 16px 0 #FF7F7F;
+    box-shadow: 0 0 16px 0 #ff7f7f, 0 0 16px 0 #ff7f7f;
 }
 
 .header-dropdown-menu-btn:active {
     box-shadow: none;
     background-color: #f94c56;
-    
 }
-

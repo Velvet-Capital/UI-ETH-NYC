@@ -11,6 +11,7 @@ import indexSwapLibraryAbi from "./utils/abi/IndexSwapLibrary.json"
 import Header from "./components/Header/Header.jsx"
 import PortfolioBox from "./components/PortfolioBox/PortfolioBox.jsx"
 import ConnectModal from "./components/ConnectModal/ConnectModal.jsx"
+import EtherspotModal from "./components/EtherspotModal/EtherspotModal.jsx"
 import CreateModal from "./components/CreateModal/CreateModal.jsx"
 import SuccessOrErrorMsgModal from "./components/SuccessOrErrorMsgModal/SuccessOrErrorMsgModal.jsx"
 import ProgressModal from "./components/ProgressModal/ProgressModal"
@@ -32,6 +33,7 @@ function App() {
     const [email, setEmail] = useState("")
     const [isWalletConnected, setIsWalletConnected] = useState(false)
     const [showConnectWalletModal, setShowConnectWalletModal] = useState(false)
+    const [showEtherSpotModal, setShowEtherSpotModal] = useState(false)
     const [showCreateModal, setShowCreateModal] = useState(false)
     const [showHeaderDropdownMenu, setShowHeaderDropdownMenu] = useState(false)
     const [showSwapModal, setShowSwapModal] = useState(false)
@@ -62,7 +64,7 @@ function App() {
         asset1Name: "",
         asset1Amount: "",
         asset2Name: "",
-        asset2Amount: ""
+        asset2Amount: "",
     })
     const [top5DefiIndexVaultBalance, setTop5DefiIndexVaultBalance] = useState("")
     const [metaIndexVaultBalance, setMetaIndexVaultBalance] = useState("")
@@ -79,13 +81,13 @@ function App() {
         ["Uniswap", "UNI", "0"],
         ["ChainLink", "LINK", "0"],
         ["Aave", "AAVE", "0"],
-        ["COMPOUND", "COMP", "0"]
+        ["COMPOUND", "COMP", "0"],
     ])
 
     const [metaTokens, setMetaTokens] = useState([
         ["SandBox", "SAND", "0"],
         ["Decentraland", "MANA", "0"],
-        ["Aavegotchi", "GHST", "0"]
+        ["Aavegotchi", "GHST", "0"],
     ])
 
     function checkMetamask() {
@@ -102,7 +104,7 @@ function App() {
             })
             throw new Error("Metamask Not Installed")
         }
-        return ethereum;
+        return ethereum
     }
 
     function toggleConnectWalletModal() {
@@ -110,8 +112,13 @@ function App() {
         else setShowConnectWalletModal(true)
     }
 
+    function toggleEtherSpotModal() {
+        if (showEtherSpotModal) setShowEtherSpotModal(false)
+        else setShowEtherSpotModal(true)
+    }
+
     function toggleSwapModal() {
-        setShowSwapModal(prevState => !prevState);
+        setShowSwapModal((prevState) => !prevState)
     }
 
     async function toggleCreateModal(e) {
@@ -145,11 +152,11 @@ function App() {
     }
 
     function portfolioBoxesflipHandler(portfolioName) {
-        if(portfolioName === "TOP5D") {
-            if (top5DefiPortfolioBoxFlipHandler === "front") setTop5DefiPortfolioBoxFlipHandler("back")
+        if (portfolioName === "TOP5D") {
+            if (top5DefiPortfolioBoxFlipHandler === "front")
+                setTop5DefiPortfolioBoxFlipHandler("back")
             else setTop5DefiPortfolioBoxFlipHandler("front")
-        }
-        else if(portfolioName === "META") {
+        } else if (portfolioName === "META") {
             if (metaPortfolioBoxFlipHandler === "front") setMetaPortfolioBoxFlipHandler("back")
             else setMetaPortfolioBoxFlipHandler("front")
         }
@@ -282,10 +289,10 @@ function App() {
             // setCurrentAccount(await web3Provider.getAddress())
             // toggleConnectWalletModal()
             // setIsWalletConnected(true)
-        } catch(err) {
+        } catch (err) {
             console.log(err)
         }
-    } 
+    }
 
     async function connectWallet() {
         try {
@@ -331,7 +338,7 @@ function App() {
     async function checkIfWalletConnected() {
         try {
             const ethereum = checkMetamask()
-            
+
             const accounts = await ethereum.request({ method: "eth_accounts" })
             if (accounts.length > 0) {
                 setCurrentAccount(accounts[0])
@@ -435,14 +442,16 @@ function App() {
                 const maticBalance = utils.formatEther(await provider.getBalance(accountAddress))
                 setMaticBalance(maticBalance)
             }
-            
+
             //Getting TOP-5-DEFI Balance
             const top5DefiContract = new Contract(
                 top5DefiIndexContractAddressMainnet,
                 indexSwap.abi,
                 provider
             )
-            const top5DefiBalance = utils.formatEther(await top5DefiContract.balanceOf(accountAddress))
+            const top5DefiBalance = utils.formatEther(
+                await top5DefiContract.balanceOf(accountAddress)
+            )
             setTop5DefiBalance(top5DefiBalance)
 
             //Getting TOP-5-DEFI Vault Balance
@@ -452,14 +461,17 @@ function App() {
                 provider
             )
             const [top5DefiTokensBalance, top5DefiIndexVaultBalance] =
-                await top5DefiLibraryContract.getTokenAndVaultBalance(top5DefiIndexContractAddressMainnet)
+                await top5DefiLibraryContract.getTokenAndVaultBalance(
+                    top5DefiIndexContractAddressMainnet
+                )
             setTop5DefiIndexVaultBalance(utils.formatEther(top5DefiIndexVaultBalance))
 
             //Getting TOP-5-DEFI Tokens Weight
             let top5DefiTokensInformation = top5DefiTokens
             top5DefiTokensBalance.forEach((tokenBalance, index) => {
                 top5DefiTokensInformation[index][2] = (
-                    (tokenBalance / top5DefiIndexVaultBalance) * 100
+                    (tokenBalance / top5DefiIndexVaultBalance) *
+                    100
                 ).toFixed(1)
             })
             top5DefiTokensInformation.sort(function (a, b) {
@@ -492,15 +504,14 @@ function App() {
             let metaTokensInformation = metaTokens
             metaTokensBalance.forEach((tokenBalance, index) => {
                 metaTokensInformation[index][2] = (
-                    (tokenBalance / metaIndexVaultBalance) * 100
+                    (tokenBalance / metaIndexVaultBalance) *
+                    100
                 ).toFixed(1)
             })
             metaTokensInformation.sort(function (a, b) {
                 return b[2] - a[2]
             })
             setMetaTokens(metaTokensInformation)
-    
-
         } catch (err) {
             console.log(err)
         }
@@ -520,23 +531,28 @@ function App() {
     }
 
     async function getTokensHoldersCount() {
-    let urlForTop5DefiTokenHoldersCount = "https://api.unmarshal.com/v1/matic/token-address/" + top5DefiIndexContractAddressMainnet + "/holders-count?auth_key=M0hbF8toAf3A8ZGyl4dMU9o4I8mujoFG2H0jc2m7"
-    let urlForMetaTokenHoldersCount = "https://api.unmarshal.com/v1/matic/token-address/" + metaIndexContractAddressMainnet + "/holders-count?auth_key=M0hbF8toAf3A8ZGyl4dMU9o4I8mujoFG2H0jc2m7"
+        let urlForTop5DefiTokenHoldersCount =
+            "https://api.unmarshal.com/v1/matic/token-address/" +
+            top5DefiIndexContractAddressMainnet +
+            "/holders-count?auth_key=M0hbF8toAf3A8ZGyl4dMU9o4I8mujoFG2H0jc2m7"
+        let urlForMetaTokenHoldersCount =
+            "https://api.unmarshal.com/v1/matic/token-address/" +
+            metaIndexContractAddressMainnet +
+            "/holders-count?auth_key=M0hbF8toAf3A8ZGyl4dMU9o4I8mujoFG2H0jc2m7"
 
-    fetch(urlForTop5DefiTokenHoldersCount)
-        .then((res) => res.json())
-        .then((data) => {
-            setTop5DefiTokenHoldersCount(data.token_holders_count)
-        })
-        .catch(err => console.log(err))
+        fetch(urlForTop5DefiTokenHoldersCount)
+            .then((res) => res.json())
+            .then((data) => {
+                setTop5DefiTokenHoldersCount(data.token_holders_count)
+            })
+            .catch((err) => console.log(err))
 
-    fetch(urlForMetaTokenHoldersCount)
-        .then((res) => res.json())
-        .then((data) => {
-            setMetaTokenHoldersCount(data.token_holders_count)
-        })
-        .catch(err => console.log(err))
- 
+        fetch(urlForMetaTokenHoldersCount)
+            .then((res) => res.json())
+            .then((data) => {
+                setMetaTokenHoldersCount(data.token_holders_count)
+            })
+            .catch((err) => console.log(err))
     }
 
     async function invest(portfolioName, amountToInvest) {
@@ -546,9 +562,9 @@ function App() {
             const signer = getProviderOrSigner(true)
             let contract
             console.log(portfolioName)
-            if(portfolioName === "TOP5D")
+            if (portfolioName === "TOP5D")
                 contract = new Contract(top5DefiIndexContractAddressMainnet, indexSwap.abi, signer)
-            else if(portfolioName === "META")
+            else if (portfolioName === "META")
                 contract = new Contract(metaIndexContractAddressMainnet, indexSwap.abi, signer)
 
             //showing progress Modal till transaction is not mined
@@ -570,7 +586,7 @@ function App() {
             receipt
                 .then(async () => {
                     //hiding progress Modal - transaction is completed
-                    setProgressModalInf(prevState => ({...prevState, show: false}))
+                    setProgressModalInf((prevState) => ({ ...prevState, show: false }))
                     setSuccessOrErrorModalInf({
                         show: true,
                         portfolioName: portfolioName,
@@ -584,7 +600,7 @@ function App() {
                 })
                 .catch((err) => {
                     //hiding progress Modal - transaction is completed
-                    setProgressModalInf(prevState => ({...prevState, show: false}))
+                    setProgressModalInf((prevState) => ({ ...prevState, show: false }))
                     setSuccessOrErrorModalInf({
                         show: true,
                         portfolioName: portfolioName,
@@ -596,7 +612,7 @@ function App() {
                     console.log(err)
                 })
         } catch (err) {
-            setProgressModalInf(prevState => ({...prevState, show: false}))
+            setProgressModalInf((prevState) => ({ ...prevState, show: false }))
             console.log(err)
             if (err.code === -32603) {
                 toast.error("Insufficient BNB Balance", {
@@ -608,8 +624,7 @@ function App() {
                     draggable: true,
                     progress: undefined,
                 })
-            } 
-            else if(err.code === 4001) {
+            } else if (err.code === 4001) {
                 toast.error("User Denied Transaction Signature", {
                     position: "top-right",
                     autoClose: 5000,
@@ -618,8 +633,7 @@ function App() {
                     pauseOnHover: true,
                     progress: undefined,
                 })
-            } 
-            else {
+            } else {
                 toast.error("Some Error Occured", {
                     position: "top-right",
                     autoClose: 5000,
@@ -640,11 +654,10 @@ function App() {
             let contract
             console.log(portfolioName)
 
-            if(portfolioName === "TOP5D")
+            if (portfolioName === "TOP5D")
                 contract = new Contract(top5DefiIndexContractAddressMainnet, indexSwap.abi, signer)
-            else if(portfolioName === "META")
+            else if (portfolioName === "META")
                 contract = new Contract(metaIndexContractAddressMainnet, indexSwap.abi, signer)
-            
 
             //showing progress Modal till transaction is not mined
             setProgressModalInf({
@@ -659,14 +672,14 @@ function App() {
             let txHash
             let tx
 
-            tx = await contract.withdrawFund(amountToWithdraw.toString(), {gasLimit: 1000000})
+            tx = await contract.withdrawFund(amountToWithdraw.toString(), { gasLimit: 1000000 })
             txHash = tx.hash
             const receipt = tx.wait()
 
             receipt
                 .then(async () => {
                     //hiding progress Modal - transaction is completed
-                    setProgressModalInf(prevState => ({...prevState, show: false}))
+                    setProgressModalInf((prevState) => ({ ...prevState, show: false }))
                     setSuccessOrErrorModalInf({
                         show: true,
                         portfolioName: portfolioName,
@@ -680,7 +693,7 @@ function App() {
                 })
                 .catch((err) => {
                     //hiding progress Modal - transaction is completed
-                    setProgressModalInf(prevState => ({...prevState, show: false}))
+                    setProgressModalInf((prevState) => ({ ...prevState, show: false }))
                     setSuccessOrErrorModalInf({
                         show: true,
                         portfolioName: portfolioName,
@@ -693,7 +706,7 @@ function App() {
                 })
         } catch (err) {
             //hiding progress Modal - transaction is completed
-            setProgressModalInf(prevState => ({...prevState, show: false}))
+            setProgressModalInf((prevState) => ({ ...prevState, show: false }))
             console.log(err)
             if (err.code === -32603) {
                 toast.error(`Insufficient ${portfolioName} Balance`, {
@@ -704,8 +717,7 @@ function App() {
                     pauseOnHover: true,
                     progress: undefined,
                 })
-            } 
-            else if (err.code === 4001) {
+            } else if (err.code === 4001) {
                 toast.error("User Denied Transaction Signature", {
                     position: "top-right",
                     autoClose: 5000,
@@ -714,8 +726,7 @@ function App() {
                     pauseOnHover: true,
                     progress: undefined,
                 })
-            }
-            else {
+            } else {
                 toast.error("Some Error Occured", {
                     position: "top-right",
                     autoClose: 4000,
@@ -754,6 +765,7 @@ function App() {
             .catch((err) => console.log(err))
         //checking isWrongNetwork or not
         const provider = getProviderOrSigner()
+        setProvider(provider)
         if (provider) {
             provider.getNetwork().then(({ chainId }) => {
                 if (chainId === 137) setIsWrongNetwork(false)
@@ -774,15 +786,15 @@ function App() {
                 email={email}
                 handleSignin={handleSignin}
             />
-
-            <SwapModal 
-                show={showSwapModal}
-                toggleSwapModal={toggleSwapModal}
-
+            <EtherspotModal
+                provider={provider}
+                showEtherSpotModal={showEtherSpotModal}
+                toggleEtherSpotModal={toggleEtherSpotModal}
             />
 
-            <CreateModalState>
+            <SwapModal show={showSwapModal} toggleSwapModal={toggleSwapModal} />
 
+            <CreateModalState>
                 <CreateModal
                     show={showCreateModal}
                     toggleModal={toggleCreateModal}
@@ -823,15 +835,25 @@ function App() {
                     currentMaticPrice={currentMaticPrice}
                     toggleSuccessOrErrorMsgModal={toggleSuccessOrErrorMsgModal}
                 />
-
             </CreateModalState>
 
-            <div style={{width: "100vw" , height: "5vh", backgroundColor: "red", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <p className="text-center">This project is at alpha stage proceed at your own risk.</p>
+            <div
+                style={{
+                    width: "100vw",
+                    height: "5vh",
+                    backgroundColor: "red",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}
+            >
+                <p className="text-center">
+                    This project is at alpha stage proceed at your own risk.
+                </p>
             </div>
 
-
             <Header
+                toggleEtherSpotModal={toggleEtherSpotModal}
                 toggleConnectWalletModal={toggleConnectWalletModal}
                 toggleHeaderDropdownMenu={toggleHeaderDropdownMenu}
                 toggleSwapModal={toggleSwapModal}
@@ -839,10 +861,7 @@ function App() {
                 isWalletConnected={isWalletConnected}
                 currentAccount={currentAccount}
                 maticBalance={maticBalance}
-                totalUserValue={
-                    parseFloat(metaBalance) + 
-                    parseFloat(top5DefiBalance)
-                }
+                totalUserValue={parseFloat(metaBalance) + parseFloat(top5DefiBalance)}
                 currentMaticPrice={currentMaticPrice}
                 isTestnet={isTestnet}
                 isWrongNetwork={isWrongNetwork}
@@ -854,9 +873,7 @@ function App() {
             <h2 className="title text-center">Portfolios</h2>
 
             <div className="container">
-                {isTestnet ? (
-                    null
-                ) : (
+                {isTestnet ? null : (
                     <>
                         <PortfolioBox
                             flipHandler={portfolioBoxesflipHandler}

@@ -28,9 +28,8 @@ function Header({
     switchToMainnet,
     switchToTestnet,
     disconnectWallet,
+    toggleEtherSpotModal,
 }) {
-
-
     return (
         <div className="header">
             <img src={Logo} alt="" id="header-logo" draggable="false" />
@@ -67,6 +66,10 @@ function Header({
                     </div>
                 </>
             )}
+
+            <button className="connect-btn" onClick={toggleEtherSpotModal}>
+                <span className="fn-sm">Connect Etherspot</span>
+            </button>
 
             {!isWalletConnected ? (
                 <button className="connect-btn" onClick={toggleConnectWalletModal}>
